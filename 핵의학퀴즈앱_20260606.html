@@ -1,0 +1,3927 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>영상학 스컬 퀴즈</title>
+<style>
+  :root{--bg:#fff;--ink:#1a1a1a;--line:#e3e3e3;--accent:#2563eb;--ok:#16a34a;--no:#dc2626;--miss:#ea8a00;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.6}
+  .wrap{max-width:760px;margin:0 auto;padding:16px}
+  h1{font-size:20px;margin:8px 0}
+  .card{border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;background:#fff}
+  .btn{display:inline-block;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:12px 16px;font-size:16px;cursor:pointer;margin:4px 4px 4px 0}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:14px;margin:8px 0;cursor:pointer;font-size:16px}
+  .opt.sel{border-color:var(--accent);background:#eff4ff}
+  .opt.ok{border-color:var(--ok);background:#eafaf0}
+  .opt.no{border-color:var(--no);background:#fdecec}
+  .opt.miss{border-color:var(--miss);background:#fff5e6}
+  .bar{height:10px;border-radius:6px;background:#f0f0f0;overflow:hidden;display:flex}
+  .bar>span{display:block;height:100%}
+  .chip{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin:2px;cursor:pointer;background:#fafafa}
+  .muted{color:#777;font-size:13px}
+  .hidden{display:none}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td,th{border-bottom:1px solid var(--line);padding:6px;text-align:left}
+  details{margin-top:8px}
+
+  /* ===== 게임화 추가 스타일 ===== */
+  /* HUD: 레벨/XP/콤보 상단바 */
+  .hud{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin:8px 0 4px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .hud .rank{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;white-space:nowrap}
+  .hud .rank .face{font-size:22px;line-height:1;transition:transform .2s}
+  .hud .lvl{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:linear-gradient(135deg,#6366f1,#2563eb);color:#fff;font-size:13px;font-weight:800;box-shadow:0 2px 6px rgba(37,99,235,.35)}
+  .hud .xpwrap{flex:1;min-width:120px}
+  .hud .xpbar{height:12px;border-radius:8px;background:#eef0f4;overflow:hidden;position:relative}
+  .hud .xpbar>span{display:block;height:100%;background:linear-gradient(90deg,#34d399,#22c55e);width:0;transition:width .55s cubic-bezier(.22,1,.36,1)}
+  .hud .xptxt{font-size:11px;color:#888;margin-top:2px}
+  .hud .combo{display:flex;align-items:center;gap:5px;font-weight:800;font-size:15px;color:#ea580c;white-space:nowrap;transition:transform .15s}
+  .hud .combo.zero{color:#bbb;font-weight:600}
+  .hud .combo .flame{font-size:18px;filter:grayscale(1);opacity:.4;transition:all .2s}
+  .hud .combo.hot .flame{filter:none;opacity:1;animation:flick .7s infinite alternate}
+  .hud .combo.bump{transform:scale(1.35)}
+  @keyframes flick{from{transform:scale(1) rotate(-4deg)}to{transform:scale(1.18) rotate(5deg)}}
+
+  /* 레벨업 / XP 플로팅 */
+  .xpfloat{position:fixed;left:50%;top:38%;font-size:30px;font-weight:900;color:#22c55e;text-shadow:0 2px 10px rgba(0,0,0,.18);pointer-events:none;z-index:60;animation:xpup 1.1s ease-out forwards}
+  @keyframes xpup{0%{opacity:0;transform:translate(-50%,12px) scale(.7)}20%{opacity:1;transform:translate(-50%,-4px) scale(1.1)}100%{opacity:0;transform:translate(-50%,-60px) scale(1)}}
+  .levelup{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:70;pointer-events:none}
+  .levelup .box{background:linear-gradient(135deg,#6366f1,#2563eb);color:#fff;padding:22px 34px;border-radius:20px;font-weight:900;font-size:26px;box-shadow:0 12px 40px rgba(37,99,235,.5);animation:luPop 1.6s ease forwards;text-align:center}
+  .levelup .box small{display:block;font-size:14px;font-weight:600;opacity:.9;margin-top:4px}
+  @keyframes luPop{0%{transform:scale(.4) rotate(-8deg);opacity:0}15%{transform:scale(1.12) rotate(2deg);opacity:1}30%{transform:scale(1) rotate(0)}80%{transform:scale(1);opacity:1}100%{transform:scale(.96);opacity:0}}
+
+  /* 컨페티 캔버스 */
+  #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:55}
+
+  /* 정답/오답 피드백 모션 */
+  .pop{animation:pop .4s cubic-bezier(.22,1,.36,1)}
+  @keyframes pop{0%{transform:scale(.96)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+  .shake{animation:shake .45s}
+  @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
+  #fbResult.win{animation:winPop .5s cubic-bezier(.22,1,.36,1)}
+  @keyframes winPop{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}
+
+  /* 배지 그리드 */
+  .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:10px}
+  .badge{border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;background:#fafafa;transition:transform .15s}
+  .badge .ic{font-size:30px;line-height:1;filter:grayscale(1);opacity:.35}
+  .badge .nm{font-size:12px;font-weight:700;margin-top:6px;color:#999}
+  .badge .ds{font-size:10px;color:#bbb;margin-top:2px;line-height:1.3}
+  .badge.got{background:linear-gradient(135deg,#fff7ed,#fffbeb);border-color:#fcd34d}
+  .badge.got .ic{filter:none;opacity:1}
+  .badge.got .nm{color:#b45309}
+  .badge.got .ds{color:#a16207}
+  .badge.just{animation:badgePop .7s cubic-bezier(.22,1,.36,1)}
+  @keyframes badgePop{0%{transform:scale(.4) rotate(-12deg)}55%{transform:scale(1.2) rotate(6deg)}100%{transform:scale(1)}}
+  /* 토스트(배지 획득) */
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(120px);background:#1a1a1a;color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;font-size:14px;z-index:65;display:flex;align-items:center;gap:8px;box-shadow:0 8px 30px rgba(0,0,0,.3);opacity:0;transition:all .4s cubic-bezier(.22,1,.36,1)}
+  #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  #toast .ic{font-size:20px}
+
+  /* ========================================================= */
+  /* ===========  다크 판타지 UI — 영상 배경 위 마법 길드  =========== */
+  /* ================================================================ */
+  :root{
+    --bg:#14110b; --ink:#f0e3c4; --line:#8a6a2e;
+    --gold:#e8b740; --gold-lt:#ffe08a; --gold-dk:#9a7420; --gold-deep:#6b4e16;
+    --parch:#f0e3c4;
+    --glass:rgba(24,16,10,.72); --stone:#241c12; --stone-lt:#3a2e1d;
+    --blood:#c0392b; --blood-dk:#7a1f17;
+    --ok:#4ade80; --ok-dk:#15803d; --no:#f87171; --no-dk:#991b1b;
+    --miss:#fbbf24; --accent:#f59e0b;
+    --ring:rgba(232,183,64,.55);
+  }
+  body{
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    text-shadow:0 1px 2px rgba(0,0,0,.45);
+  }
+  /* body 배경은 영상(#scenery)이 담당 */
+  h1{
+    font-family:"Cinzel","Georgia","Times New Roman",serif; font-size:23px; letter-spacing:1px; font-weight:800;
+    background:linear-gradient(180deg,#fff4cf,#e8b740 55%,#9a7420);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:#e8b740;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(232,183,64,.3));
+  }
+  .wrap>.row:first-child{ border-bottom:1px solid var(--gold-dk); padding-bottom:10px; box-shadow:0 1px 0 rgba(232,183,64,.15); }
+
+  /* 카드 = 마법 글래스 + 황금 룬 프레임 */
+  .card{
+    position:relative;
+    background:linear-gradient(180deg, rgba(48,32,18,.5), rgba(16,11,7,.28)), var(--glass);
+    -webkit-backdrop-filter:blur(11px) saturate(1.1); backdrop-filter:blur(11px) saturate(1.1);
+    color:var(--ink); border:1px solid var(--gold-dk); border-radius:14px;
+    box-shadow:0 10px 34px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.4),
+      inset 0 1px 0 rgba(255,224,138,.22), inset 0 0 26px rgba(0,0,0,.3);
+  }
+  .card::before{ content:""; position:absolute; left:16px; right:16px; top:0; height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-lt),transparent); opacity:.7; }
+  .card::after{ content:""; position:absolute; inset:5px; border-radius:10px; pointer-events:none;
+    border:1px solid rgba(232,183,64,.16);
+    -webkit-mask:linear-gradient(#000 0 0) top left/15px 15px no-repeat,linear-gradient(#000 0 0) top right/15px 15px no-repeat,linear-gradient(#000 0 0) bottom left/15px 15px no-repeat,linear-gradient(#000 0 0) bottom right/15px 15px no-repeat;
+            mask:linear-gradient(#000 0 0) top left/15px 15px no-repeat,linear-gradient(#000 0 0) top right/15px 15px no-repeat,linear-gradient(#000 0 0) bottom left/15px 15px no-repeat,linear-gradient(#000 0 0) bottom right/15px 15px no-repeat; }
+  .card b{ color:var(--gold-lt); }
+  .muted{ color:#b59b6a; }
+
+  /* 버튼 = 마법 금속 (광택 sweep) */
+  .btn{
+    position:relative; overflow:hidden;
+    background:linear-gradient(180deg,#3c2e1b,#221910); color:#f3e6c2;
+    border:1px solid var(--gold-dk); border-radius:11px; font-weight:700; letter-spacing:.3px;
+    text-shadow:0 1px 2px #000;
+    box-shadow:0 3px 0 #0a0705, 0 5px 14px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,224,138,.16), inset 0 -2px 6px rgba(0,0,0,.4);
+    transition:transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, border-color .18s, color .18s;
+  }
+  .btn::before{ content:""; position:absolute; top:0; left:-120%; width:60%; height:100%;
+    background:linear-gradient(105deg,transparent,rgba(255,238,190,.35),transparent); transform:skewX(-18deg); transition:left .55s ease; }
+  .btn:hover{ border-color:var(--gold); color:#fff7df; box-shadow:0 3px 0 #0a0705, 0 0 20px rgba(232,183,64,.45), inset 0 1px 0 rgba(255,224,138,.25); }
+  .btn:hover::before{ left:130%; }
+  .btn:active{ transform:translateY(2px); box-shadow:0 1px 0 #0a0705, inset 0 2px 6px rgba(0,0,0,.5); }
+  .btn.primary{
+    background:linear-gradient(180deg,#c0392b,#7a1f17); border-color:var(--gold-lt); color:#fff;
+    animation:primaryPulse 2.6s ease-in-out infinite;
+  }
+  .btn.primary:hover{ box-shadow:0 3px 0 #3f0f0a, 0 0 30px rgba(255,224,138,.6), 0 0 50px rgba(192,57,43,.5), inset 0 1px 0 rgba(255,255,255,.3); }
+  @keyframes primaryPulse{ 0%,100%{box-shadow:0 3px 0 #3f0f0a,0 0 16px rgba(192,57,43,.45),inset 0 1px 0 rgba(255,255,255,.22)} 50%{box-shadow:0 3px 0 #3f0f0a,0 0 30px rgba(232,183,64,.5),inset 0 1px 0 rgba(255,255,255,.3)} }
+
+  /* 선택지 = 룬 석판 */
+  .opt{
+    position:relative; overflow:hidden; padding-left:20px;
+    background:linear-gradient(180deg, rgba(48,33,19,.72), rgba(26,18,10,.72));
+    -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+    color:#efe2c4; border:1px solid #6f5524; border-radius:11px; font-weight:600;
+    box-shadow:inset 0 1px 0 rgba(255,224,138,.12), 0 2px 8px rgba(0,0,0,.35);
+    transition:transform .14s cubic-bezier(.34,1.4,.64,1), border-color .15s, box-shadow .15s, background .15s, color .15s;
+  }
+  .opt::before{ content:""; position:absolute; left:7px; top:50%; transform:translateY(-50%);
+    width:6px; height:58%; border-radius:3px; background:linear-gradient(180deg,#7a5c2a,#4a3818); transition:all .15s; }
+  .opt::after{ content:""; position:absolute; top:0; left:-120%; width:55%; height:100%;
+    background:linear-gradient(105deg,transparent,rgba(232,183,64,.18),transparent); transform:skewX(-18deg); transition:left .5s ease; }
+  .opt:hover{ border-color:var(--gold); transform:translateX(4px); box-shadow:0 0 16px rgba(232,183,64,.32), inset 0 1px 0 rgba(255,224,138,.18); }
+  .opt:hover::before{ background:linear-gradient(180deg,var(--gold-lt),var(--gold-dk)); box-shadow:0 0 8px var(--ring); }
+  .opt:hover::after{ left:130%; }
+  .opt.sel{ border-color:var(--accent); background:linear-gradient(180deg, rgba(120,70,20,.85), rgba(70,40,12,.85)); box-shadow:0 0 20px rgba(245,158,11,.45), inset 0 0 14px rgba(245,158,11,.18); }
+  .opt.sel::before{ background:linear-gradient(180deg,#ffd27a,#e8910f); box-shadow:0 0 10px rgba(245,158,11,.7); }
+  .opt.ok{ border-color:var(--ok); color:#eafff0; background:linear-gradient(180deg, rgba(20,80,40,.82), rgba(10,45,22,.84)); box-shadow:0 0 22px rgba(74,222,128,.4), inset 0 0 14px rgba(74,222,128,.16); }
+  .opt.ok::before{ background:linear-gradient(180deg,#86efac,#15803d); box-shadow:0 0 10px rgba(74,222,128,.7); }
+  .opt.no{ border-color:var(--no); color:#ffe9e9; background:linear-gradient(180deg, rgba(110,25,20,.84), rgba(60,12,10,.86)); box-shadow:0 0 22px rgba(248,113,113,.4), inset 0 0 14px rgba(248,113,113,.14); }
+  .opt.no::before{ background:linear-gradient(180deg,#fca5a5,#991b1b); box-shadow:0 0 10px rgba(248,113,113,.7); }
+  .opt.miss{ border-color:var(--miss); color:#fff4d6; background:linear-gradient(180deg, rgba(120,85,15,.82), rgba(70,48,8,.84)); box-shadow:0 0 18px rgba(251,191,36,.35); }
+  .opt.miss::before{ background:linear-gradient(180deg,#fde68a,#b45309); }
+
+  .chip{ background:rgba(42,33,19,.8); color:#e8dcc0; border:1px solid var(--gold-dk); border-radius:999px;
+    -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); transition:all .15s; }
+  .chip:hover{ border-color:var(--gold-lt); color:#fff7df; box-shadow:0 0 10px rgba(232,183,64,.4); }
+
+  /* 진행/탐험 바 */
+  .bar{ background:rgba(10,7,4,.7); border:1px solid var(--gold-dk); border-radius:8px; height:15px; overflow:hidden; box-shadow:inset 0 2px 5px rgba(0,0,0,.7); }
+
+  table td,table th{ border-bottom:1px solid rgba(195,171,116,.3); }
+
+  /* ===== HUD = 길드 스탯 패널 ===== */
+  .hud{
+    background:linear-gradient(180deg, rgba(44,33,20,.82), rgba(16,12,7,.86));
+    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border:1px solid var(--gold-dk); border-radius:14px;
+    box-shadow:0 6px 20px rgba(0,0,0,.55), inset 0 1px 0 rgba(232,183,64,.2);
+  }
+  .hud .rank{ color:var(--gold-lt); text-shadow:0 1px 3px #000; font-weight:700; }
+  .hud .lvl{ background:radial-gradient(circle at 35% 30%,#ffe9a8,#e8b740 45%,#8a6a1e); color:#3a2806; font-weight:900; border:1px solid #fff2c4; box-shadow:0 0 12px rgba(232,183,64,.6), inset 0 1px 2px rgba(255,255,255,.5); }
+  .hud .xpbar{ position:relative; background:rgba(8,5,3,.85); border:1px solid var(--gold-dk); height:15px; border-radius:8px; overflow:hidden; }
+  .hud .xpbar>span{ position:relative; background:linear-gradient(90deg,#9a7420,#e8b740 60%,#ffe08a); box-shadow:0 0 12px rgba(232,183,64,.6); overflow:hidden; }
+  .hud .xpbar>span::after{ content:""; position:absolute; inset:0; background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.55) 50%,transparent 80%); transform:translateX(-100%); animation:xpShimmer 2.8s ease-in-out infinite; }
+  @keyframes xpShimmer{ 0%{transform:translateX(-100%)} 55%,100%{transform:translateX(240%)} }
+  .hud .xptxt{ color:#c9b079; }
+  .hud .combo{ color:var(--gold-lt); font-weight:800; }
+  .hud .combo.zero{ color:#8a7550; }
+
+  #qExam{ display:inline-block; background:rgba(90,20,20,.8); color:#ffc2c2; border:1px solid #8a2a2a; border-radius:7px; padding:2px 9px; font-weight:700; }
+  #qExam::before{ content:"👹 "; }
+  #qText{ color:#fbeed0; font-size:17.5px; line-height:1.7; }
+
+  #fbResult{ font-family:"Cinzel","Georgia",serif; font-weight:800; letter-spacing:1px; }
+
+  /* 배지 = 전리품 */
+  .badge{ background:linear-gradient(180deg, rgba(40,29,16,.8), rgba(14,10,6,.85)); -webkit-backdrop-filter:blur(5px); backdrop-filter:blur(5px); border:1px solid #5a4626; border-radius:13px; transition:transform .15s; }
+  .badge:hover{ transform:translateY(-2px); }
+  .badge .nm{ color:#9c855a; }
+  .badge .ds{ color:#8a7550; }
+  .badge.got{ background:linear-gradient(180deg, rgba(80,56,16,.85), rgba(34,22,4,.9)); border-color:var(--gold); box-shadow:0 0 18px rgba(232,183,64,.35), inset 0 1px 0 rgba(255,224,138,.25); }
+  .badge.got .ic{ filter:drop-shadow(0 0 8px rgba(255,224,138,.8)); }
+  .badge.got .nm{ color:var(--gold-lt); }
+  .badge.got .ds{ color:#ccac63; }
+
+  /* 레벨업/토스트 */
+  .levelup .box{ background:linear-gradient(135deg,#e8b740,#9a7420); border:2px solid var(--gold-lt); font-family:"Cinzel","Georgia",serif; box-shadow:0 16px 50px rgba(232,183,64,.5), 0 0 0 1px rgba(0,0,0,.3); }
+  #toast{ background:linear-gradient(180deg, rgba(44,33,20,.95), rgba(12,9,5,.96)); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid var(--gold); }
+  .xpfloat{ color:var(--gold-lt); text-shadow:0 2px 10px #000, 0 0 14px rgba(232,183,64,.6); font-weight:800; }
+
+  /* 입력류 */
+  input,textarea{ background:rgba(14,10,5,.8); color:#e8dcc0; border:1px solid var(--gold-dk); border-radius:8px; font-size:16px; }
+  input:focus,textarea:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 12px rgba(232,183,64,.4); }
+
+  /* 선택지 stagger 등장 */
+  #qOpts .opt{ animation:optIn .42s cubic-bezier(.22,1,.36,1) backwards; }
+  #qOpts .opt:nth-child(1){animation-delay:.04s} #qOpts .opt:nth-child(2){animation-delay:.10s}
+  #qOpts .opt:nth-child(3){animation-delay:.16s} #qOpts .opt:nth-child(4){animation-delay:.22s}
+  #qOpts .opt:nth-child(5){animation-delay:.28s}
+  @keyframes optIn{ from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)} }
+
+  /* 이펙트 레이어: 검광 슬래시 / 피격 비네팅 */
+  #fxSlash{ position:fixed; inset:0; z-index:60; pointer-events:none; overflow:hidden; }
+  #fxSlash .slash{ position:absolute; top:-50%; left:-60%; width:62%; height:200%;
+    background:linear-gradient(100deg,transparent 34%,rgba(255,255,255,.95) 48%,rgba(255,232,150,.92) 52%,rgba(255,180,80,.5) 56%,transparent 66%);
+    filter:blur(1px) drop-shadow(0 0 18px rgba(255,232,150,.95)) drop-shadow(0 0 40px rgba(255,180,80,.6));
+    transform:rotate(15deg); animation:slashSweep .46s cubic-bezier(.5,0,.2,1) forwards; }
+  @keyframes slashSweep{ 0%{left:-60%;opacity:0} 12%{opacity:1} 100%{left:135%;opacity:0} }
+  #fxHit{ position:fixed; inset:0; z-index:60; pointer-events:none; animation:hitPulse .6s ease forwards; }
+  @keyframes hitPulse{ 0%{box-shadow:inset 0 0 140px 30px rgba(185,22,22,0)} 18%{box-shadow:inset 0 0 200px 70px rgba(205,28,28,.85)} 100%{box-shadow:inset 0 0 200px 70px rgba(205,28,28,0)} }
+
+  /* ===== 강타 이펙트 (정답 타격감) ===== */
+  #fxFlash{ position:fixed; inset:0; z-index:59; pointer-events:none;
+    background:radial-gradient(circle at 50% 42%, rgba(255,244,210,.6), rgba(255,200,90,.2) 34%, transparent 60%);
+    animation:flashBoom .38s ease-out forwards; }
+  @keyframes flashBoom{ 0%{opacity:0; transform:scale(.55)} 16%{opacity:1} 100%{opacity:0; transform:scale(1.18)} }
+  #fxShock{ position:fixed; top:42%; left:50%; z-index:60; pointer-events:none; }
+  #fxShock .ring{ position:absolute; left:0; top:0; width:50px; height:50px; border-radius:50%;
+    border:5px solid rgba(255,230,155,.95); transform:translate(-50%,-50%) scale(.3);
+    box-shadow:0 0 34px rgba(255,224,138,.85), inset 0 0 22px rgba(255,224,138,.55);
+    animation:shockExpand .55s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes shockExpand{ 0%{opacity:.95; transform:translate(-50%,-50%) scale(.3); border-width:6px}
+    100%{opacity:0; transform:translate(-50%,-50%) scale(10); border-width:0} }
+  /* 콤보 불타는 화면 테두리 */
+  #fxRim{ position:fixed; inset:0; z-index:58; pointer-events:none; opacity:0; transition:opacity .45s; }
+  #fxRim.on{ opacity:1; animation:rimFlicker 1.5s ease-in-out infinite; }
+  @keyframes rimFlicker{ 0%,100%{box-shadow:inset 0 0 70px 6px rgba(232,183,64,.32)} 50%{box-shadow:inset 0 0 120px 16px rgba(255,160,60,.52)} }
+  /* 화면 펀치 / 강한 흔들림 */
+  .punch{ animation:punch .34s cubic-bezier(.34,1.7,.5,1) both; }
+  @keyframes punch{ 0%{transform:scale(1)} 34%{transform:scale(1.04)} 100%{transform:scale(1)} }
+  .shakeHard{ animation:shakeHard .5s cubic-bezier(.36,.07,.19,.97) both; }
+  @keyframes shakeHard{ 10%,90%{transform:translate(-3px,1px) rotate(-.4deg)} 20%,80%{transform:translate(7px,-2px) rotate(.5deg)} 30%,50%,70%{transform:translate(-12px,2px) rotate(-.8deg)} 40%,60%{transform:translate(12px,-2px) rotate(.8deg)} }
+
+  /* ========================================================= */
+  /* ===========  모바일/태블릿 최적화 (폰·아이패드)  =========== */
+  /* ========================================================= */
+  html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  *{ -webkit-tap-highlight-color:transparent; }
+  /* 노치/홈바 안전영역 */
+  .wrap{ padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right)); padding-bottom:max(16px, env(safe-area-inset-bottom)); }
+  /* 탭 대상은 텍스트 선택/더블탭 확대 방지 */
+  .btn,.opt,.chip,.badge,.hud{ -webkit-user-select:none; user-select:none; touch-action:manipulation; }
+  /* 손가락 터치 타겟 최소 크기 보장 */
+  .opt{ min-height:48px; }
+  .btn{ min-height:44px; }
+  /* iOS 모멘텀 스크롤 */
+  body{ -webkit-overflow-scrolling:touch; }
+
+  /* 폰(좁은 화면) */
+  @media (max-width:480px){
+    .wrap{ padding-top:8px; }
+    h1{ font-size:17px; }
+    .hud{ gap:8px; padding:8px 10px; }
+    .hud .rank{ font-size:13px; }
+    .hud .rank .face{ font-size:19px; }
+    .hud .combo{ font-size:13px; }
+    .hud .xptxt{ font-size:10px; }
+    .card{ padding:13px; margin:10px 0; }
+    .btn{ font-size:15px; padding:11px 13px; }
+    .btn.primary{ display:block; width:100%; margin:6px 0; }   /* 공격/주요 버튼은 풀폭 */
+    .opt{ font-size:15px; padding:13px 13px 13px 20px; }
+    #qText{ font-size:16px; }
+    .badges{ grid-template-columns:repeat(auto-fill,minmax(82px,1fr)); gap:8px; }
+    .badge .ic{ font-size:26px; }
+    /* 시작 버튼들 세로 풀폭으로 */
+    #home .card>div[style]>.btn{ display:block; width:100%; margin:6px 0; }
+  }
+  /* 가로 모드/태블릿에서 본문 폭 살짝 넓게 */
+  @media (min-width:768px){ .wrap{ max-width:820px; } }
+
+  /* ===========  판타지 영상 배경 (성 + 나는 용)  =========== */
+  #scenery{
+    position:fixed; inset:0; z-index:-3; overflow:hidden; pointer-events:none;
+    background:#100a16; /* 영상 로딩 전/레터박스 방지 폴백 */
+  }
+  #scenery .bgvid{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:center 42%;
+    transform:scale(1.07); transform-origin:center; /* 가장자리 살짝 크롭(워터마크 완화) */
+  }
+  /* 가독성 + 우하단 워터마크 가림 오버레이 */
+  #scenery .bgoverlay{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(12,7,18,.34) 0%, rgba(12,7,18,.10) 26%, rgba(12,7,18,.14) 64%, rgba(12,7,18,.52) 100%),
+      radial-gradient(46% 40% at 100% 100%, rgba(8,5,12,.92) 0%, rgba(8,5,12,.5) 45%, transparent 72%);
+  }
+</style>
+</head>
+<body>
+<div id="scenery" aria-hidden="true">
+  <video id="bgvid" class="bgvid" autoplay muted loop playsinline preload="auto" poster="castle-poster.jpg">
+    <source src="castle-bg.mp4" type="video/mp4">
+  </video>
+  <div class="bgoverlay"></div>
+</div>
+<div class="wrap">
+  <div class="row"><h1>☢️ 핵의학 던전 · 검사 퀘스트</h1><button class="btn" onclick="show('home')">🏰 마을</button></div>
+
+  <!-- HUD (게임 상태바) -->
+  <div class="hud" id="hud">
+    <div class="rank"><span class="face" id="hudFace">🦴</span><span class="lvl" id="hudLvl">1</span><span id="hudRank">견습</span></div>
+    <div class="xpwrap"><div class="xpbar"><span id="hudXp"></span></div><div class="xptxt" id="hudXpTxt"></div></div>
+    <div class="combo zero" id="hudCombo"><span class="flame">🔥</span><span id="hudComboN">0</span> 연속격파</div>
+  </div>
+
+  <!-- PARTS (단원 선택) -->
+  <div id="parts">
+    <div class="card">
+      <div class="row"><b>🗺️ 원정 지역 선택 (단원)</b><span class="muted" id="partsCount"></span></div>
+      <div class="muted" style="margin:6px 0">풀 회차를 고르세요. 진도·탐험도는 고른 단원 기준으로 집계됩니다.</div>
+      <div id="partsGrid" style="margin-top:8px"></div>
+      <div style="margin-top:10px">
+        <button class="btn" onclick="toggleAllParts()">전체 선택/해제</button>
+        <button class="btn primary" onclick="confirmParts()">▶ 출진</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home">
+    <div class="card">
+      <div class="row"><b>🗂️ 현재 단원</b><button class="btn" onclick="show('parts')">단원 변경</button></div>
+      <div class="muted" id="homeParts" style="margin-top:4px"></div>
+    </div>
+    <div class="card">
+      <div class="row"><b>👹 미토벌 몬스터</b><span id="weakCount">0</span></div>
+      <div class="bar" id="progBar"></div>
+      <div class="muted" id="progText"></div>
+      <div style="margin-top:10px">
+        <button class="btn primary" onclick="startMode('weak')">⚔️ 복수전 (약점 토벌)</button>
+        <button class="btn" onclick="startMode('new')">🚪 새 던전 입장</button>
+        <button class="btn" onclick="startMode('infinite')">♾️ 무한 회랑</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row"><b>🗺️ 던전 탐험도</b><span id="covText"></span></div>
+      <div class="bar" id="covBar"></div>
+      <div class="muted">미탐험 구역(ID)은 토벌 일지에서 확인 → "여기 더 만들어줘".</div>
+    </div>
+    <div class="card">
+      <div class="row"><b>🏆 전리품 보관함</b><span class="muted" id="badgeCount"></span></div>
+      <div class="badges" id="badgeGrid"></div>
+    </div>
+    <div class="card">
+      <button class="btn" onclick="show('report')">📜 토벌 일지</button>
+      <button class="btn" onclick="show('settings')">⚙️ 설정·백업</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hidden">
+    <div class="card">
+      <div class="muted"><span id="qExam"></span> · <span id="qPos"></span></div>
+      <p id="qText" style="font-size:17px;font-weight:600"></p>
+      <div id="qOpts"></div>
+      <button class="btn primary" id="submitBtn" onclick="submit()">🗡️ 공격!</button>
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div id="feedback" class="hidden">
+    <div class="card">
+      <p id="fbResult" style="font-weight:700;font-size:18px"></p>
+      <div id="fbOpts"></div>
+      <div class="card"><b>📖 전투 해설</b><div id="fbExp"></div></div>
+      <div><b>🔮 간파한 마스터 비급</b><div id="fbSrc"></div></div>
+      <div id="fbSrcDetail" class="muted"></div>
+      <p class="muted" id="fbStreak"></p>
+      <button class="btn primary" onclick="next()">▶ 다음 전투</button>
+    </div>
+  </div>
+
+  <!-- REPORT -->
+  <div id="report" class="hidden">
+    <div class="card"><b>👹 강적 목록 (피격 누적 Top)</b><div id="rpWeak"></div></div>
+    <div class="card"><b>🗺️ 미탐험 구역 (지도 공백)</b><div id="rpUncov" class="muted"></div></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings" class="hidden">
+    <div class="card">
+      <label>졸업 연속정답 M: <input id="setM" type="number" min="1" max="5" style="width:60px"></label>
+      <label style="margin-left:12px">새 문제 묶음: <input id="setBatch" type="number" min="1" max="100" style="width:70px"></label>
+      <div style="margin-top:10px"><button class="btn" onclick="saveSettings()">저장</button></div>
+    </div>
+    <div class="card">
+      <b>진도 백업(맥↔아이패드)</b>
+      <div><button class="btn" onclick="exportProgress()">진도 내보내기(.json)</button>
+      <button class="btn" onclick="document.getElementById('impFile').click()">가져오기</button>
+      <input id="impFile" type="file" accept="application/json" class="hidden" onchange="importProgress(event)"></div>
+      <textarea id="expText" class="hidden"></textarea>
+      <div style="margin-top:8px"><button class="btn" onclick="if(confirm('진도 전체 초기화?'))resetProgress()">진도 초기화</button></div>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+<div id="toast"><span class="ic">🏅</span><span id="toastTxt"></span></div>
+
+<script>
+(function (global) {
+  function toSet(a) { return new Set(a); }
+  function eqSet(a, b) { if (a.size !== b.size) return false; for (const x of a) if (!b.has(x)) return false; return true; }
+
+  function gradeAnswer(selected, answers) {
+    const ans = toSet(answers);
+    const correct = eqSet(toSet(selected), ans);
+    const got = selected.filter(i => ans.has(i));
+    const wrong = selected.filter(i => !ans.has(i));
+    const missed = answers.filter(i => !selected.includes(i));
+    return { correct, got, wrong, missed };
+  }
+
+  function applyResult(prog, correct, M) {
+    M = M || 2;
+    const p = Object.assign({ streak: 0, wrongCount: 0, mastered: false, seen: false }, prog || {});
+    p.seen = true;
+    if (correct) { p.streak += 1; if (p.streak >= M) p.mastered = true; }
+    else { p.streak = 0; p.wrongCount += 1; p.mastered = false; }
+    return p;
+  }
+
+  function selectQueue(progressMap, bank, mode, batchN) {
+    batchN = batchN || 10;
+    const prog = id => progressMap[id] || { seen: false, mastered: false };
+    const weak = bank.filter(q => { const p = prog(q.id); return p.seen && !p.mastered && (p.wrongCount||0) > 0; }).map(q => q.id);
+    const unseen = bank.filter(q => !prog(q.id).seen).map(q => q.id);
+    if (mode === "weak") return weak;
+    if (mode === "new") return unseen.slice(0, batchN);
+    return weak.concat(unseen);
+  }
+
+  function computeCoverage(bank, registry) {
+    const perId = {}; registry.forEach(r => perId[r.id] = 0);
+    bank.forEach(q => (q.source_ids || []).forEach(id => { if (id in perId) perId[id]++; }));
+    const uncovered = Object.keys(perId).filter(id => perId[id] === 0);
+    const covered = Object.keys(perId).filter(id => perId[id] > 0);
+    return { perId, covered, uncovered, total: registry.length };
+  }
+
+  function idWeakness(progressMap, bank) {
+    const agg = {};
+    bank.forEach(q => {
+      const p = progressMap[q.id]; if (!p) return;
+      (q.source_ids || []).forEach(id => {
+        agg[id] = agg[id] || { wrong: 0, seen: 0 };
+        agg[id].wrong += p.wrongCount || 0; agg[id].seen += p.seen ? 1 : 0;
+      });
+    });
+    return agg;
+  }
+
+  function answerSizeDistribution(bank) {
+    const d = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    bank.forEach(q => { const n = (q.answers || []).length; if (d[n] !== undefined) d[n]++; });
+    return d;
+  }
+
+  const QuizEngine = { gradeAnswer, applyResult, selectQueue, computeCoverage, idWeakness, answerSizeDistribution, eqSet };
+  if (typeof module !== "undefined" && module.exports) module.exports = QuizEngine;
+  else global.QuizEngine = QuizEngine;
+})(typeof window !== "undefined" ? window : globalThis);
+
+const REGISTRY = [
+  {
+    "id": "PTH-ANA-01",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "부갑상샘은 길이 3~8cm·지름 2~5cm·두께 1.5mm·무게 35mg 정도의 아주 작은 기관 작은수치"
+  },
+  {
+    "id": "PTH-ANA-02",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "갑상샘 좌우 엽(lobe) 뒷면에 위아래 각각 2개씩(총 4개) 위치, 3개·5개 변이도 있음 개수"
+  },
+  {
+    "id": "PTH-ANA-03",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "황갈색 소체"
+  },
+  {
+    "id": "PTH-ANA-04",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "부갑상샘 호르몬(PTH)의 합성·저장·분비를 수행, 아미노산으로 구성"
+  },
+  {
+    "id": "PTH-ANA-05",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "PTH는 뼈·신장·장에서 작용하며 비타민 D와 상호작용함 작용장기"
+  },
+  {
+    "id": "PTH-ANA-06",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "PTH는 뼈에서 혈액으로 칼슘 이동을 증가시키고 위장관·신장에서 칼슘 흡수를 촉진 → 혈중 칼슘 농도를 상승시킴 기전"
+  },
+  {
+    "id": "PTH-ANA-07",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "혈중 칼슘 농도가 상승하면 PTH 분비가 저하되는 음성 되먹임 조절"
+  },
+  {
+    "id": "PTH-ANA-08",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "정상 혈중 칼슘 농도는 8.8~10.1 mg/dl 사이에서 조절 수치"
+  },
+  {
+    "id": "PTH-SCAN-01",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "검사목적 — 부갑상샘암(adenoma)·부갑상샘 과형성(hyperplasia)·갑상샘 기능항진증으로 크기가 커져 체내 무기질 대사 이상 발생 시"
+  },
+  {
+    "id": "PTH-SCAN-02",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "부갑상샘 검사 집적기전 = 능동이동(active transport) 기전"
+  },
+  {
+    "id": "PTH-SCAN-03",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "의약품 ① 201Tl-chloride / 99mTcO4- (74~111MBq / 185~370MBq, 정맥주사) ② 99mTc-sestaMIBI·99mTc-tetrofosmin ("
+  },
+  {
+    "id": "PTH-SCAN-04",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "이중선원법 — 201Tl-chloride는 갑상샘 및 부갑상샘 모두에 집적 핵심"
+  },
+  {
+    "id": "PTH-SCAN-05",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "이중선원법 — 99mTcO4-(과테크네슘산)는 갑상샘에만 집적 핵심(201Tl과 역할 구분)"
+  },
+  {
+    "id": "PTH-SCAN-06",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "핀홀(pinhole) 콜리메이터 이용 콜리메이터"
+  },
+  {
+    "id": "PTH-SCAN-07",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "선원에너지 설정 99mTc 140 keV / 201Tl 80 keV 에너지값"
+  },
+  {
+    "id": "PTH-SCAN-08",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "갑상샘 영상만을 소거(subtraction)하여 부갑상샘 영상을 획득(또는 각 영상 비교)"
+  },
+  {
+    "id": "PTH-SCAN-09",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "영상 획득 시 절대 움직이지 말아야 함(체위 고정)"
+  },
+  {
+    "id": "PTH-SCAN-10",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "단일선원법 — 99mTc-sestaMIBI는 정맥주사 후 4~5분에 갑상샘이 최대 섭취, 부갑상샘에도 빠르게 섭취 시간"
+  },
+  {
+    "id": "PTH-SCAN-11",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "갑상샘은 최대 섭취 후 점차 감소하나 부갑상샘은 지속적으로 섭취 대비"
+  },
+  {
+    "id": "PTH-SCAN-12",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "부갑상샘종(adenoma)에서 sestaMIBI의 배설은 늦음(2~3시간 이상) 지연"
+  },
+  {
+    "id": "PTH-SCAN-13",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "조기 및 지연기(2~3시간 후) 영상을 획득"
+  },
+  {
+    "id": "ADR-ANA-01",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "부신은 양측 콩팥 위를 덮는 한 쌍의 기관, 크기 2~3cm·길이 4~6cm·두께 0.3~0.6cm·무게 3~6g"
+  },
+  {
+    "id": "ADR-ANA-02",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "피질(adrenal cortex)과 수질(adrenal medulla)로 구성"
+  },
+  {
+    "id": "ADR-ANA-03",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "피질은 코르티코스테로이드(스테로이드 호르몬) 분비 — 염류코르티코이드·당류코르티코이드·성 스테로이드"
+  },
+  {
+    "id": "ADR-ANA-04",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "염류코르티코이드(mineralocorticoid)는 Na+/K+ 평형 조절, 알도스테론(aldosterone)이 가장 강력"
+  },
+  {
+    "id": "ADR-ANA-05",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "알도스테론은 사구대(zona glomerulosa)에서 생성, 콩팥을 자극해 NaCl·물을 보유하고 K+는 오줌으로 배설 → 혈액 용량·압력 증가"
+  },
+  {
+    "id": "ADR-ANA-06",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "당류코르티코이드(glucocorticoid)는 포도당·유기분자 대사 조절"
+  },
+  {
+    "id": "ADR-ANA-07",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "뇌하수체에서 부신겉질자극호르몬(ACTH) 분비 → 겉질이 스테로이드 호르몬 생성"
+  },
+  {
+    "id": "ADR-ANA-08",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "수질은 에피네프린:노르에피네프린을 4:1로 분비 비율"
+  },
+  {
+    "id": "ADR-ANA-09",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "에피네프린·노르에피네프린은 카테콜아민 호르몬, 교감신경계 효과 강화(심박↑·관상혈관 확장·호흡수↑·대사율↑) → 스트레스 반응"
+  },
+  {
+    "id": "ADR-MED-01",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "131I-MIBG는 갈색세포종(pheochromocytoma)에 높은 감수성, 신경아세포종(neuroblastoma)·속질성 갑상샘암·부신경절종·악성종양에 이용 적응증"
+  },
+  {
+    "id": "ADR-MED-02",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "전처치 — Lugol액(potassium iodide, KI)을 검사 2일 전부터 투여해 갑상샘 차단(방사선 피폭 차단) 전처치"
+  },
+  {
+    "id": "ADR-MED-03",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "의약품 131I-MIBG 18.5~37MBq(500~1000μCi), 123I-MIBG 370MBq(10mCi), 정맥주사"
+  },
+  {
+    "id": "ADR-MED-04",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "MIBG는 정상에서도 심장·간·지라(비장)·침샘·갑상샘·대장(가끔)에 나타남 정상분포"
+  },
+  {
+    "id": "ADR-MED-05",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "정상적인 부신에서는 MIBG가 잘 나타나지 않음 뒤집기 함정(정상부신에 잘 나타난다=오답)"
+  },
+  {
+    "id": "ADR-MED-06",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "부신 위치 확인을 위해 소량의 99mTc-DTPA 또는 99mTc-DMSA를 주입해 콩팥을 영상화하기도 함"
+  },
+  {
+    "id": "ADR-COR-01",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "131I-NP-59는 부신 겉질과 난소종양(ovarian tumor)에 집적 적응증"
+  },
+  {
+    "id": "ADR-COR-02",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "NP-59는 체내 주입 후 저농도의 지질단백에 흡수되며 부신겉질에 의해 제거됨"
+  },
+  {
+    "id": "ADR-COR-03",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "전처치 — Lugol액을 검사 전부터 투여해 갑상샘 차단"
+  },
+  {
+    "id": "ADR-COR-04",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "의약품 131I-NP-59 18.5~74MBq(0.5~2mCi), 정맥주사"
+  },
+  {
+    "id": "ADR-COR-05",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "정맥 주입 후 3·5·7일에 복부 posterior view 영상 획득 시간"
+  },
+  {
+    "id": "ADR-COR-06",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "정상에서 간·쓸개·대장에 방사능 집적이 보임"
+  },
+  {
+    "id": "ADR-COR-07",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "posterior view에서 오른쪽 부신이 왼쪽보다 높게 나타남(간 방사능 중첩 때문, 해부학적으로는 왼쪽이 더 높음) 좌우 뒤집기 함정"
+  },
+  {
+    "id": "ADR-COR-08",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "섭취율(%) = (한쪽 부신 계수 / 주입한 방사성의약품 총 계수) × 100"
+  },
+  {
+    "id": "OCTREO-01",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "검사목적 — 신경 내분비·비신경 내분비 종양 의심 환자의 전이성 여부 확인, 원발성·전이성 신경내분비종양 위치 진단 적응증"
+  },
+  {
+    "id": "OCTREO-02",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "전처치 — 111In-Pentetreotide(펜테트레오티드) 투여 전 24시간 동안 Octreotide 투여 중지 전처치"
+  },
+  {
+    "id": "OCTREO-03",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "의약품 111In-Pentetreotide — 평면영상 111MBq(3mCi) / SPECT 영상 222MBq(6mCi), 정맥주사"
+  },
+  {
+    "id": "OCTREO-04",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "주사 후 4시간 및 24시간에 전신촬영 시간"
+  },
+  {
+    "id": "PYP-01",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "99mTc-PYP는 뼈 영상에 적용되는 Diphosphonate 및 에너지 대사 중심 구조인 ATP의 phosphate bond를 구성 구조"
+  },
+  {
+    "id": "PYP-02",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "구조적 유사성으로 골 영상과 ATP가 많이 소모되는 심장 영상에 적용"
+  },
+  {
+    "id": "PYP-03",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "Gated Blood Pool Scan(GBPS)은 심실(좌심실 박출량/박출률)을 평가하며 99mTc-RBC가 주로 사용됨 PYP 아님"
+  },
+  {
+    "id": "PYP-04",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "99mTc-PYP 용도 ① 골 스캔(99mTc-MDP·99mTc-HDP로 대체되어 덜 사용) ② 심근 아밀로이드증 진단(비정상적으로 심근에 섭취) ③ 급성 심근경색 진단"
+  },
+  {
+    "id": "PYP-05",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "급성 심근경색 진단 원리 — 심근 괴사 부위에 칼슘이 침착되면서 99mTc-PYP가 결합(현재는 MRI·SPECT·PET 등 고해상도법으로 대체되어 거의 미사용) 기전"
+  },
+  {
+    "id": "PYP-06",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "PYP를 Gated Blood Pool Scan에 사용하지 않는 이유 — 칼슘 결합 성질로 조직 침착 칼슘·아밀로이드 진단에 쓰고, 혈액 내에 오래 머물지 않고 특정 조직(골·아밀"
+  },
+  {
+    "id": "PYP-07",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "아밀로이드(amyloid) — 비정상적으로 접힌 단백질이 섬유 구조로 응집해 조직에 침착되는 물질"
+  },
+  {
+    "id": "PYP-08",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "심장에 아밀로이드 침착 → 부정맥(수축 리듬 불일정 → 효율적 혈액순환 어려움) → 심근경색 없이 심기능 저하 발생"
+  },
+  {
+    "id": "CIRC-ANA-01",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "정상 상태에서 심실을 통해 흐르는 혈류는 항상 일정해야 하며, 판막(valve)의 크기·압력이 심실에 균일한 혈류가 흐르도록 도움"
+  },
+  {
+    "id": "CIRC-ANA-02",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "최대 확장기말 용적(EDV)은 혈류가 완전히 심실에 채워진 이후의 용적, EDV가 달라도 박출량(stroke volume)은 같아야 함"
+  },
+  {
+    "id": "CIRC-ANA-03",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "박출량(stroke volume)은 수축기말 동안 각 심실이 박출하는 혈류 용적"
+  },
+  {
+    "id": "CIRC-ANA-04",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심박출률(EF) = 수축기 박출 혈액량 / 확장기말 용적의 백분율 = 심장이 혈액을 얼마나 잘 공급하는지의 척도 정의"
+  },
+  {
+    "id": "CIRC-ANA-05",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "정상적으로 좌심실은 혈액 중 55~60%를 박출(80~100ml 범위) 수치"
+  },
+  {
+    "id": "CIRC-ANA-06",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심장은 수축기 동안 대부분 전벽(anterior wall)이 움직임, 벽 운동은 심실벽 구역 평가, 비정상 국소 벽운동은 운동저하증·운동불능증·운동이상증으로 분류(운동이상증=수축기"
+  },
+  {
+    "id": "CIRC-ANA-07",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "왼 심장동맥 주요분지 — 좌전하행분지(LAD)·좌회선분지(Cx)·둔각변연분지, 좌심방·좌심실에 혈류 공급 분지매칭"
+  },
+  {
+    "id": "CIRC-ANA-08",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "오른 심장동맥 주요분지 — 예각변연분지·후하행동맥(PDA), 오른심방·오른심실·왼심실 하벽(inferior wall)·심실 중격에 혈류 공급 분지매칭"
+  },
+  {
+    "id": "CIRC-ANA-09",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심박동기(cardiac dynamics)는 이완기(filling phase, 3부분)와 수축기(4부분)로 구성"
+  },
+  {
+    "id": "CIRC-ANA-10",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "이완기 제1기 — 심실에 혈액이 급속히 채워지는 기간(이완), 심실 확장기의 처음 1/3 차지"
+  },
+  {
+    "id": "CIRC-ANA-11",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "이완기 제2기 — 정맥을 통해 계속 심방으로 들어오는 소량 혈류가 심방→심실로 넘어옴"
+  },
+  {
+    "id": "CIRC-ANA-12",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "이완기 제3기 — 심방 수축이 일어나고 혈액량은 확장기말 용적의 20~30% 정도 수치"
+  },
+  {
+    "id": "CIRC-ANA-13",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제1기 — 등축성 수축(isometric contraction), 심실 용적 변화 없이 압력만 증가, 20~30msec 정도 킬러용어"
+  },
+  {
+    "id": "CIRC-ANA-14",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제2기 — 혈액 배출 시기(심실 혈액의 ½ 방출), 심실압이 대동맥·허파동맥 확장기말 압력보다 증가하며 판막이 열려 혈액 방출"
+  },
+  {
+    "id": "CIRC-ANA-15",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제3기 — 심실 수축으로 혈액 배출"
+  },
+  {
+    "id": "CIRC-ANA-16",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제4기 — 혈류 방출 없이 심근이 수축된 상태(확장 초기, 제2심음 직후), 등장성 이완으로 수축기 종료"
+  },
+  {
+    "id": "CIRC-ANA-17",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심방·심실 중격 결손 → 혈류 순환이 본래 방향과 달라짐 = 선천성 심장질환(CHD), 단락검사·심실-허파 방사능 곡선으로 측정"
+  },
+  {
+    "id": "CIRC-ANA-18",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "판막 감염·손상으로 기능 상실 → 후천성 심장질환(CHF), 판막 협착(stenosis)·부전(regurgitation)으로 심박출 저하, 심방·심실 확장, 폐혈류 재분포(redi"
+  },
+  {
+    "id": "CIRC-ANA-19",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심장동맥 협착·폐쇄로 허혈성 심근질환·심근경색 = 관상동맥질환(CAD), 201Tl·99mTc의 심근 분포 정도를 영상화"
+  },
+  {
+    "id": "CARD-RP-01",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "(1) 혈류 이동경로 추적자 — 수 분 이내 추적자 역할 후 심장 통과 후 신속 배설, 99mTcO4-·99mTc-DTPA가 적당 조합"
+  },
+  {
+    "id": "CARD-RP-02",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "(2) 심실 모양 관찰 — 혈액풀(blood pool) 형성해 검사시간 동안 장시간 머무름, 99mTc-RBC·99mTc-HSA가 적당 조합"
+  },
+  {
+    "id": "CARD-RP-03",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "(3) 심근 집적 — 관상동맥 통해 분포하며 심근 무기질대사에 이용되어 집적, 99mTc-sestaMIBI·99mTc-teboroxime 조합"
+  },
+  {
+    "id": "CARD-RP-04",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "검사목적별 의약품 — 심근혈류(201Tl/sestaMIBI/tetrofosmin/teboroxime, 운동·약물 Dipyridamole 부하), 심실기능(99mTc-RBC/HSA,"
+  },
+  {
+    "id": "CARD-RP-05",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "심장 핵의학 검사 적용 — 흉통(chest pain) 원인, 심장기능, 심근 허혈, 심실동맥류, 수술 전 예후, 심근 생존능력, 심장동맥질환 진단"
+  },
+  {
+    "id": "SPS-01",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "목적 — 심장 내 단락(shunt) 유무, 심박출량 평가, 심장 순환시간 측정, 심실 용적 측정"
+  },
+  {
+    "id": "SPS-02",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "의약품 99mTcO4-·99mTc-DTPA"
+  },
+  {
+    "id": "SPS-03",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "환자자세 앙와위(supine), 영상 전면상(anterior)/좌전사위상(LAO), 30~60초 짧은 시간에 심장기능 평가, 방사성의약품이 심장을 1회 순환하는 동안 측정"
+  },
+  {
+    "id": "SPS-04",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "투여방법 bolus injection(순간주사), 바깥쪽정맥(external jugular)·앞팔꿈치정맥(antecubital vein) 투여"
+  },
+  {
+    "id": "SPS-05",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "단락률(Qp/Qs) = 1.0~1.2가 정상 수치"
+  },
+  {
+    "id": "GBPS-01",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "목적 — 심장기능(systolic·diastolic) 평가, 국소적 심장벽 운동(wall motion) 이상 유무"
+  },
+  {
+    "id": "GBPS-02",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "혈액풀 유지 의약품 투여 후 심장 움직임을 8~32 frames으로 ECG R파를 trigger 하는 원리로 박동 주기를 구분된(Gated) 동작으로 획득 frames"
+  },
+  {
+    "id": "GBPS-03",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "의약품 99mTc-PYP·99mTc-RBC (단, 99mTc-RBC가 주로 사용 — PYP는 혈액풀 부적합, 수업5_1 PYP-06 교차)"
+  },
+  {
+    "id": "GBPS-04",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "환자자세 앙와위, 영상 좌전사위상(LAO), 투여 정맥주사"
+  },
+  {
+    "id": "GBPS-05",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "검사시간 최소 30분~1시간 소요되므로 그동안 방사성의약품은 안정된 표지 상태가 유지되어야 함"
+  },
+  {
+    "id": "GBPS-06",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "RBC 제조법 — 체내 표지법(표지율 낮음 60~70%), 변형 체내 표지법(가장 널리 사용), 체외 표지법(사용되지 않음)"
+  },
+  {
+    "id": "MPS-01",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "목적 — 관상동맥질환 진단, 심장 관류 감소의 정량적 평가, 심장 전반 기능 평가"
+  },
+  {
+    "id": "MPS-02",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "환자준비 — 검사 6시간 전까지 금식(NPO): 내장 혈류를 증가시켜 간·소장에 201Tl 집적을 높이고 상대적으로 심근 집적이 낮아지는 것을 막기 위함(교수 킬러)"
+  },
+  {
+    "id": "MPS-03",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "의약품 201Tl-chloride·99mTc-sestaMIBI·99mTc-tetrofosmin"
+  },
+  {
+    "id": "MPS-04",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "환자자세 앙와위, 영상 우전사위상(RAO)에서 좌후사위상(LPO)까지 SPECT 스캔, 정맥주사 자세"
+  },
+  {
+    "id": "MPS-05",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl은 심장동맥 혈류를 따라 심근에 집적, K+(potassium)과 유사한 성질로 Na-K 펌프작용으로 심근 세포막을 통과해 추출 기전"
+  },
+  {
+    "id": "MPS-06",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl 심근 섭취 = 심근 혈류량 × 추출률, 심근 혈류로 유입된 201Tl의 약 85%를 추출해 섭취, 이 양은 전체 주입량의 4% 정도이고 나머지는 소화장기·근육 등에 집적"
+  },
+  {
+    "id": "MPS-07",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "시간 경과에 따라 혈액과 심근 내 201Tl 농도가 평형을 이루어 심근 내 201Tl 농도는 감소"
+  },
+  {
+    "id": "MPS-08",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "재분포(redistribution) — 심장동맥 협착·폐쇄 시 운동부하로 정상 심근보다 혈류 감소가 심화, 2~3시간 휴지기 이후 혈중 201Tl이 냉소 부위에서 서서히 재흡수됨"
+  },
+  {
+    "id": "MPS-09",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "운동부하 시 냉소로 나타난 부위가 휴지기에 재분포를 보여 정상조직과 같은 열소로 나타나면 심근 허혈(ischemia), 재분포가 없으면 심근경색(infarction)으로 진단(교수"
+  },
+  {
+    "id": "MPS-10",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl은 69·71·80keV 감마선과 135·167keV 연속엑스선을 가짐, 주로 80keV 사용, 이중에너지 사용 시 80keV·167keV 사용 에너지"
+  },
+  {
+    "id": "MPS-11",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl 사용에너지(80keV)가 낮아 영상의 질이 비교적 낮고 연조직 감쇠 효과가 큼"
+  },
+  {
+    "id": "MPS-12",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl 반감기 2.7일, 가속기(사이클로트론)에서 생성된 핵종(원활하지 못한 공급이 문제 될 수 있음) 반감기·생산"
+  },
+  {
+    "id": "MPS-13",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "99mTc-sestaMIBI·tetrofosmin은 심근 섭취기전·섭취율·배설경로가 201Tl과 비슷"
+  },
+  {
+    "id": "MPS-14",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "sestaMIBI·tetrofosmin은 심근 집적·제거의 생리적 기전이 201Tl과 달라 재분포가 일어나지 않음 → 운동부하 재분포 영상을 위해 추가 재주입을 해야 하는 단점 ("
+  },
+  {
+    "id": "MPS-15",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "99mTc-sestaMIBI는 지질친화성 양이온 화합물로 미토콘드리아의 음성막전하에 의해 포획(단순 확산) 기전(교수 킬러)"
+  },
+  {
+    "id": "MPS-16",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "sestaMIBI 심근 섭취율은 총 주입량의 3% 내외이며 쓸개·간에 높은 집적을 보이고 장으로 배출"
+  },
+  {
+    "id": "MPS-17",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "sestaMIBI 심근 섭취·배설은 세포 생존능력·세포막 온전성 여부에 영향받으므로 심근 섭취 정도가 심근 생존능을 반영"
+  },
+  {
+    "id": "MPYP-01",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "99mTc-PYP는 심근경색 부위(infarcted area)에 선택적으로 집적되어 열소(hot spot)로 나타나는 특징 이용, 경색 발병 1~7일/수술 후, 경색 부위 찾기 c"
+  },
+  {
+    "id": "MPYP-02",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "PYP는 괴사로 함몰된 심근세포 미토콘드리아에 Ca2+와 함께 인산화합물이 수산화인회석형으로 섭취되는 성질 이용, 급성기 심근괴사 병소를 양성상으로 묘출"
+  },
+  {
+    "id": "MPYP-03",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "PYP는 201Tl과 반대로 양성상으로 검출되므로 흡수보정이 필요 없음 (201Tl 대비)"
+  },
+  {
+    "id": "MPYP-04",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "정상 심근은 복장뼈·갈비뼈 영상만 나타남, 비정상 심근은 심근 내 집적. 갈비뼈 골절·근육 손상·피부병소·석회화 연골·유방질환에도 집적, 심근경색·왼심실 동맥류·불완전 협심증·심근"
+  },
+  {
+    "id": "CPET-01",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "심근관류 PET는 현재 임상에서 관류 평가에 가장 실용적·유용, 심근관류 SPECT보다 영상품질·진단성적 우수, 절대 관류량 평가 장점"
+  },
+  {
+    "id": "CPET-02",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "[15O]H2O — 반감기 2분, 물분자 자체로 관류 시 자유확산을 통해 조직에 섭취되며 혈중에서 대사되지 않음"
+  },
+  {
+    "id": "CPET-03",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "[13N]NH3 — 반감기 9.96분, 심근으로 확산해 들어간 후 글루타민합성효소가 글루타민 형태로 고정, 혈류량 측정 시 초기 5분 이내 영상 이용"
+  },
+  {
+    "id": "CPET-04",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "심근대사 PET — 포도당 대사 FDG, 지방산 대사 11C-팔미트산, 산소 대사 11C-아세트산 매칭"
+  },
+  {
+    "id": "VENO-01",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "목적 — 상지 또는 하지 심부 정맥 폐쇄의 선별 진단"
+  },
+  {
+    "id": "VENO-02",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "의약품 — 상지 99mTcO4-, 하지 99mTc-MAA 상·하지 구분"
+  },
+  {
+    "id": "VENO-03",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "환자자세 앙와위, 영상 전면상(anterior), 투여 bolus injection(순간주사)"
+  },
+  {
+    "id": "VENO-04",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "하지 혈류량 대부분 깊은 정맥에서 평가, 99mTc-MAA는 폐(lung)에 집적되므로 상지보다 하지정맥에 적당, 장골정맥·대퇴정맥·무릎 후면 정맥 등 깊은 부위도 잘 표현"
+  },
+  {
+    "id": "VENO-05",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "상지정맥은 좌우를 분리해 병소부위를 먼저 검사, 99mTc-MAA를 발등 정맥 내로 주사"
+  },
+  {
+    "id": "LYMPH-01",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "목적 — Hodgkin's 질환, 림프절·림프관 질환(형태·기능), 림프절 통한 전이(metastasis) 여부"
+  },
+  {
+    "id": "LYMPH-02",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "의약품 99mTc-phytate·99mTc-colloid·99mTc-ASCtate(Sb2S3)"
+  },
+  {
+    "id": "LYMPH-03",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "환자자세 상·하지 앙와위·좌위(sitting), 유방 앙와위, 투여 피하주사(subcutaneous injection) (정맥주사로 뒤집으면 오답 — 교수 부정형 함정)"
+  },
+  {
+    "id": "LYMPH-04",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "주입 후 4시간 경과 후 서혜부(inguinal)·장골 부위·대동맥 주위에서 집적 관찰(정상)"
+  },
+  {
+    "id": "RESP-ANA-01",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "공기 유입 경로 — 코안(nasal cavity)→인두(pharynx)→후두(larynx)→기관(trachea), 기관은 2개의 기관지(bronchus)로 나뉜 후 허파 속에서 2"
+  },
+  {
+    "id": "RESP-ANA-02",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "허파꽈리주머니(폐포낭, alveolar sac)와 허파꽈리(폐포, alveoli)에서 끝나며, 허파꽈리는 공기와 혈액 사이 가스교환(산소·이산화탄소)이 일어남"
+  },
+  {
+    "id": "RESP-ANA-03",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "코안~호흡세기관지에 이르는 공기 운반 통로를 기도라 함"
+  },
+  {
+    "id": "RESP-ANA-04",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "허파에서 기관지·혈관이 출입하는 곳을 허파문(폐문, hilus)이라 함"
+  },
+  {
+    "id": "RESP-ANA-05",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "횡격막(가로막)은 가슴과 배를 나누는 가로무늬근육"
+  },
+  {
+    "id": "RESP-ANA-06",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "가슴막은 벽쪽가슴막·허파쪽가슴막, 사이에 가슴막액(윤활제 역할), 가슴막공간(pleural cavity)은 음압으로 유지"
+  },
+  {
+    "id": "LPS-01",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "목적 — 폐 혈관계 질환(폐전색·혈전·종양·폐암·결핵), 폐쇄성 질환(만성 기관지염·폐기종·기관지 천식·기관지 확장증), 우좌단락(right to left shunt) 평가, 색전"
+  },
+  {
+    "id": "LPS-02",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "전처치 — 촬영 5~10분 전 누운 상태 휴식, 정맥주사 후에도 3~5분간 편안히 누운 상태 유지"
+  },
+  {
+    "id": "LPS-03",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-MAA 주입 시 주사기 내로 혈액이 역류하면 혈액과 MAA가 응집해 다시 주입 시 허파 내 열소로 나타나므로 응고되기 전에 주입"
+  },
+  {
+    "id": "LPS-04",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "주입하는 동안 2~3회 심호흡 → 입자의 균등 분포에 도움"
+  },
+  {
+    "id": "LPS-05",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-MAA(microaggregated albumin)는 혈관 차단기전, 일반적으로 0.1%가 모세관에 차단, 단락 없으면 입자의 95%가 허파모세혈관에서 제거(작은 입자는"
+  },
+  {
+    "id": "LPS-06",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-MAA — 입자 직경 10~60μm, 입자 수 600,000, 반감기 6h, generator 생성, 140keV, 정맥 수치"
+  },
+  {
+    "id": "LPS-07",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-HAM(human albumin microsphere) — 입자 20~45μm, 입자 수 100,000, 폐성고혈압증이 심한 환자에게는 사용 금지"
+  },
+  {
+    "id": "LPS-08",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "검사 — 앉은/누운 자세, 조준기 저에너지 범용성(LEGP)·저에너지 고분해능(LEHR), SPECT로 허파 크기·모양·혈류분포·질환 정보 및 정량분석"
+  },
+  {
+    "id": "LVS-01",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "목적 — 국소 환기 평가, 흡입된 방사선 기체가 기관·기관지→종말세기관지(terminal bronchiole)→허파꽈리관을 거쳐 허파꽈리에서 기체교환"
+  },
+  {
+    "id": "LVS-02",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "기도에 유입된 방사성 기체는 콘공(pore of Kohn)·람버트관(canal of Lambert)을 통해 인근 허파꽈리에 도달, 세기관지가 막혀도 측부환기 역할로 폐엽에 냉소(c"
+  },
+  {
+    "id": "LVS-03",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "폐관류 스캔의 특이도를 보완·개선, 만성 기관지염·폐기종·폐전색증에 이용, 특별한 전처치 없음"
+  },
+  {
+    "id": "LVS-04",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "133Xe — 반감기 5.3일(생물학적 반감기 30초), 감마선 81keV로 낮아 10cm 이상 허파조직에서 ½ 이상 감약되어 좋은 영상 어려움, 후면상(posterior)으로 실"
+  },
+  {
+    "id": "LVS-05",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "127Xe — 환기검사 이용, 반감기 36.4일, 감마선 172·203keV, 관류 영상보다 나중에 시행할 수 있는 장점"
+  },
+  {
+    "id": "LVS-06",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "81mKr — 반감기 13초(81Rb을 모핵종으로 생성, generator 반감기 4.6시간으로 짧아 사용 불편), 190keV, 허파 용적보다 국소 폐환기 검사에 적당"
+  },
+  {
+    "id": "LVS-07",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "환기검사 표 — 133Xe(reactor 생성, 80keV) / 127Xe(accelerator, 375·203·172keV) / 81mKr(generator, 190keV), 모"
+  },
+  {
+    "id": "LVS-08",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "환기 영상 3단계 — First breath(방사성 제논 가스 깊게 흡입 후 호흡 멈추고 기록), Equilibrium(산소+방사가스 2~3분 흡입한 평형 영상), Washout("
+  },
+  {
+    "id": "LIS-01",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "연무(양압/초음파 분무기) 흡입 촬영은 국소 환기 촬영의 일종, 연무 입자 크기에 의한 분포 차이 가능하나 호흡 방법에 영향받음"
+  },
+  {
+    "id": "LIS-02",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "폐혈류+폐흡입 동시 시행으로 폐 혈류 결손이 환기 결손과 동반되는지 진단, 특별한 전처치 없음"
+  },
+  {
+    "id": "LIS-03",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "99mTc-technegas — 입자 크기 20nm 이하(탄소 증기: 99mTcO4-과 아르곤 가스를 2,500°C로 가열해 생성), 담체 가스로 아르곤(Argon) 사용, 허파"
+  },
+  {
+    "id": "LIS-04",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "99mTc-DTPA aerosol — 입자 0.25~2.0μm(technegas 0.0005μm), 둘 다 6h·generator·140keV·흡입, DTPA는 바로누운/앉은 자세"
+  },
+  {
+    "id": "PEVQ-01",
+    "exam": "PEVQ",
+    "part": "L6",
+    "label": "폐색전증 — 폐혈류+폐흡입을 동시 시행해 혈류 결손이 환기 결손과 동반되는지 확인, 병행 시 폐흡입 검사를 먼저 실시(허파에 침착되는 연무량이 폐혈류보다 상대적으로 낮기 때문) 순"
+  },
+  {
+    "id": "PEVQ-02",
+    "exam": "PEVQ",
+    "part": "L6",
+    "label": "환기 정상 + 관류 결손 = mismatch = 폐색전(pulmonary embolism), 둘 다 결손 = matched 해석"
+  },
+  {
+    "id": "PEVQ-03",
+    "exam": "PEVQ",
+    "part": "L6",
+    "label": "우좌단락 검사 — 기본 폐관류 검사를 동일하게 시행 후 전신촬영, 10세 이하 어린이와 우좌단락 환자에는 MAA 입자 수를 100,000개 이하로 주사 수치"
+  },
+  {
+    "id": "SALI-ANA-01",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "침샘(salivary gland)은 외분비샘(exocrine gland), 귀밑샘(아하선, parotid)·턱밑샘(악하선, submandibular)·혀밑샘(설하선, subling"
+  },
+  {
+    "id": "SALI-ANA-02",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "귀밑샘(parotid)은 3개 분비기관 중 가장 크고 장액성(serous) 침 생성, Stensen's duct를 통해 분비"
+  },
+  {
+    "id": "SALI-ANA-03",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "턱밑샘(submandibular)은 혼합성(점액성+장액성) 침 생성, Wharton's duct를 통해 분비"
+  },
+  {
+    "id": "SALI-ANA-04",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "혀밑샘(sublingual)은 주로 점액성 침 생성하나 혼합샘으로 분류, 10% 미만의 침 분비(가장 작음)"
+  },
+  {
+    "id": "SALI-ANA-05",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "침 분비 — 부교감신경에 의해 저농도 침, 고농도 침 분비는 교감신경이 조절"
+  },
+  {
+    "id": "SALI-ANA-06",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "분비세포(secretory cell)가 모여 소포(acini)를 이룸, 침 생성에 필요한 수분·성분은 목동맥(경동맥)과 연결된 모세혈관 통해 공급, 침샘은 하루 0.5~1.5L 분"
+  },
+  {
+    "id": "SALI-ANA-07",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "침은 소엽내관(intralobular duct)에 저장, 음이온(과산화테크네슘·옥소화합물)을 농축하는 능력"
+  },
+  {
+    "id": "SALI-ANA-08",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "99mTcO4-은 음이온 성질로 침샘에서 활동적으로 흡수·분비되므로 침샘 위치·크기·기능 촬영, 침샘 침범 종괴(mass) 진단·감별에 이용"
+  },
+  {
+    "id": "SALI-01",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "목적 — 침 분비관 폐쇄, 침샘염·입안 건조, 침샘 내 종양 기능 평가"
+  },
+  {
+    "id": "SALI-02",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "전처치 — 검사 6시간 전부터 공복, 촬영 전 물로 입안을 세척해 침으로 분비된 99mTcO4- 제거"
+  },
+  {
+    "id": "SALI-03",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "의약품 99mTcO4-(정맥주사), Head&neck anterior dynamic blood flow study로 침샘 내 혈류분포 영상화, Conversing collimato"
+  },
+  {
+    "id": "SALI-04",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "침 분비제(레몬주스 등)를 사용하면 99mTcO4-의 분비가 촉진됨 (교수 단골)"
+  },
+  {
+    "id": "SALI-05",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "검사 — 정맥주사 후 즉시·5·10·20분 전면상, 20분에 전면+좌우측면, 레몬주스 물린 후 제거·세척한 30분 washout 영상"
+  },
+  {
+    "id": "SALI-06",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "영상 phase — 관류기(1분 이내 perfusion), 농축기(5~15분 concentration, 정적영상), 분비기(15분 이후 secretory), 방출영상(washout"
+  },
+  {
+    "id": "ESO-01",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "목적 — 연하곤란증(dysphagia)·이완불능증(achalasia)·식도운동 이상증 진단, 식도 통과시간 측정, 유동식·고형식 식괴(bolus)가 식도→위 통과시간 측정"
+  },
+  {
+    "id": "ESO-02",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "Ba 식도촬영(esophagram)·식도압측정(manometry)에는 미치지 못하나 식도통과 정량검사에 유용, 전처치 6시간 공복"
+  },
+  {
+    "id": "ESO-03",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "유동식 검사 — 99mTc-sulfur colloid, 바로누운 자세로 위 fundus 포함, 한 번에 삼킴(15초 간격 10분 반복), 영상은 삼킨 후 1분간 0.25초·나머지"
+  },
+  {
+    "id": "ESO-04",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "고형식 검사 — 99mTc-DTPA+계란을 후라이로 만들어 빵조각에 넣어 먹게 함, 15초 간격 전후면상으로 기하학적 효율 계산"
+  },
+  {
+    "id": "ESO-05",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "정상 — pharynx에서 식도로 통과 0.5~1초 이하, 식도통과시간 5~10초, 삼킨 후 15초 후 통과율 90% 이상 수치"
+  },
+  {
+    "id": "GER-01",
+    "exam": "GER",
+    "part": "L71",
+    "label": "목적 — 역류 신티그램으로 역류 유무·역류량 측정, 위·샘창자 내용물이 식도로 역류해 점막 염증 유발, 가슴앓이(heart-burn)·탄산증(pyrosis)·역류(regurgita"
+  },
+  {
+    "id": "GER-02",
+    "exam": "GER",
+    "part": "L71",
+    "label": "전처치 — 검사 전날 밤부터 반드시 공복"
+  },
+  {
+    "id": "GER-03",
+    "exam": "GER",
+    "part": "L71",
+    "label": "의약품 99mTc-sulfur colloid·99mTcO4-·111In-DTPA, 식도 점막에 붙거나 흡수되지 않아야 함, 오렌지 주스와 희석해 경구 투여"
+  },
+  {
+    "id": "GER-04",
+    "exam": "GER",
+    "part": "L71",
+    "label": "식도역류율(%) — 비정상 4% 이상, 정상 2% 미만 수치"
+  },
+  {
+    "id": "GES-01",
+    "exam": "GES",
+    "part": "L71",
+    "label": "목적 — 위 소화능력, 오심·구토·복부팽만감·체중저하 원인 파악, 위 내용물의 삼투성·산도·칼로리·단백질·탄수화물·지방 정도에 따라 배출시간이 다름"
+  },
+  {
+    "id": "GES-02",
+    "exam": "GES",
+    "part": "L71",
+    "label": "음식물 배출 경로 — 위바닥(fundus)·위몸통(body)에 머문 뒤 느린 수축·연동으로 위전정부(antrum)로, 위전정부 강한 연동으로 연한 음식은 샘창자로 내려가고 딱딱한"
+  },
+  {
+    "id": "GES-03",
+    "exam": "GES",
+    "part": "L71",
+    "label": "전처치 — 검사 전 최소 4~6시간 금식(담배·술도 금함)"
+  },
+  {
+    "id": "GES-04",
+    "exam": "GES",
+    "part": "L71",
+    "label": "유동식 — 99mTc-DTPA·111In-DTPA를 생리식염수·우유에 섞어 마심, 1시간 이내, 위 배출능력 정확 반영 못함, 섬유·단백질·지방 함유 필요, 정상 위 반감시간 10"
+  },
+  {
+    "id": "GES-05",
+    "exam": "GES",
+    "part": "L71",
+    "label": "고형식 — 99mTc-DTPA 포함 계란찜+김밥 먹고 10분 이내 촬영, 2~3시간 장시간, 정상 위 반감시간 45~110분 수치"
+  },
+  {
+    "id": "GES-06",
+    "exam": "GES",
+    "part": "L71",
+    "label": "위 배출이 빠른 경우 — 수술 후(유문성형술·반위절제·샘창자궤양·가스트리노마)·갑상샘기능항진증·샤가스병(Chagas')·흡수장애증"
+  },
+  {
+    "id": "SBT-01",
+    "exam": "SBT",
+    "part": "L71",
+    "label": "소장 통과시간 — 방사성의약품 투여 후 3.5~4.0시간 후 영상(6시간 후 재촬영)"
+  },
+  {
+    "id": "SBT-02",
+    "exam": "SBT",
+    "part": "L71",
+    "label": "57Co를 iliac crest에 부착해 소장과 오름(상행)·내림(하행)결장·S자결장·직장을 구분, 111In resin bead를 capsule로 경구 투여하고 4·12시간 영상"
+  },
+  {
+    "id": "SBT-03",
+    "exam": "SBT",
+    "part": "L71",
+    "label": "위로부터 대장 통과시간을 ROI 설정해 계수 측정, 정상 위로부터 배율률은 투여량의 24~47%(2시간)·56~100%(4시간), 6시간 경과 후 소장으로부터 11~70% 배출 수"
+  },
+  {
+    "id": "GIB-01",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "원리 — 특정 장기에서만 선택적으로 제거되는 방사성의약품을 출혈 환자에게 투여하여 출혈 부위로 일부 새어 나가고 나머지는 특정 장기에서 제거되는 원리"
+  },
+  {
+    "id": "GIB-02",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "예민도가 높아 0.05~0.12ml/min 정도의 출혈량을 감지 수치"
+  },
+  {
+    "id": "GIB-03",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "상부 소화기(궤양·샘창자 궤양·위염·정맥류), 하부 소화기(게실 diverticulum·혈관 형성장애 angiodysplasia·소장 감염·신생물 neoplasm) 출혈 진단에 유"
+  },
+  {
+    "id": "GIB-04",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "의약품 99mTc-pyrophosphate(PYP)·99mTc-sulfur colloid·99mTc-RBC 조합"
+  },
+  {
+    "id": "GIB-05",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "99mTc-sulfur colloid는 체내 투입 시 그물내피계(RES)에 빠르게 흡수되어 혈액 중 감소, 정상 반감기 1.5~3분, 반감기 짧아 출혈점-정상 대조도 크고 장 내"
+  },
+  {
+    "id": "GIB-06",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "99mTc-sulfur colloid는 처음에 간·지라에 집적되어 상복부 출혈검사 곤란(오른창자굽이 hepatic flexure·왼창자굽이 splenic flexure 등 출혈병소"
+  },
+  {
+    "id": "GIB-07",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "99mTc-RBC는 간헐적·서서히 출혈되는 출혈검사에 우수, 적어도 24시간 경시적 기록 가능, 출혈 시 1/3 이상이 12~24시간 사이 양성, sulfur colloid보다 정"
+  },
+  {
+    "id": "MECKEL-01",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "출혈을 일으킨 멕켈게실은 거의 모두 위벽측세포(gastric parietal cell)를 가짐, 퇴화된 위장관의 하나로 돌창자(회장) 말단(terminal ileum)에 위치, 산"
+  },
+  {
+    "id": "MECKEL-02",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "상당한 염산(HCl)·펩신(pepsin) 분비가 주위 장점막에 궤양·출혈 유발, 이소성(ectopic) 위점막에 의한 혈변증(hematochezia) 환자에게 시행, 전처치 4~6"
+  },
+  {
+    "id": "MECKEL-03",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "의약품 99mTcO4-(옥소처럼 위점막 점액 생산세포에 농축·분비되는 성질)"
+  },
+  {
+    "id": "MECKEL-04",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "검사 — bolus 정맥주사, 하행대동맥 나타나면 1분간 1frame/5sec 동적영상, 이후 1시간 5~10분 간격 정적영상, 지연상(delay image) 2~6시간 또는 18"
+  },
+  {
+    "id": "MECKEL-05",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "정상 — 99mTcO4- 주사 후 blood pool 즉시 나타남, 침샘·갑상샘·위 집적 증가, 위강 분비 방사능이 샘창자→빈창자(공장, jejunum)→때로 돌창자까지 내려감"
+  },
+  {
+    "id": "LIV-ANA-01",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간은 인체 최대 장기(적갈색 실질장기), 대부분 복막에 싸여 오른 상복부 횡경막 아래면에 위치, 모양은 체위·호흡에 따라 변함"
+  },
+  {
+    "id": "LIV-ANA-02",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "낫인대(겸상인대, falciform ligament)에 의해 오른간엽·왼간엽 구분, 간문 앞뒤로 네모엽(quadrate)·조리엽(caudate), 오른엽-네모엽 사이에 쓸개(gal"
+  },
+  {
+    "id": "LIV-ANA-03",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간실질의 65%가 간세포, 모세혈관 사이는 간세포삭, 육각형 중심에 central vein, 모서리에 hepatic artery·portal vein·bile duct 위치(동양혈"
+  },
+  {
+    "id": "LIV-ANA-04",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "쿠퍼세포(Kupffer's cell)는 혈관벽 내피세포 사이 그물내피계세포, 몸 전체 그물내피계(탐식작용)의 80%를 구성(지라·골수·허파에도 다수)"
+  },
+  {
+    "id": "LIV-ANA-05",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간 혈액 — 복강동맥(celiac artery)의 분지인 간동맥, 그리고 지라정맥+위창자간막정맥이 합치는 문맥으로부터 공급"
+  },
+  {
+    "id": "LIV-ANA-06",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간 기능 — 대사·분비·배설·순환·저장, 쓸개즙(담즙) 생성·분비, 암모니아 등 독성물질을 요소로 전환해 배설"
+  },
+  {
+    "id": "LIVS-01",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "목적 — 간종대(hepatomegaly)·복부종양 구분, 암 전이 여부 수술 전 확인, 간경화·간염, 위치·모양·황달·간농양·혈종·파열"
+  },
+  {
+    "id": "LIVS-02",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "Colloid 표지 방사성의약품의 직접 기전은 식균작용(phagocytosis)임(간·지라) 기전"
+  },
+  {
+    "id": "LIVS-03",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "Kupffer 세포에 의한 식균작용 — 간 80~90%, 지라 5~10% 비율"
+  },
+  {
+    "id": "LIVS-04",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "정상 간 최대 집적은 8~12분, 간에서 유효반감기 6시간 수치"
+  },
+  {
+    "id": "LIVS-05",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "의약품 99mTc-sulfur colloid 74~148MBq IV(영상 10~15분), 99mTc-tin colloid·albumin minimicrosphere, 99mTc-I"
+  },
+  {
+    "id": "LIVS-06",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "정상 — 방사능 고르고 오른엽보다 왼엽이 약간 저하, 종양·낭종·농양은 single/multiple cold 부위, 간경화·간염은 불규칙 분포+간 크기 증가+골수 방사능 증가+지라"
+  },
+  {
+    "id": "LHEM-01",
+    "exam": "LHEM",
+    "part": "L72",
+    "label": "간 혈관종은 흔한 간의 양성종양, 검사로 악성·양성 판정에 결정적 진단정보 제공, 간암·간농양·간전이 등 악성과 신속 구별"
+  },
+  {
+    "id": "LHEM-02",
+    "exam": "LHEM",
+    "part": "L72",
+    "label": "의약품·방법 — 99mTc-RBC 정맥주사(혈류영상·정지영상 static·지연상 delay image 기록)"
+  },
+  {
+    "id": "HBS-01",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "쓸개즙은 간세포에서 생성, 담세관(bile canaliculi)→소엽간담관(interlobular)→간관(hepatic duct)→온간관(common hepatic duct), 온"
+  },
+  {
+    "id": "HBS-02",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "대사산물 배출은 극성(polarity)·분자 크기·구조에 영향받음 — 분자량<300은 요로 배설(주로 신장), 300~1,000은 쓸개관으로 잘 배설(300~500은 소변·담즙 두"
+  },
+  {
+    "id": "HBS-03",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "쓸개에 저장된 쓸개즙은 음식물 섭취 시 샘창자 점막에서 분비, CCK(cholecystokinin)에 의해 쓸개가 수축하며 배출, 오디조임근(괄약근)이 이완되며 샘창자 내로 배출,"
+  },
+  {
+    "id": "HBS-04",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "목적 — 간세포 기능상태, 쓸개관 폐쇄 여부, 쓸개 기능·쓸개주머니관 폐쇄 여부 진단, 전처치 최소 6시간 공복"
+  },
+  {
+    "id": "HBS-05",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "99mTc-IDA 복합체는 음이온체와 결합하며 같은 음이온체를 운반하는 bilirubin과 경쟁적으로 작용해 간세포 섭취 후 쓸개즙과 함께 분비되어 쓸개·쓸개관→샘창자로 흘러감(간"
+  },
+  {
+    "id": "HBS-06",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "간담도 의약품 조건 — 혈장으로 빠른 시간 내 간세포 흡수, 간담도로 신속 이행, 장 흡수 없고 콩팥 배설 적어야, 분자량 300~1,000 적당, 복합체 양단이 수용성·지용성 동"
+  },
+  {
+    "id": "HBS-07",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "이동 phase — 혈액기(blood pool, 5분 이내), 간실질기(hepatocyte, 5~20분), 담도기(biliary tract, 1시간), 장기기(intestinal,"
+  },
+  {
+    "id": "HBS-08",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "정상은 1시간 이내 쓸개·장이 관찰되나, 쓸개가 안 보이면 쓸개주머니관(cystic duct) 폐쇄 의심, 장이 안 보이면 쓸개관(bile duct) 폐쇄 의심(교수 킬러)"
+  },
+  {
+    "id": "BEF-01",
+    "exam": "BEF",
+    "part": "L72",
+    "label": "목적 — 담석 없는 환자에서 쓸개운동 이상증·cystic duct 이상이 만성 간담께 통증 원인이 될 수 있음, 전처치 최소 4시간 공복"
+  },
+  {
+    "id": "BEF-02",
+    "exam": "BEF",
+    "part": "L72",
+    "label": "IDA계 외에 99mTc-disofenin·99mTc-mebrofenin 이용, 쓸개의 쓸개즙 배출 정량 분석"
+  },
+  {
+    "id": "BEF-03",
+    "exam": "BEF",
+    "part": "L72",
+    "label": "바로 누운 자세 정맥주사, 모든 영상 기록시간 5분 일정 유지, 정상 쓸개즙 배출률 40% 이상(sincalide 자극) 수치"
+  },
+  {
+    "id": "SPLEEN-01",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "지라는 좌상복부 후면, 그물내피세포+림프구 구성, 혈구(혈소판·백혈구·적혈구) 조절·체액인자 생산·외부입자 제거, 두 생리적 기능은 적혈구 포획(sequestration)과 식균작"
+  },
+  {
+    "id": "SPLEEN-02",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "수명을 다하거나 변형된 적혈구가 지라에서 포획되는 원리 이용 — 적혈구를 인위적으로 변형시키고 방사성의약품 표지해 정맥주사하면 모두 지라에 섭취 기전"
+  },
+  {
+    "id": "SPLEEN-03",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "목적 — 크기·형태·위치, 좌상복부 종괴 감별, 외상, 악성종양 진전도, 부비(accessory spleen)·비증(splenosis)·무비증(asplenia) 진단"
+  },
+  {
+    "id": "SPLEEN-04",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "의약품 99mTc-RBC·99mTc-PYP·99mTc-sulfur colloid, 정상은 간과 비슷하거나 약간 적게 균등 분포·전면상 얇은 난원형, 체위 anterior·후면상 주"
+  },
+  {
+    "id": "SPLEEN-05",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "sulfur colloid가 지라에 cold로 나타나는 경우 — 경색·림프종·전이성질환·낭종·농양·혈종·동맥류 / cold로 안 나타나는 경우 — 지라 절제 후(splenectom"
+  },
+  {
+    "id": "PANC-01",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "이자(췌장)는 1·2허리뼈 높이, 내분비+외분비 겸비 복막 후 장기, 머리(head)·몸통(body)·꼬리(tail)로 구분(머리는 샘창자에, 꼬리는 지라에 부착)"
+  },
+  {
+    "id": "PANC-02",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "내분비선 Langerhans섬에서 인슐린·글루카곤·소마토스타틴 분비, 탄수화물 합성조절·혈장수준 조절, 삼대영양소 분해효소 보유, 이자관→온쓸개관과 함께 큰샘창자유두로 방출, 췌액"
+  },
+  {
+    "id": "PANC-03",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "의약품 75Se-seleno-methionin 정맥주사, 75Se는 소변 80%·대변 20% 배설, 이자에서 신속 합성에 의해 고농도 축적, 고농도 축적 위해 검사 전 고단백 식사"
+  },
+  {
+    "id": "PANC-04",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "이자 외 지라·콩팥·간·고환(testis)에도 집적, 이자 집적량은 간의 6~8배, 10분 간격 60분 기록, 정상 10분 이내 이자에 나타남(간·공장·비장)"
+  },
+  {
+    "id": "FAT-01",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "정상 성인은 50~100g 지방식 섭취 시 5g 이하 지방이 대변 배설, 지방변(steatorrhea) 진단, 표지물 oleic acid·triolein(131I 표지)·11C-c"
+  },
+  {
+    "id": "FAT-02",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "전처치 — 방사성의약품 투여 24시간 전 Lugol액 투여(갑상샘 차단), triolein 투여 3~6시간 후 혈중 방사능 최고(투여량 8~17%가 혈중)"
+  },
+  {
+    "id": "FAT-03",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "대변 방사능 측정이 장 지방 흡수 기능을 가장 잘 평가, 72시간 동안 대변 수집(배설량 투여량의 5% 미만, 보통 1~2%) 수치"
+  },
+  {
+    "id": "FAT-04",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "triolein 흡수 이상 시 이자 리파아제(lipase) 분비 결핍 의심 — triolein(중성지방)은 lipase·lecithinase로 oleic acid로 변해 흡수, 1"
+  },
+  {
+    "id": "FAT-05",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "11C-carbon dioxide는 경구 투여 시 간에서 빠른 대사 후 허파 통해 호기 중 14CO2로 제거, 방사능 계수 측정(간단·안전)"
+  },
+  {
+    "id": "B12-01",
+    "exam": "B12",
+    "part": "L72",
+    "label": "내부 인자 결함에 의한 악성빈혈(pernicious anemia) 검사, 흡수 장애 — 회장염(ileitis)·소장 게실염·다발성 소장 협착증·위절제 수술·점액수종(myxedema"
+  },
+  {
+    "id": "B12-02",
+    "exam": "B12",
+    "part": "L72",
+    "label": "의약품 57Co-cyanocobalamin"
+  },
+  {
+    "id": "B12-03",
+    "exam": "B12",
+    "part": "L72",
+    "label": "57Co-cyanocobalamin 경구 투여 후 1~2시간 후 비방사성 비타민 B12를 근육주사, 조직·혈장 내 B12가 내인자(intrinsic factor)를 포화시키면 방사"
+  },
+  {
+    "id": "B12-04",
+    "exam": "B12",
+    "part": "L72",
+    "label": "정상인 요 배설률 10~40%, 8% 이하면 장관 흡수장애로 판단해 빈혈 진단 수치"
+  },
+  {
+    "id": "BRAIN-ANA-01",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "좌우 2개 대뇌반구와 소뇌로 구분, 뇌줄기(brain stem)에 의해 척수(spinal cord)와 연결, 대뇌는 이마엽(전두엽)·관자엽(측두엽)·마루엽(두정엽)"
+  },
+  {
+    "id": "BRAIN-ANA-02",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "뇌막 3겹 — 연질막(pia mater)·거미막(지주막, arachnoid)·그 사이 거미막 밑공간(지주막하강, subarachnoid space), 거미막 밑공간은 뇌척수액(CS"
+  },
+  {
+    "id": "BRAIN-ANA-03",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "뇌 혈류량은 정상에서 심박출량의 15%인 750ml/min, 뇌조직 내 산소·이산화탄소 분압에 의해 좌우 수치"
+  },
+  {
+    "id": "BRAIN-ANA-04",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "뇌혈류장벽(BBB)은 뇌혈관계와 신경교 별아교세포(성상세포, astrocyte) 사이에 존재, 혈액-뇌 사이 불필요 물질 차단, 구조상 모세혈관 내피세포·기저막·신경교 세포돌기 3"
+  },
+  {
+    "id": "BRP-01",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "BBB를 잘 통과하는 물질 — 물·탄산가스·산소·지용성 물질"
+  },
+  {
+    "id": "BRP-02",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "정상인은 BBB에 의해 차단되어 뇌조직 자체에는 방사능 집적이 없고, 시상정맥동(sagittal sinus)·횡단정맥동(transverse sinus) 같은 큰 혈관 내 반응만 나"
+  },
+  {
+    "id": "BRP-03",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "BBB 통과가 용이하지 못한(비확산성) 의약품 — 99mTc-pertechnetate·99mTc-DTPA·99mTc-GHA·99mTc-red cells·99mTc-phosphona"
+  },
+  {
+    "id": "BRP-04",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "BBB 통과가 용이한(확산성, 국소뇌혈류) 의약품 — 133Xe(gas, 81keV)·123I-iodoamphetamine(159keV)·99mTc-HMPAO(140keV)·99m"
+  },
+  {
+    "id": "BRANGI-01",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "뇌 핵의학 검사는 2과정 — 동적(bolus 후 대뇌반구 뇌혈류 연속 스캔, angiographic study) + 정적(1시간 후 뇌조직 분포 확인, static image, 지"
+  },
+  {
+    "id": "BRANGI-02",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "99mTcO4- 사용 시 검사 30분~1시간 전 potassium perchlorate 200~500mg 투여로 맥락총 집적 차단해 불필요한 피폭 방지"
+  },
+  {
+    "id": "BRANGI-03",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Radionuclide angiogram — anterior view, 99mTc-표지화합물 555~740MBq(15~20mCi) bolus, 2~3초 간격 30~60초 기록, p"
+  },
+  {
+    "id": "BRANGI-04",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "비정상 angiogram 원인 — 대칭 지연(부적당 주사·아테롬성 동맥경화·울혈성 심부전), 부분 감소 관류(폐쇄성·색전·아테롬종양), 혈종·경막하 cystic 종양·위축·경색 부"
+  },
+  {
+    "id": "BRANGI-05",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Brain static — 1시간 후 anterior·posterior·both lateral, 99mTcO4- 시 맥락얼기·침샘 차단, vertex view로 대뇌반구 verte"
+  },
+  {
+    "id": "BRANGI-06",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Delay static — 이상 부위 3~4시간 후 재촬영(표적/배후방사능 비 커짐), 경막하혈종(subdural hematoma)에 반드시 시행, 뼈·연부조직 표재는 시간 경과로"
+  },
+  {
+    "id": "BRANGI-07",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Brain death — dynamic study에서 intracerebral artery·capillary·venous blood flow가 안 나타나고, 즉시 실시한 stati"
+  },
+  {
+    "id": "BPS-01",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "목적 — 폐쇄성 뇌혈관질환(내경동맥 협착·모야모야병), 치매·뇌신경질환(간질·알츠하이머·파킨슨) 진단, 뇌질환 생리연구·예후 평가"
+  },
+  {
+    "id": "BPS-02",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "의약품 99mTc-HMPAO·99mTc-ECD 정맥주사"
+  },
+  {
+    "id": "BPS-03",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "SPECT 이점 — 후두개·기저부 병소 검출 우수, 두개 내/외 병소 감별, 깊이 방향 위치 평가 용이, 수술 후 재발·잔존병소 검출 우수"
+  },
+  {
+    "id": "BPS-04",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "99mTc-HMPAO는 정맥 주입 후 수초 이내 안정 분포, BBB 통과 순간 지용성 특징이 상실되며 뇌조직에 집적(집적 정도는 뇌혈류량에 의해 분포 양상 다름) 기전"
+  },
+  {
+    "id": "BPS-05",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "99mTc-ECD도 조기 가수분해로 뇌조직 집적되고 콩팥 통해 빠르게 배설되므로 배후방사능(BKG)이 HMPAO보다 낮음"
+  },
+  {
+    "id": "BPS-06",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "정상은 HMPAO·ECD 양측 대칭 분포, 백질(20~30ml/min/100g)보다 회백질(70~90ml/min/100g)에서 혈류량이 많아 회백질부·신경절 저부·시상부에서 증가"
+  },
+  {
+    "id": "BPS-07",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "뇌혈류질환 의심 시 혈관확장제 acetazolamide 정맥주사 후 검사 — 정상은 뇌혈류량 증가하나 뇌혈관질환은 변화 없거나 부분 감소가 뚜렷, 약 20~50% 뇌혈류 증가 ="
+  },
+  {
+    "id": "BPS-08",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "123I-IMP — 중성 지용성, 초회 순환으로 높은 비율 뇌 섭취, 배설(clearance) 느림, 집적률 약 8%, 1시간 정도 안정, 123I 반감기 13시간·159keV,"
+  },
+  {
+    "id": "BPET-01",
+    "exam": "BPET",
+    "part": "L8",
+    "label": "FDG(fluoro deoxy glucose) brain PET은 뇌 포도당 대사 변화를 영상화·정량분석, 뇌종양 위치·양성종양 감별·재발·간질 발작병소·치매·파킨슨·악성뇌종양 방"
+  },
+  {
+    "id": "BPET-02",
+    "exam": "BPET",
+    "part": "L8",
+    "label": "전처치 6시간 이상 금식, 수분 섭취 충분하면 연부조직 대조도 향상, 18F-FDG는 대뇌 겉질·미상핵(caudate nucleus)·시상(thalamus)·소뇌에 집적, 정맥주사"
+  },
+  {
+    "id": "BPET-03",
+    "exam": "BPET",
+    "part": "L8",
+    "label": "당대사 영상≠혈류영상, 해마(hippocampus) FDG 축적은 정상에서도 낮아 알츠하이머·간질 병소로 판단하면 안 됨, 당뇨병 환자는 FDG 섭취 저하, 대뇌 당대사는 노년층에"
+  },
+  {
+    "id": "CSF-01",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "CSF는 측뇌실 맥락막총(choroid plexus)에서 1일 400~500cc 생성(약 6시간이면 20% 교체), 총 CSF 양은 120~160cc 항상 유지(뇌실 크기 20~3"
+  },
+  {
+    "id": "CSF-02",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "CSF 흐름 — 가쪽뇌실 상의세포(ependyma)로 이루어진 맥락얼기에서 시작→가쪽뇌실→셋째·넷째 뇌실→정중구·외측구→거미막 밑공간(지주막하강)→거미막 융모 통해 정맥(venou"
+  },
+  {
+    "id": "CSF-03",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "뇌조 스캔(Cisternography) — 수두증(hydrocephalus)·뇌척수액강 협착·샛길(fistulae) 진단, 99mTc-DTPA를 요추천자(lumbar punctur"
+  },
+  {
+    "id": "CSF-04",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "정상 — 1시간 후 머리 방사능 분포·뇌저조, 2~4시간 전두부·중간뇌수도관(실비우스구), 8~12시간 대뇌저면, 24시간 거미막 융모·시상정맥동 도달·흡수, 허리뼈 주입은 뇌실로"
+  },
+  {
+    "id": "CSF-05",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "뇌실-복막 단락 기능검사(Shunt function test) — 수두증 치료용 저장고(reservoir) 수술 후 기능 평가, 99mTc-DTPA를 저장고에 직접 주사, 단락장치"
+  },
+  {
+    "id": "KID-ANA-01",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥은 몸의 등쪽 가로막(횡격막) 아래 1쌍의 완두콩 모양 복막뒤기관(복막후장기), 제11등뼈~제3허리뼈 사이, 오른콩팥이 왼콩팥보다 낮게 위치(간에 눌리기 때문)"
+  },
+  {
+    "id": "KID-ANA-02",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥은 바깥쪽 겉질(피질, cortex)과 안쪽 속질(수질, medulla)로 구별, 속질 안쪽 콩팥굴(renal sinus)에 콩팥깔대기(renal pelvis)가 있어 소변 방"
+  },
+  {
+    "id": "KID-ANA-03",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "혈류 — 배대동맥→콩팥동맥→(콩팥문)→엽사이동맥(interlobar)→활꼴동맥(arcuate)→소엽사이동맥(interlobular)→들토리세동맥(afferent)→토리(glomer"
+  },
+  {
+    "id": "KID-ANA-04",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥소체(renal corpuscle)는 토리와 토리주머니(Bowman capsule)로 구성, 토리주머니는 콩팥세관(renal tubule)과 연결, 토리주머니에서 여과된 토리여"
+  },
+  {
+    "id": "KID-ANA-05",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥세관 경로 — 토리쪽곱슬세관(근위, proximal convoluted tubule)→콩팥세관고리(헨레고리, 내림부위·오름부위)→먼쪽곱슬세관(원위, distal convolut"
+  },
+  {
+    "id": "KID-ANA-06",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥소체와 콩팥세관은 소변 생성의 기능적 단위 = 콩팥단위(nephron), 100만 개 정도, 소변은 토리여과액이 재흡수·분비를 거쳐 생성"
+  },
+  {
+    "id": "KIDS-01",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "목적 — 위치·크기·모양, 종양·낭종·농양 공간점유물, 깔때기콩팥염·방광요로 역류 환자의 콩팥피질 손상, 좌우 콩팥 상대 기능평가, 선천성 콩팥기형 진단"
+  },
+  {
+    "id": "KIDS-02",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "99mTc-glucoheptonate(GHA)는 콩팥겉질 영상 기록 가능"
+  },
+  {
+    "id": "KIDS-03",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "99mTc-DMSA는 콩팥겉질 내 집적되어 24시간 동안 잔류, 혈장단백과 견고하게 결합해 콩팥겉질에 집적, 콩팥 배설기능 평가는 불가능하고 다른 의약품보다 피폭이 많은 편"
+  },
+  {
+    "id": "KIDS-04",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "집적기전(집적부위) — 99mTc-DMSA 37~185MBq 정맥, 세뇨관분비(콩팥겉질 40~50%) / 99mTc-GHA 370MBq 정맥, 세뇨관분비(콩팥겉질 5~10%) 수치"
+  },
+  {
+    "id": "KIDS-05",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "주의 — 표지된 의약품은 30분 이내 투여, 빛 차단·2~8℃ 보관, 99mTcO4-와 DMSA 표지 후 10~240분 이내 사용"
+  },
+  {
+    "id": "KIDD-01",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "목적 — 콩팥 관류·배설 기능 평가, 콩팥동맥 협착, 콩팥혈관성 고혈압 진단·평가, 사구체여과율(GFR)·유효콩팥혈장류량(ERPF) 측정"
+  },
+  {
+    "id": "KIDD-02",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "전처치 — 검사 전 소변을 보게 해 방광 피폭 방사선량 감소"
+  },
+  {
+    "id": "KIDD-03",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "집적기전(배설기전) — 99mTc-DTPA(단순확산, 토리여과)·99mTc-GHA(능동이동, 토리여과 90~95%·세뇨관분비 5~10%)·99mTc-MAG3(능동이동, 세뇨관 80"
+  },
+  {
+    "id": "KIDD-04",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "99mTc-DTPA는 대부분 콩팥 통해 빠르게 배설되고 콩팥 내 머무는 시간 짧음, 토리(사구체) 기능 평가, 투여량 90%가 주입 후 4시간 이내 여과"
+  },
+  {
+    "id": "KIDD-05",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "99mTc-MAG3는 hippuran처럼 콩팥 기능 검사, 정상 콩팥 실질 내에 머무르지 않고 주입량 90%가 3시간 이내 소변 배설, 소변 배설 기능·콩팥 혈류·콩팥겉질 집적 검"
+  },
+  {
+    "id": "KIDD-06",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "배설기전 대비 — 99mTc-MAG3는 능동이동으로 콩팥 신피질에 집적되고 세뇨관분비로 배설 / 99mTc-DTPA는 단순확산으로 콩팥에 집적되고 사구체여과로 배설(교수 킬러: D"
+  },
+  {
+    "id": "KIDD-07",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "Renogram은 혈류기·분비기·배설기로 구성"
+  },
+  {
+    "id": "DIUR-01",
+    "exam": "DIUR",
+    "part": "L9",
+    "label": "콩팥 배설 기능 저하 시 이뇨제콩팥신티그램 실시 — 콩팥결석(신석)·종괴·중복콩팥깔때기(중복신우)·물콩팥증(수신증)에 의한 요로폐쇄와 비폐쇄성 요로질환 감별에 유용"
+  },
+  {
+    "id": "DIUR-02",
+    "exam": "DIUR",
+    "part": "L9",
+    "label": "이뇨제(furosemide 0.3~1.0mg/kg, 1 ample 2mL)를 정맥주사하고 앉은/누운 자세로 기본검사와 동일하게 검사"
+  },
+  {
+    "id": "DIUR-03",
+    "exam": "DIUR",
+    "part": "L9",
+    "label": "평가 — 이뇨제 주사 전후 영상 육안 비교, 소실곡선 반감기 비교(객관·정량), 주사 직전 관심영역 방사능이 1/2로 감소하는 시간(반감기)을 구함(흔한 방법)"
+  },
+  {
+    "id": "ACE-01",
+    "exam": "ACE",
+    "part": "L9",
+    "label": "콩팥혈관에 의한 고혈압 환자에서 콩팥의 동적인 진단을 위해 ACE 억제제로 캡토프릴(Captopril) 이용"
+  }
+];
+const BANK = [
+  {
+    "id": "l42-001",
+    "source_ids": ["PTH-SCAN-04", "PTH-SCAN-05", "PTH-SCAN-02"],
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "question": "부갑상샘 이중선원법(dual isotope subtraction)의 의약품 분포와 기전으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ²⁰¹Tl-chloride는 갑상샘과 부갑상샘 모두에 집적된다",
+      "② ⁹⁹ᵐTcO₄⁻는 갑상샘에만 집적된다",
+      "③ ⁹⁹ᵐTcO₄⁻가 부갑상샘에만 선택 집적되어 단독으로 부갑상샘을 그린다",
+      "④ 두 의약품의 집적기전은 모세혈관 차단이다",
+      "⑤ ²⁰¹Tl이 갑상샘에만, ⁹⁹ᵐTcO₄⁻가 두 샘 모두에 집적된다"
+    ],
+    "answers": [0, 1],
+    "explanation": "이중선원법은 ²⁰¹Tl(갑상샘+부갑상샘 모두)에서 ⁹⁹ᵐTcO₄⁻(갑상샘만) 영상을 빼 부갑상샘을 얻는다(①②). ③은 ⁹⁹ᵐTcO₄⁻가 갑상샘에만 가는데 부갑상샘에만 간다고 뒤집은 함정, ⑤는 두 핵종 역할을 통째로 맞바꾼 함정, ④는 폐관류 MAA의 모세혈관 차단을 끌어온 타검사 기전(실제 부갑상샘=능동이동).",
+    "distractor_src": ["LPS-05"]
+  },
+  {
+    "id": "l42-002",
+    "source_ids": ["ADR-MED-01", "ADR-MED-02", "ADR-MED-04", "ADR-MED-05"],
+    "exam": "ADR-MED",
+    "part": "L42",
+    "question": "¹³¹I-MIBG 부신속질 스캔에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 갈색세포종(pheochromocytoma)에 높은 감수성을 보인다",
+      "② 정상 부신에 뚜렷이 집적되어 부신 위치를 쉽게 확인한다",
+      "③ 검사 2일 전부터 Lugol액(KI)으로 갑상샘을 차단한다",
+      "④ 정상에서도 심장·간·지라 등에 나타날 수 있다",
+      "⑤ 의약품을 경구로 투여한다"
+    ],
+    "answers": [0, 2, 3],
+    "explanation": "MIBG는 갈색세포종에 고감수성(①), Lugol액 2일 전 갑상샘 차단(③), 정상에서도 심장·간·지라·침샘에 분포(④). ②는 '정상 부신에는 잘 안 나타난다'를 뒤집은 교수 단골 함정, ⑤는 정맥주사인데 경구로 바꾼 투여경로 뒤집기(멕켈 검사와 함께 교수가 즐겨 쓰는 뒤집기).",
+    "distractor_src": ["ADR-MED-05"]
+  },
+  {
+    "id": "l42-003",
+    "source_ids": ["OCTREO-02"],
+    "exam": "OCTREO",
+    "part": "L42",
+    "question": "¹¹¹In-Octreotide(Pentetreotide) 스캔의 전처치로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 검사 24시간 전부터 Octreotide 투여를 중지한다",
+      "② 검사 2일 전부터 Lugol액으로 갑상샘을 차단한다",
+      "③ 검사 6시간 전까지 금식한다",
+      "④ 검사 직전 배뇨시켜 방광 피폭을 줄인다",
+      "⑤ 검사 전 과염소산칼륨(KClO₄)을 투여한다"
+    ],
+    "answers": [0],
+    "explanation": "Octreotide 스캔의 고유 전처치는 검사 24시간 전 Octreotide 중지뿐(①). 나머지는 모두 타검사 전처치를 끼운 함정 — ②는 MIBG·NP-59의 Lugol 차단, ③은 심근관류·침샘의 금식, ④는 콩팥 동적검사의 배뇨, ⑤는 뇌·갑상샘검사의 KClO₄ 맥락총 차단. 같은 '전처치' 축의 타검사 값만 모아 버림패를 없앤 고난이도.",
+    "distractor_src": ["ADR-MED-02", "MPS-02"]
+  },
+  {
+    "id": "l42-004",
+    "source_ids": ["PTH-SCAN-10", "PTH-SCAN-11", "PTH-SCAN-12", "PTH-SCAN-13", "PTH-SCAN-02"],
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "question": "단일선원법 ⁹⁹ᵐTc-sestaMIBI 부갑상샘 스캔에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 정맥주사 후 4~5분에 갑상샘이 최대로 섭취된다",
+      "② 갑상샘은 최대 섭취 후 감소하나 부갑상샘은 지속 섭취한다",
+      "③ 부갑상샘종(adenoma)은 배설이 늦어 조기·지연(2~3시간) 영상을 얻는다",
+      "④ 집적기전은 능동이동(active transport)이다",
+      "⑤ 부갑상샘이 먼저 씻겨나가고 갑상샘에 오래 남는다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "sestaMIBI는 4~5분에 갑상샘 최대 섭취(①), 갑상샘은 감소·부갑상샘은 지속(②), 선종은 배설이 늦어 지연영상으로 잡음(③), 기전은 능동이동(④). ⑤는 ②의 섭취 양상을 정반대로 뒤집은 함정(부갑상샘이 오래 남아야 선종이 보임).",
+    "distractor_src": ["PTH-SCAN-11"]
+  },
+  {
+    "id": "l42-005",
+    "source_ids": ["ADR-COR-01", "ADR-COR-03", "ADR-COR-07", "ADR-COR-05", "ADR-COR-06"],
+    "exam": "ADR-COR",
+    "part": "L42",
+    "question": "¹³¹I-NP-59 부신겉질 스캔에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 부신 겉질과 난소종양에 집적된다",
+      "② 검사 전 Lugol액으로 갑상샘을 차단한다",
+      "③ posterior view에서 오른쪽 부신이 왼쪽보다 높게 나타난다",
+      "④ 정맥 주입 후 3·5·7일에 복부 posterior 영상을 얻는다",
+      "⑤ 정상에서도 간·쓸개·대장에 방사능 집적이 보인다"
+    ],
+    "answers": [0, 1, 2, 3, 4],
+    "explanation": "NP-59는 부신겉질·난소종양 집적(①), Lugol 갑상샘 차단(②), posterior view에서 간 방사능 중첩으로 오른쪽 부신이 더 높게 보임(③, 해부학적으론 왼쪽이 높은 좌우역설), 3·5·7일 지연영상(④), 정상 간·쓸개·대장 집적(⑤) — 전부 옳다. 정답 개수가 은닉된 상태에서 '5개 모두 맞는가'를 끝까지 검토하게 만드는 문항.",
+    "distractor_src": []
+  },
+  {
+    "id": "l42-006",
+    "source_ids": ["ADR-ANA-02", "ADR-ANA-03", "ADR-ANA-09", "ADR-MED-01", "ADR-COR-01"],
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "question": "부신의 겉질·속질 구분과 해당 검사 의약품 연결로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 부신속질(medulla) 병변 평가에는 ¹³¹I-MIBG를 사용한다",
+      "② 부신겉질(cortex) 병변 평가에는 ¹³¹I-NP-59를 사용한다",
+      "③ 부신속질에는 NP-59, 부신겉질에는 MIBG를 사용한다",
+      "④ 부신겉질은 카테콜아민을, 속질은 스테로이드를 분비한다",
+      "⑤ MIBG와 NP-59의 집적기전은 모두 식균작용이다"
+    ],
+    "answers": [0, 1],
+    "explanation": "속질(카테콜아민 분비)=MIBG, 겉질(스테로이드 분비)=NP-59가 정상 연결(①②). ③은 두 의약품을 겉질/속질에 맞바꾼 함정, ④는 겉질=스테로이드·속질=카테콜아민인 분비물을 뒤집은 함정, ⑤는 간·지라 colloid의 식균작용을 끌어온 타검사 기전.",
+    "distractor_src": ["LIVS-02"]
+  },
+  {
+    "id": "l42-007",
+    "source_ids": ["PTH-SCAN-01", "PTH-SCAN-06", "PTH-SCAN-07", "PTH-SCAN-09"],
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "question": "부갑상샘 스캔의 적응증과 검사 조건으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 부갑상샘 선종·과형성으로 무기질 대사 이상이 의심될 때 시행한다",
+      "② 핀홀(pinhole) 콜리메이터를 사용한다",
+      "③ 선원에너지는 ⁹⁹ᵐTc 140keV, ²⁰¹Tl 80keV로 설정한다",
+      "④ 영상 획득 중 환자가 자유롭게 움직여도 영상에 영향이 없다",
+      "⑤ 집적기전은 모세혈관 차단이다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "기능항진으로 커진 부갑상샘의 무기질대사 이상이 적응증(①), 핀홀 콜리메이터(②), 선원에너지 ⁹⁹ᵐTc 140keV·²⁰¹Tl 80keV(③, 검사약 물리특성이라 출제 대상). ④는 subtraction이 어긋나지 않게 '절대 움직이지 말 것'을 뒤집은 함정, ⑤는 폐관류 MAA 기전을 끌어온 함정.",
+    "distractor_src": ["LPS-05"]
+  },
+  {
+    "id": "l42-008",
+    "source_ids": ["OCTREO-01", "OCTREO-04"],
+    "exam": "OCTREO",
+    "part": "L42",
+    "question": "¹¹¹In-Octreotide 스캔의 적응증과 영상 시점으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 신경내분비종양의 원발·전이 위치 진단에 사용된다",
+      "② 갈색세포종 진단을 위해 부신속질에 선택 집적시킨다",
+      "③ 레몬주스로 분비를 촉진한 뒤 영상을 얻는다",
+      "④ 주사 직후 1회만 촬영하고 종료한다",
+      "⑤ 운동부하 후 재분포 영상을 추가로 얻는다"
+    ],
+    "answers": [0],
+    "explanation": "Octreotide 스캔은 신경내분비종양의 원발·전이 위치 진단이 적응증이며 4시간·24시간 전신촬영을 한다(①). ②는 MIBG 적응증, ③은 침샘 스캔, ④는 4·24시간 2회 촬영을 1회로 뒤집은 함정, ⑤는 심근관류검사의 재분포를 끌어온 타검사 개념.",
+    "distractor_src": ["ADR-MED-01", "MPS-08"]
+  },
+  {
+    "id": "l42-009",
+    "source_ids": ["ADR-MED-03", "ADR-MED-06", "ADR-MED-01", "ADR-MED-02"],
+    "exam": "ADR-MED",
+    "part": "L42",
+    "question": "MIBG 부신속질 검사의 실무로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ¹³¹I-MIBG 또는 ¹²³I-MIBG를 정맥주사한다",
+      "② 부신 위치 확인을 위해 ⁹⁹ᵐTc-DTPA·DMSA로 콩팥을 함께 영상화하기도 한다",
+      "③ 신경아세포종·부신경절종에도 이용된다",
+      "④ Lugol액으로 갑상샘을 차단해 피폭을 줄인다",
+      "⑤ 의약품이 정상 부신에 강하게 집적되어 위치 확인이 쉽다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "MIBG는 ¹³¹I·¹²³I 표지로 정맥주사(①), 부신 위치 확인 위해 콩팥을 DTPA·DMSA로 영상화(②), 신경아세포종·부신경절종에도 사용(③), Lugol 갑상샘 차단(④). ⑤는 '정상 부신에는 잘 안 나타난다'를 뒤집은 교수 단골 함정.",
+    "distractor_src": ["ADR-MED-05"]
+  },
+  {
+    "id": "l51-001",
+    "source_ids": ["PYP-01", "PYP-02", "PYP-04", "PYP-05"],
+    "exam": "PYP",
+    "part": "L51",
+    "question": "⁹⁹ᵐTc-PYP의 구조와 용도로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ATP의 phosphate bond와 유사한 구조라 골 영상과 심장 영상에 적용된다",
+      "② 급성 심근경색 진단에 사용된다",
+      "③ 심근 괴사 부위에 침착된 칼슘과 결합하는 원리를 이용한다",
+      "④ 좌심실 박출률 평가를 위한 표준 혈액풀(blood pool) 의약품이다",
+      "⑤ 집적기전은 K⁺ 펌프를 통한 능동수송이다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "PYP는 ATP 인산결합 유사구조로 골·심장에 적용(①), 급성 심근경색 진단에 사용(②), 괴사부 칼슘 침착과 결합하는 원리(③). ④는 혈액풀 표준이 ⁹⁹ᵐTc-RBC인데 PYP로 뒤집은 함정(PYP는 혈액풀 부적합), ⑤는 201Tl의 Na-K 펌프 기전을 끌어온 타검사 함정.",
+    "distractor_src": ["MPS-05", "GBPS-03"]
+  },
+  {
+    "id": "l51-002",
+    "source_ids": ["PYP-06", "PYP-03"],
+    "exam": "PYP",
+    "part": "L51",
+    "question": "⁹⁹ᵐTc-PYP를 게이트 혈액풀 검사(GBPS)에 사용하지 않는 이유로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 칼슘 결합 성질로 특정 조직에 빠르게 결합해 혈액 내에 오래 머물지 않아 균일한 혈액풀을 형성하기 어렵기 때문이다",
+      "② 반감기가 너무 짧아 검사시간 동안 모두 붕괴되기 때문이다",
+      "③ 감마선 에너지가 너무 높아 콜리메이터를 통과해버리기 때문이다",
+      "④ PYP가 적혈구에 표지되지 않아 영상이 흐려지기 때문이다",
+      "⑤ GBPS에는 오히려 PYP가 RBC보다 표준으로 권장되기 때문이다"
+    ],
+    "answers": [0],
+    "explanation": "PYP는 칼슘 결합 성질로 골·아밀로이드 등 조직에 빠르게 결합해 혈류 지속성·균일한 혈액풀을 못 만들어 GBPS에 부적합하다(①, 교수 킬러). ②③④는 그럴듯하나 실제 이유가 아닌 오답, ⑤는 GBPS 표준이 ⁹⁹ᵐTc-RBC라는 사실을 정반대로 뒤집은 함정.",
+    "distractor_src": ["GBPS-03"]
+  },
+  {
+    "id": "l51-003",
+    "source_ids": ["PYP-07", "PYP-08", "PYP-04"],
+    "exam": "PYP",
+    "part": "L51",
+    "question": "⁹⁹ᵐTc-PYP 심근 아밀로이드증 검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 아밀로이드는 비정상적으로 접힌 단백질이 섬유 구조로 응집해 조직에 침착되는 물질이다",
+      "② 심장 아밀로이드 침착은 부정맥을 일으켜 심근경색 없이도 심기능 저하를 유발한다",
+      "③ 아밀로이드 심근에는 PYP 섭취가 정상보다 감소해 냉소로 나타난다",
+      "④ 아밀로이드증은 201Tl 재분포 영상으로 진단한다",
+      "⑤ 아밀로이드는 갑상샘에서 분비되는 호르몬이다"
+    ],
+    "answers": [0, 1],
+    "explanation": "아밀로이드는 잘못 접힌 단백질의 섬유성 응집·침착물(①), 심장 침착 시 부정맥으로 경색 없이 심기능 저하(②). ③은 아밀로이드 심근에 PYP가 비정상적으로 '증가' 섭취되는 것을 감소로 뒤집은 함정, ④는 201Tl 재분포(심근관류) 개념을 끌어온 타검사 함정, ⑤는 아밀로이드 정의 자체를 비튼 오답.",
+    "distractor_src": ["MPS-08"]
+  },
+  {
+    "id": "l5-001",
+    "source_ids": ["CARD-RP-01", "CARD-RP-02", "CARD-RP-03"],
+    "exam": "CARD-RP",
+    "part": "L5",
+    "question": "심장 검사 방사성의약품의 3가지 기능 분류와 의약품 연결로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 혈류 이동경로 추적자 — ⁹⁹ᵐTcO₄⁻·⁹⁹ᵐTc-DTPA",
+      "② 심실 모양 관찰(혈액풀 형성) — ⁹⁹ᵐTc-RBC·⁹⁹ᵐTc-HSA",
+      "③ 심근 집적(무기질대사 이용) — ⁹⁹ᵐTc-sestaMIBI·⁹⁹ᵐTc-teboroxime",
+      "④ 혈류 추적자는 혈액풀을 길게 유지해야 하므로 ⁹⁹ᵐTc-RBC가 적당하다",
+      "⑤ 심근 집적 의약품은 수 분 내 신속히 배설되어야 한다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "혈류추적=TcO₄⁻·DTPA(①), 혈액풀=RBC·HSA(②), 심근집적=sestaMIBI·teboroxime(③)가 정상 연결. ④는 혈류추적자가 신속 배설돼야 하는데 혈액풀 유지(RBC) 성질로 뒤집은 함정, ⑤는 반대로 심근집적 의약품에 혈류추적자의 신속배설 성질을 끼운 함정.",
+    "distractor_src": ["CARD-RP-01", "CARD-RP-02"]
+  },
+  {
+    "id": "l5-002",
+    "source_ids": ["CARD-RP-04"],
+    "exam": "CARD-RP",
+    "part": "L5",
+    "question": "심장 핵의학 검사목적과 방사성의약품 연결로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 심근경색 hot spot 검출 — ⁹⁹ᵐTc-PYP·¹¹¹In-antimyosin",
+      "② 심근 혈류(관류) 평가 — ⁹⁹ᵐTc-RBC",
+      "③ 심실 기능 평가 — ²⁰¹Tl-chloride",
+      "④ 심장 내 단락 평가 — ⁹⁹ᵐTc-MAA",
+      "⑤ 심근 관류 부하검사에 ⁹⁹ᵐTc-PYP를 운동부하용으로 사용한다"
+    ],
+    "answers": [0],
+    "explanation": "심근경색 hot spot은 PYP·antimyosin·201Tl(①)이 정답 연결. ②는 관류=201Tl/sestaMIBI인데 심실기능제 RBC를 끼움, ③은 심실기능=RBC/HSA인데 관류제 201Tl을 끼움(②③ 역할 맞바꿈), ④는 단락=DTPA/TcO₄/RBC인데 폐관류제 MAA를 끼운 함정, ⑤는 PYP가 경색 진단제인데 부하관류용으로 비튼 함정.",
+    "distractor_src": ["CARD-RP-04", "LPS-02"]
+  },
+  {
+    "id": "l5-003",
+    "source_ids": ["SPS-01", "SPS-03", "SPS-04"],
+    "exam": "SPS",
+    "part": "L5",
+    "question": "일회통과검사(single pass study)에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 방사성의약품이 심장을 1회 순환하는 30~60초의 짧은 시간에 심장기능을 평가한다",
+      "② bolus injection(순간주사)으로 투여한다",
+      "③ 의약품으로 ⁹⁹ᵐTc-RBC·⁹⁹ᵐTc-HSA를 사용해 혈액풀을 형성한다",
+      "④ 목적은 심근 허혈 부위의 재분포 평가다",
+      "⑤ 영상은 30분~1시간 게이트 수집으로 얻는다"
+    ],
+    "answers": [0, 1],
+    "explanation": "SPS는 의약품이 심장을 1회 순환하는 30~60초에 평가(①), bolus 순간주사(②). ③은 SPS 의약품이 TcO₄⁻·DTPA인데 혈액풀제(RBC·HSA)를 끼운 함정, ④는 심근관류(MPS)의 재분포 개념을 끌어옴, ⑤는 GBPS의 30분~1시간 게이트 수집을 끼운 함정.",
+    "distractor_src": ["CARD-RP-02", "MPS-08", "GBPS-05"]
+  },
+  {
+    "id": "l5-004",
+    "source_ids": ["GBPS-01", "GBPS-02", "GBPS-03", "GBPS-04"],
+    "exam": "GBPS",
+    "part": "L5",
+    "question": "게이트 혈액풀 검사(GBPS)에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 심장기능(수축기·이완기)과 국소 심장벽 운동 이상을 평가한다",
+      "② ECG R파를 trigger로 박동 주기를 8~32 frames의 구분된 동작으로 수집한다",
+      "③ 의약품은 ⁹⁹ᵐTc-PYP·⁹⁹ᵐTc-RBC가 가능하나 RBC가 주로 사용된다",
+      "④ 영상은 우전사위상(RAO)에서만 얻는다",
+      "⑤ PYP가 혈액풀 유지에 가장 적합해 표준으로 쓰인다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "GBPS는 수축·이완기 기능과 벽운동 평가(①), R파 trigger로 8~32 frames 게이트 수집(②), RBC가 주로 사용(③). ④는 GBPS 자세가 좌전사위상(LAO)인데 RAO로 바꾼 함정(RAO~LPO는 MPS 자세), ⑤는 PYP가 혈액풀 부적합인 사실을 뒤집은 함정.",
+    "distractor_src": ["MPS-04", "GBPS-03"]
+  },
+  {
+    "id": "l5-005",
+    "source_ids": ["GBPS-06", "GBPS-05"],
+    "exam": "GBPS",
+    "part": "L5",
+    "question": "게이트 혈액풀 검사용 ⁹⁹ᵐTc-RBC 표지(제조)법에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 변형 체내 표지법(modified in vivo)이 가장 널리 사용된다",
+      "② 체내 표지법은 표지율이 90% 이상으로 가장 높다",
+      "③ 체외 표지법이 현재 표준으로 가장 많이 쓰인다",
+      "④ RBC 표지는 불필요하며 ⁹⁹ᵐTcO₄⁻를 그대로 정맥주사한다",
+      "⑤ 표지 상태는 검사 중 불안정해도 영상에 영향이 없다"
+    ],
+    "answers": [0],
+    "explanation": "RBC 제조는 변형 체내 표지법이 가장 널리 사용된다(①). ②는 체내 표지법의 표지율이 60~70%로 낮은 것을 90%로 뒤집음, ③은 체외 표지법이 사용되지 않는데 표준이라 뒤집음, ④는 표지 자체를 부정한 오답, ⑤는 검사시간 30분~1시간 동안 안정 표지가 유지돼야 한다는 사실을 뒤집은 함정.",
+    "distractor_src": ["GBPS-06"]
+  },
+  {
+    "id": "l5-006",
+    "source_ids": ["MPS-05", "MPS-06"],
+    "exam": "MPS",
+    "part": "L5",
+    "question": "심근관류검사에서 ²⁰¹Tl-chloride의 집적기전으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① K⁺와 유사한 성질로 Na-K 펌프작용을 통해 심근 세포막을 통과해 추출된다",
+      "② 심근 혈류로 유입된 ²⁰¹Tl의 약 85%를 추출해 섭취한다",
+      "③ 미토콘드리아 음성막전하에 의해 단순확산으로 포획된다",
+      "④ 모세혈관에 기계적으로 차단되어 집적된다",
+      "⑤ 식균작용으로 세망내피계에 포획된다"
+    ],
+    "answers": [0, 1],
+    "explanation": "201Tl은 K⁺ 유사성질로 Na-K 펌프를 통해 심근에 추출(①), 유입량의 약 85%를 추출 섭취(②). ③은 sestaMIBI의 미토콘드리아 단순확산 포획을 끌어옴, ④는 폐관류 MAA의 모세혈관 차단, ⑤는 간·지라 colloid의 식균작용을 끼운 타검사 기전 함정.",
+    "distractor_src": ["MPS-15", "LPS-02", "LIVS-02"]
+  },
+  {
+    "id": "l5-007",
+    "source_ids": ["MPS-07", "MPS-08", "MPS-09"],
+    "exam": "MPS",
+    "part": "L5",
+    "question": "심근관류검사의 재분포(redistribution)와 허혈/경색 판독으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 시간이 지나면 혈액과 심근 내 ²⁰¹Tl 농도가 평형을 이뤄 심근 농도가 감소한다",
+      "② 협착·폐쇄 부위는 운동부하 시 정상보다 혈류 감소가 심화되어 냉소로 나타난다",
+      "③ 2~3시간 휴지기 후 냉소 부위가 ²⁰¹Tl 재흡수로 열소처럼 채워지면 심근 허혈로 진단한다",
+      "④ 휴지기에도 재분포 없이 냉소가 지속되면 심근경색으로 진단한다",
+      "⑤ 재분포로 냉소가 채워지면 비가역적 심근경색을 의미한다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "평형으로 심근 201Tl 농도 감소(①), 협착부는 부하 시 냉소(②), 휴지기 재분포로 채워지면 허혈(③), 재분포 없으면 경색(④) — 교수 cold/hot 4대 함정의 정답 축. ⑤는 채워지면(재분포 있으면) 가역적 허혈인데 비가역적 경색이라 정반대로 뒤집은 함정.",
+    "distractor_src": ["MPS-09"]
+  },
+  {
+    "id": "l5-008",
+    "source_ids": ["MPS-02"],
+    "exam": "MPS",
+    "part": "L5",
+    "question": "심근관류검사(²⁰¹Tl)의 환자준비로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 검사 6시간 전까지 금식(NPO)한다",
+      "② 검사 2일 전부터 Lugol액으로 갑상샘을 차단한다",
+      "③ 검사 전 과염소산칼륨(KClO₄)을 투여한다",
+      "④ 검사 24시간 전부터 Octreotide 투여를 중지한다",
+      "⑤ 식사를 하면 내장 혈류가 줄어 간·소장 집적이 낮아지므로 식후에 검사한다"
+    ],
+    "answers": [0],
+    "explanation": "심근관류검사는 6시간 전까지 금식(①, 식사 시 내장 혈류 증가로 간·소장 집적이 높아져 상대적으로 심근 집적이 낮아지는 것을 막기 위함). ②는 MIBG·NP-59의 Lugol 차단, ③은 뇌·갑상샘검사의 KClO₄, ④는 Octreotide 검사 전처치를 끼운 함정, ⑤는 식사의 효과를 정반대로 설명해 식후 검사로 뒤집은 함정.",
+    "distractor_src": ["ADR-MED-02", "OCTREO-02"]
+  },
+  {
+    "id": "l5-009",
+    "source_ids": ["MPS-10", "MPS-11", "MPS-12"],
+    "exam": "MPS",
+    "part": "L5",
+    "question": "심근관류검사용 ²⁰¹Tl의 물리적 특성으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 주로 80keV 감마선을 사용하며 이중에너지 시 80keV·167keV를 쓴다",
+      "② 사용에너지가 낮아 영상의 질이 비교적 낮고 연조직 감쇠 효과가 크다",
+      "③ 반감기는 약 2.7일이며 사이클로트론(가속기)에서 생산된다",
+      "④ 반감기가 6시간이고 발생기(generator)에서 얻는다",
+      "⑤ 140keV 단일 광봉우리를 가져 영상의 질이 우수하다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "201Tl은 주로 80keV 사용·이중에너지 시 80·167keV(①), 낮은 에너지로 영상질↓·연조직 감쇠 큼(②), 반감기 2.7일·사이클로트론 생산(③). ④⑤는 ⁹⁹ᵐTc의 특성(반감기 6시간·발생기·140keV 단일광봉우리)을 끌어와 201Tl인 척 끼운 타핵종 함정.",
+    "distractor_src": ["MPS-10"]
+  },
+  {
+    "id": "l5-010",
+    "source_ids": ["MPS-13", "MPS-14", "MPS-15", "MPS-16", "MPS-17"],
+    "exam": "MPS",
+    "part": "L5",
+    "question": "⁹⁹ᵐTc-sestaMIBI(·tetrofosmin) 심근관류제에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 심근 섭취기전·섭취율·배설경로가 ²⁰¹Tl과 비슷하다",
+      "② ²⁰¹Tl과 달리 재분포가 일어나지 않아 운동부하·휴지 영상에 각각 재주입이 필요하다",
+      "③ 지질친화성 양이온으로 미토콘드리아 음성막전하에 의해 포획된다",
+      "④ 심근 섭취율은 총 주입량의 3% 내외이고 쓸개·간 집적이 높아 장으로 배출된다",
+      "⑤ 심근 섭취·배설이 세포 생존능·세포막 온전성에 영향받아 심근 생존능을 반영한다"
+    ],
+    "answers": [0, 1, 2, 3, 4],
+    "explanation": "sestaMIBI는 201Tl과 섭취기전·섭취율·배설경로가 유사하나(①) 재분포가 없어 부하·휴지에 각각 재주입이 필요(②, 교수 킬러), 지질친화성 양이온으로 미토콘드리아 음성막전하에 단순확산 포획(③), 섭취율 3% 내외·쓸개간 집적 후 장 배출(④), 심근 생존능 반영(⑤) — 5개 모두 옳다(정답 개수 은닉).",
+    "distractor_src": []
+  },
+  {
+    "id": "l5-011",
+    "source_ids": ["MPYP-01", "MPYP-02", "MPYP-03", "MPYP-04"],
+    "exam": "MPYP",
+    "part": "L5",
+    "question": "⁹⁹ᵐTc-PYP 심근경색 검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 경색 부위에 선택적으로 집적되어 열소(hot spot)로 나타나며 발병 1~7일에 시행한다",
+      "② 괴사 심근세포 미토콘드리아에 Ca²⁺와 인산화합물이 수산화인회석형으로 섭취된다",
+      "③ ²⁰¹Tl과 반대로 양성상으로 검출되므로 흡수보정이 필요 없다",
+      "④ 갈비뼈 골절·근육 손상·판막 석회화 등에도 집적될 수 있다",
+      "⑤ 정상 심근이 열소로, 경색 심근이 냉소로 나타난다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "PYP는 경색부에 열소로 집적·발병 1~7일 시행(①), 괴사 미토콘드리아에 Ca²⁺·인산화합물이 수산화인회석형 섭취(②), 201Tl과 반대로 양성상이라 흡수보정 불필요(③), 갈비뼈 골절·근손상·판막 석회화에도 집적(④). ⑤는 정상은 뼈만 보이고 경색이 열소로 나타나는 것을 정반대로 뒤집은 함정.",
+    "distractor_src": ["MPS-09"]
+  },
+  {
+    "id": "l5-012",
+    "source_ids": ["CPET-02", "CPET-03", "CPET-01"],
+    "exam": "CPET",
+    "part": "L5",
+    "question": "심장 양전자방출단층검사(cardiac PET)에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① [¹⁵O]H₂O는 반감기 2분이며 물분자로 자유확산해 섭취되고 혈중에서 대사되지 않는다",
+      "② [¹³N]NH₃는 반감기 약 9.96분이며 글루타민합성효소로 글루타민 형태로 고정된다",
+      "③ 심근관류 PET는 심근관류 SPECT보다 영상품질·진단성적이 낮다",
+      "④ [¹⁵O]H₂O의 반감기는 2시간으로 길어 지연영상에 적합하다",
+      "⑤ [¹³N]NH₃는 혈류량 측정에 부적합해 사용하지 않는다"
+    ],
+    "answers": [0, 1],
+    "explanation": "[¹⁵O]H₂O는 반감기 2분·자유확산·혈중 비대사(①), [¹³N]NH₃는 반감기 9.96분·글루타민으로 고정(②). ③은 PET가 SPECT보다 영상품질·진단성적이 우수한 사실을 뒤집음, ④는 [¹⁵O]H₂O 반감기 2분을 2시간으로 부풀린 함정, ⑤는 [¹³N]NH₃가 초기 5분 영상으로 혈류량 측정에 쓰이는 사실을 뒤집은 함정.",
+    "distractor_src": ["CPET-01", "CPET-02"]
+  },
+  {
+    "id": "l5-013",
+    "source_ids": ["CPET-04"],
+    "exam": "CPET",
+    "part": "L5",
+    "question": "심근대사 PET의 대사 종류와 추적자 연결로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 포도당 대사 — FDG",
+      "② 지방산 대사 — ¹¹C-아세트산",
+      "③ 산소 대사 — ¹¹C-팔미트산",
+      "④ 포도당 대사 — ¹¹C-아세트산",
+      "⑤ 지방산 대사 — [¹⁵O]H₂O"
+    ],
+    "answers": [0],
+    "explanation": "포도당 대사=FDG(①)가 정답. 지방산 대사=¹¹C-팔미트산, 산소 대사=¹¹C-아세트산이 정상 연결인데 ②③은 팔미트산과 아세트산을 맞바꾼 함정, ④는 포도당에 아세트산을 끼움, ⑤는 관류추적자 [¹⁵O]H₂O를 지방산 대사로 끼운 함정.",
+    "distractor_src": ["CPET-04"]
+  },
+  {
+    "id": "l5-014",
+    "source_ids": ["VENO-01", "VENO-02", "VENO-04"],
+    "exam": "VENO",
+    "part": "L5",
+    "question": "정맥 검사(venography)에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 상지·하지 심부정맥 폐쇄의 선별 진단이 목적이다",
+      "② 하지정맥 검사에는 폐에 집적되는 ⁹⁹ᵐTc-MAA가 적당하다",
+      "③ 상지정맥에는 ⁹⁹ᵐTc-MAA, 하지정맥에는 ⁹⁹ᵐTcO₄⁻를 사용한다",
+      "④ 의약품은 피하주사(subcutaneous)로 투여한다",
+      "⑤ ⁹⁹ᵐTc-MAA는 하지에 부적합해 상지에만 사용한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "정맥검사는 상·하지 심부정맥 폐쇄 선별(①), 하지에는 폐 집적 성질의 ⁹⁹ᵐTc-MAA가 적당(②). ③은 상지=TcO₄⁻·하지=MAA인 의약품을 좌우로 맞바꾼 함정, ④는 bolus 정맥주사인데 림프절검사의 피하주사를 끼움, ⑤는 MAA가 오히려 하지에 적당하다는 사실을 뒤집은 함정.",
+    "distractor_src": ["VENO-02", "LYMPH-03"]
+  },
+  {
+    "id": "l5-015",
+    "source_ids": ["LYMPH-01", "LYMPH-02", "LYMPH-03", "LYMPH-04"],
+    "exam": "LYMPH",
+    "part": "L5",
+    "question": "림프절 검사(lymph node scan)에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 호지킨병·림프절 전이 여부 평가가 목적이다",
+      "② 의약품으로 ⁹⁹ᵐTc-phytate·⁹⁹ᵐTc-colloid·⁹⁹ᵐTc-antimony sulfide colloid를 사용한다",
+      "③ 피하주사(subcutaneous)로 투여한다",
+      "④ 주입 4시간 후 서혜부·장골 부위·대동맥 주위에서 집적이 관찰된다",
+      "⑤ 정맥주사로 투여해 즉시 전신 림프절을 영상화한다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "림프절검사는 호지킨병·전이 평가(①), phytate·colloid·antimony sulfide colloid 사용(②), 피하주사 투여(③), 4시간 후 서혜부·장골·대동맥 주위 집적(④). ⑤는 피하주사인 투여경로를 정맥주사로 뒤집은 교수 부정형 함정(③과 정면 충돌).",
+    "distractor_src": ["LYMPH-03"]
+  },
+  {
+    "id": "l5-016",
+    "source_ids": ["CIRC-ANA-17", "CIRC-ANA-18", "CIRC-ANA-19"],
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "question": "심장질환과 핵의학 검사 접근으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 심방·심실 중격 결손 등 선천성 심장질환(CHD)은 단락검사·심실-폐 방사능 곡선으로 측정한다",
+      "② 판막 협착·부전에 의한 후천성 심장질환(CHF)에서는 폐혈류 재분포가 나타날 수 있다",
+      "③ 관상동맥질환(CAD)은 ²⁰¹Tl·⁹⁹ᵐTc의 심근 분포 정도를 영상화해 평가한다",
+      "④ 선천성 심장질환은 ⁹⁹ᵐTc-PYP 열소영상으로만 진단한다",
+      "⑤ 관상동맥질환에서 정상 심근은 냉소, 허혈 심근은 열소로 나타난다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "CHD는 단락검사·심실-폐 방사능 곡선으로 측정(①), CHF는 판막 손상으로 폐혈류 재분포(②), CAD는 201Tl·⁹⁹ᵐTc 심근 분포를 영상화(③). ④는 PYP가 심근경색 진단제인데 선천성 질환 진단으로 끼운 함정, ⑤는 관류에서 정상이 열소·허혈이 냉소인 사실을 정반대로 뒤집은 함정.",
+    "distractor_src": ["MPYP-01", "MPS-09"]
+  },
+  {
+    "id": "l6-001",
+    "source_ids": ["LPS-05", "LPS-06"],
+    "exam": "LPS",
+    "part": "L6",
+    "question": "⁹⁹ᵐTc-MAA 폐관류검사의 집적기전과 물리특성으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① MAA는 폐 모세혈관에 기계적으로 차단되는 기전으로 집적된다",
+      "② 단락이 없으면 입자의 약 95%가 허파모세혈관에서 제거된다",
+      "③ 입자 직경 10~60μm, 반감기 6시간, 140keV이며 정맥주사한다",
+      "④ 집적기전은 K⁺ 펌프를 통한 능동수송이다",
+      "⑤ MAA는 흡입으로 투여해 허파꽈리에 침착시킨다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "MAA는 모세혈관 차단 기전(①), 단락 없으면 95% 제거(②), 10~60μm·6h·140keV·정맥(③). ④는 201Tl 심근 K펌프 기전, ⑤는 환기·흡입검사(technegas)의 흡입·침착을 끌어온 함정(MAA는 정맥주사로 혈관차단).",
+    "distractor_src": ["MPS-05", "LIS-03"]
+  },
+  {
+    "id": "l6-002",
+    "source_ids": ["LPS-02", "LPS-03", "LPS-04", "LPS-07"],
+    "exam": "LPS",
+    "part": "L6",
+    "question": "폐관류검사의 실무로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 주사기로 혈액이 역류해 MAA와 응집하면 허파 내 열소로 나타나므로 응고 전에 주입한다",
+      "② 주입 동안 2~3회 심호흡시켜 입자의 균등 분포를 돕는다",
+      "③ 촬영 5~10분 전과 주입 후 3~5분간 누운 상태로 휴식한다",
+      "④ ⁹⁹ᵐTc-HAM은 폐성고혈압이 심한 환자에게는 사용을 금한다",
+      "⑤ 검사 전 레몬주스로 분비를 촉진한 뒤 주사한다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "혈액 역류 시 응집→열소 주의(①), 심호흡으로 균등분포(②), 누운 휴식(③), HAM은 폐성고혈압 심한 환자 금지(④). ⑤는 침샘 스캔의 레몬주스 분비촉진을 끌어온 타검사 함정.",
+    "distractor_src": ["SALI-04"]
+  },
+  {
+    "id": "l6-003",
+    "source_ids": ["LVS-01", "LVS-02", "LVS-03"],
+    "exam": "LVS",
+    "part": "L6",
+    "question": "폐환기검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 방사성 기체가 기관·기관지→종말세기관지→허파꽈리관을 거쳐 가스교환한다",
+      "② 콘공(pore of Kohn)·람버트관을 통한 측부환기로, 세기관지가 막혀도 폐엽에 냉소 분포를 보인다",
+      "③ 측부환기 때문에 세기관지 폐쇄 부위는 항상 열소로 나타난다",
+      "④ 환기검사에는 반드시 6시간 금식 등 특별한 전처치가 필요하다",
+      "⑤ ⁹⁹ᵐTc-MAA를 흡입시켜 환기를 평가한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "기도 경로로 가스교환(①), 측부환기로 폐쇄 시에도 냉소 분포(②). ③은 막힌 부위가 냉소인 것을 열소로 뒤집음, ④는 환기검사가 특별한 전처치 없는 사실을 부정, ⑤는 관류제 MAA를 환기제로 끼운 함정.",
+    "distractor_src": ["LPS-05"]
+  },
+  {
+    "id": "l6-004",
+    "source_ids": ["LVS-04", "LVS-05", "LVS-06", "LVS-07"],
+    "exam": "LVS",
+    "part": "L6",
+    "question": "폐환기검사용 방사성 기체의 특성으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ¹³³Xe는 81keV로 에너지가 낮아 두꺼운 허파조직에서 감약이 커 좋은 영상을 얻기 어렵다",
+      "② ¹²⁷Xe는 172·203keV로 관류영상보다 나중에 시행할 수 있는 장점이 있다",
+      "③ ⁸¹ᵐKr는 반감기가 13초로 매우 짧다",
+      "④ ¹³³Xe는 감마선 에너지가 높아 영상의 질이 우수하다",
+      "⑤ 세 기체 모두 정맥주사로 투여한다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "133Xe 81keV로 감약 큼(①), 127Xe 172·203keV·나중 시행 장점(②), 81mKr 반감기 13초(③). ④는 ①과 모순되는 뒤집기(낮은 에너지·영상질 나쁨), ⑤는 환기기체가 모두 흡입 투여인데 정맥주사로 뒤집은 함정.",
+    "distractor_src": ["LVS-04"]
+  },
+  {
+    "id": "l6-005",
+    "source_ids": ["LVS-08"],
+    "exam": "LVS",
+    "part": "L6",
+    "question": "¹³³Xe 환기 영상 3단계 중 평형(equilibrium) 영상에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 산소+방사성 가스를 2~3분간 흡입해 얻는 평형 영상이다",
+      "② 가스를 깊게 흡입한 뒤 호흡을 멈추고 기록한 첫 호흡 영상이다",
+      "③ 호흡을 계속해 방사성 가스가 제거된 영상이다",
+      "④ 정맥주사 직후 혈류영상으로 얻는다",
+      "⑤ 레몬주스 자극 후 washout 영상이다"
+    ],
+    "answers": [0],
+    "explanation": "평형 영상은 산소+방사가스 2~3분 흡입(①). ②는 first breath, ③은 washout 단계를 끌어옴, ④는 정맥 혈류영상(환기는 흡입), ⑤는 침샘검사의 레몬주스 washout을 끼운 함정.",
+    "distractor_src": ["SALI-05"]
+  },
+  {
+    "id": "l6-006",
+    "source_ids": ["LIS-03", "LIS-04"],
+    "exam": "LIS",
+    "part": "L6",
+    "question": "폐흡입검사용 방사성의약품으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ⁹⁹ᵐTc-technegas는 20nm 이하 탄소 증기로 허파 심부 허파꽈리벽에 단순확산으로 침착된다",
+      "② ⁹⁹ᵐTc-DTPA aerosol은 0.25~2.0μm 입자로 흡입 투여한다",
+      "③ technegas는 모세혈관 차단으로 집적된다",
+      "④ DTPA aerosol은 정맥주사로 투여한다",
+      "⑤ technegas는 담체 가스로 산소를 사용한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "technegas 20nm·심부 허파꽈리벽·단순확산(①), DTPA aerosol 0.25~2.0μm·흡입(②). ③은 MAA의 모세혈관 차단을 끌어옴, ④는 흡입제를 정맥으로 뒤집음, ⑤는 담체가스가 아르곤인데 산소로 바꾼 함정.",
+    "distractor_src": ["LPS-05"]
+  },
+  {
+    "id": "l6-007",
+    "source_ids": ["PEVQ-01", "PEVQ-02"],
+    "exam": "PEVQ",
+    "part": "L6",
+    "question": "폐색전증 진단을 위한 폐환기/관류(V/Q) 검사로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 환기는 정상이고 관류에 결손이 있는 mismatch는 폐색전을 시사한다",
+      "② 병행 시 폐흡입(환기) 검사를 폐관류보다 먼저 실시한다",
+      "③ 환기·관류 둘 다 결손(matched)이면 폐색전으로 확진한다",
+      "④ 폐관류를 먼저 시행해야 환기 결손을 정확히 평가할 수 있다",
+      "⑤ V/Q 검사는 ²⁰¹Tl 재분포로 판독한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "환기정상+관류결손 mismatch=색전(①), 병행 시 환기를 먼저 실시(연무량이 관류보다 낮아서)(②). ③은 matched가 색전이 아닌데 확진으로 뒤집음, ④는 순서를 반대로(관류 먼저), ⑤는 심근관류 재분포를 끼운 함정.",
+    "distractor_src": ["MPS-08"]
+  },
+  {
+    "id": "l6-008",
+    "source_ids": ["PEVQ-03"],
+    "exam": "PEVQ",
+    "part": "L6",
+    "question": "우좌단락(right to left shunt) 검사로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 기본 폐관류 검사 후 전신촬영을 하며, 10세 이하·우좌단락 환자에는 MAA 입자 수를 100,000개 이하로 줄여 주사한다",
+      "② 환기검사만 단독으로 시행한다",
+      "③ MAA 입자 수를 평소보다 늘려 600,000개 이상으로 주사한다",
+      "④ ⁹⁹ᵐTcO₄⁻를 경구 투여한다",
+      "⑤ 검사 전 Lugol액으로 갑상샘을 차단한다"
+    ],
+    "answers": [0],
+    "explanation": "우좌단락은 폐관류+전신촬영, 어린이·단락 환자엔 입자 수 100,000개 이하로 감소(①). ②는 환기 단독으로 비틀고, ③은 입자 수를 줄여야 하는데 늘림, ④는 투여경로 뒤집기, ⑤는 MIBG·지방흡수검사의 Lugol 차단을 끼운 함정.",
+    "distractor_src": ["FAT-02"]
+  },
+  {
+    "id": "l71-001",
+    "source_ids": ["SALI-ANA-02", "SALI-ANA-03", "SALI-ANA-04"],
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "question": "침샘의 종류와 특성 연결로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 귀밑샘(parotid)은 가장 크고 장액성 침을 생성하며 Stensen's duct로 분비한다",
+      "② 턱밑샘(submandibular)은 혼합성 침을 생성하며 Wharton's duct로 분비한다",
+      "③ 혀밑샘(sublingual)은 가장 작고 주로 점액성 침을 생성한다",
+      "④ 귀밑샘은 가장 작고 점액성 침을 생성한다",
+      "⑤ 턱밑샘은 Stensen's duct, 귀밑샘은 Wharton's duct로 분비한다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "귀밑샘=최대·장액성·Stensen(①), 턱밑샘=혼합성·Wharton(②), 혀밑샘=최소·점액성(③). ④는 귀밑샘을 혀밑샘 특성으로 뒤집음, ⑤는 두 샘의 분비관을 맞바꾼 함정.",
+    "distractor_src": ["SALI-ANA-02"]
+  },
+  {
+    "id": "l71-002",
+    "source_ids": ["SALI-ANA-08", "SALI-02", "SALI-04", "SALI-06"],
+    "exam": "SALI",
+    "part": "L71",
+    "question": "침샘 스캔(⁹⁹ᵐTcO₄⁻)에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ⁹⁹ᵐTcO₄⁻는 음이온 성질로 침샘에서 능동적으로 흡수·분비된다",
+      "② 검사 6시간 전부터 공복하고 촬영 전 물로 입안을 세척한다",
+      "③ 레몬주스 등 침 분비제를 쓰면 ⁹⁹ᵐTcO₄⁻ 분비가 촉진된다",
+      "④ 영상 phase는 관류기·농축기·분비기·방출(washout)로 구성된다",
+      "⑤ 의약품은 피하주사로 투여한다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "TcO₄⁻ 음이온 능동 흡수·분비(①), 6시간 공복·입안 세척(②), 레몬주스 분비촉진(③, 교수 단골), 관류·농축·분비·방출 phase(④). ⑤는 정맥주사인데 림프절검사의 피하주사로 뒤집은 함정.",
+    "distractor_src": ["LYMPH-03"]
+  },
+  {
+    "id": "l71-003",
+    "source_ids": ["ESO-01", "ESO-03", "ESO-04", "ESO-05"],
+    "exam": "ESO",
+    "part": "L71",
+    "question": "식도 통과시간 검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 연하곤란·이완불능증 진단과 식괴의 식도→위 통과시간 측정이 목적이다",
+      "② 유동식 검사에는 ⁹⁹ᵐTc-sulfur colloid를 사용한다",
+      "③ 정상 식도통과시간은 5~10분이다",
+      "④ 고형식 검사에는 ⁹⁹ᵐTc-MAA를 사용한다",
+      "⑤ 검사 전 특별한 전처치 없이 식후 바로 시행한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "연하곤란·통과시간 측정 목적(①), 유동식=sulfur colloid(②). ③은 통과시간이 5~10초인데 분으로 부풀림, ④는 고형식 의약품이 ⁹⁹ᵐTc-DTPA+계란인데 폐관류제 MAA로 끼움, ⑤는 6시간 공복 전처치를 부정한 함정.",
+    "distractor_src": ["LPS-05"]
+  },
+  {
+    "id": "l71-004",
+    "source_ids": ["GER-04", "GER-03"],
+    "exam": "GER",
+    "part": "L71",
+    "question": "위식도 역류 검사의 식도역류율 판정으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 식도역류율 4% 이상이면 비정상이다",
+      "② 식도역류율 2% 미만은 비정상이다",
+      "③ 의약품은 식도 점막에 잘 흡수되어야 한다",
+      "④ 역류율 10% 이상에서만 비정상으로 판정한다",
+      "⑤ 의약품으로 ⁹⁹ᵐTc-MAA를 경구 투여한다"
+    ],
+    "answers": [0],
+    "explanation": "역류율 4% 이상=비정상(①, 정상 2% 미만). ②는 정상 기준을 비정상이라 뒤집음, ③은 의약품이 점막에 붙거나 흡수되지 않아야 하는 사실을 반대로, ④는 기준치를 과장, ⑤는 폐관류제 MAA를 끼운 함정(실제 sulfur colloid·TcO₄⁻·In-DTPA).",
+    "distractor_src": ["GER-03"]
+  },
+  {
+    "id": "l71-005",
+    "source_ids": ["GES-03", "GES-04", "GES-05"],
+    "exam": "GES",
+    "part": "L71",
+    "question": "위 배출 검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 검사 전 최소 4~6시간 금식하며 담배·술도 금한다",
+      "② 유동식의 정상 위 반감시간은 10~20분이다",
+      "③ 고형식의 정상 위 반감시간은 45~110분이다",
+      "④ 고형식이 유동식보다 위 배출능력을 정확히 반영하지 못한다",
+      "⑤ 검사에는 ²⁰¹Tl-chloride를 사용한다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "4~6시간 금식·담배술 금함(①), 유동식 반감 10~20분(②), 고형식 45~110분(③). ④는 유동식이 오히려 정확히 반영 못하는 것을 고형식으로 뒤집음, ⑤는 심근관류제 201Tl을 끼운 함정(실제 ⁹⁹ᵐTc·¹¹¹In-DTPA).",
+    "distractor_src": ["MPS-03"]
+  },
+  {
+    "id": "l71-006",
+    "source_ids": ["GES-06"],
+    "exam": "GES",
+    "part": "L71",
+    "question": "위 배출이 비정상적으로 빨라지는 경우로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 유문성형술·반위절제 등 수술 후, 갑상샘기능항진증, 흡수장애증",
+      "② 갑상샘기능저하증",
+      "③ 위전정부 연동의 완전 소실",
+      "④ 날문(유문) 협착",
+      "⑤ 마약성 진통제 사용"
+    ],
+    "answers": [0],
+    "explanation": "수술 후·갑상샘기능항진·샤가스병·흡수장애에서 위배출이 빨라진다(①). ②④⑤는 오히려 위배출을 지연시키는 상태, ③도 배출 감소 요인으로 빠른 배출의 원인이 아니다.",
+    "distractor_src": ["GES-06"]
+  },
+  {
+    "id": "l71-007",
+    "source_ids": ["SBT-01", "SBT-02"],
+    "exam": "SBT",
+    "part": "L71",
+    "question": "소장·대장 통과시간 측정으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 소장 통과시간은 의약품 투여 3.5~4.0시간 후 영상으로 평가한다",
+      "② ¹¹¹In resin bead를 캡슐로 경구 투여하고 4·12시간에 영상을 얻는다",
+      "③ 통과시간은 의약품을 정맥주사한 직후 1분 내에 측정 완료한다",
+      "④ ⁵⁷Co를 정맥주사해 대장 구분 표지로 사용한다",
+      "⑤ 통과시간 검사에는 전처치로 Lugol 차단이 필수다"
+    ],
+    "answers": [0, 1],
+    "explanation": "소장 통과 3.5~4시간 후 영상(①), 111In resin bead 캡슐 경구·4·12시간(②). ③은 수 시간 걸리는 검사를 1분으로 축소, ④는 57Co를 iliac crest에 부착하는 외부표지인데 정맥주사로 뒤집음, ⑤는 무관한 Lugol 차단을 끼운 함정.",
+    "distractor_src": ["SBT-02"]
+  },
+  {
+    "id": "l71-008",
+    "source_ids": ["SALI-ANA-05", "SALI-ANA-06", "SALI-ANA-07"],
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "question": "침샘의 분비 생리로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 부교감신경 자극은 저농도(묽은) 침 분비를, 교감신경은 고농도 침 분비를 조절한다",
+      "② 침은 소엽내관에 저장되며 음이온(과테크네슘·옥소화합물)을 농축하는 능력이 있다",
+      "③ 부교감신경이 고농도 침을, 교감신경이 저농도 침을 분비시킨다",
+      "④ 침샘은 양이온만 농축하므로 ⁹⁹ᵐTcO₄⁻는 집적되지 않는다",
+      "⑤ 침샘은 내분비샘으로 침을 혈관으로 직접 분비한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "부교감=저농도·교감=고농도(①), 음이온 농축능(②). ③은 신경 역할을 맞바꿈, ④는 음이온 농축이라 TcO₄⁻가 집적되는 사실을 뒤집음, ⑤는 침샘이 외분비샘인 것을 내분비로 뒤집은 함정.",
+    "distractor_src": ["SALI-ANA-05"]
+  },
+  {
+    "id": "l72-001",
+    "source_ids": ["GIB-01", "GIB-02", "GIB-03", "GIB-04"],
+    "exam": "GIB",
+    "part": "L72",
+    "question": "위장관 출혈 검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 특정 장기에서 선택 제거되는 의약품을 투여해 출혈부로 새어나간 일부를 영상화한다",
+      "② 0.05~0.12ml/min 정도의 출혈량을 감지할 만큼 예민하다",
+      "③ 의약품으로 ⁹⁹ᵐTc-sulfur colloid·⁹⁹ᵐTc-RBC를 사용한다",
+      "④ 상·하부 소화기 출혈 진단에 유용하며 특별한 전처치가 없다",
+      "⑤ ²⁰¹Tl 재분포로 출혈 부위를 판독한다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "선택제거 의약품 원리(①), 0.05~0.12ml/min 감지(②), sulfur colloid·RBC·PYP 사용(③), 상하부 출혈·전처치 없음(④). ⑤는 심근관류의 재분포 개념을 끼운 함정.",
+    "distractor_src": ["MPS-08"]
+  },
+  {
+    "id": "l72-002",
+    "source_ids": ["GIB-05", "GIB-06", "GIB-07"],
+    "exam": "GIB",
+    "part": "L72",
+    "question": "위장관 출혈 검사에서 ⁹⁹ᵐTc-sulfur colloid와 ⁹⁹ᵐTc-RBC의 비교로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① sulfur colloid는 반감기가 짧아 출혈점-정상 대조도가 크고 하부 위장출혈에 우수하다",
+      "② sulfur colloid는 간·지라에 집적되어 상복부(창자굽이) 출혈검사가 곤란하다",
+      "③ RBC는 간헐적·서서히 출혈되는 경우에 우수하며 24시간 경시적 기록이 가능하다",
+      "④ RBC는 반감기가 짧아 상복부 출혈에만 쓴다",
+      "⑤ sulfur colloid는 장 내 재흡수가 많아 출혈 구분이 어렵다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "colloid 짧은 반감기·높은 대조도·하부 우수(①), 간지라 집적→상복부 곤란(②), RBC 간헐출혈·24시간 기록(③). ④는 RBC 특성을 colloid처럼 왜곡, ⑤는 colloid가 장 재흡수 없어 구분이 쉬운 사실을 뒤집은 함정.",
+    "distractor_src": ["GIB-05"]
+  },
+  {
+    "id": "l72-003",
+    "source_ids": ["MECKEL-01", "MECKEL-02", "MECKEL-03", "MECKEL-04"],
+    "exam": "MECKEL",
+    "part": "L72",
+    "question": "멕켈게실 검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 출혈성 멕켈게실은 거의 모두 위벽측세포를 가져 산 분비로 궤양·출혈을 일으킨다",
+      "② 돌창자(회장) 말단에 위치한 퇴화된 위장관이다",
+      "③ ⁹⁹ᵐTcO₄⁻가 위점막 점액 생산세포에 농축·분비되는 성질을 이용한다",
+      "④ bolus 정맥주사 후 동적·정적 영상과 2~24시간 지연상으로 출혈을 확인한다",
+      "⑤ 의약품을 경구 투여해 게실에 직접 도달시킨다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "위벽세포 보유·산분비 궤양(①), 회장말단 퇴화 위장관(②), TcO₄⁻가 위점막세포에 농축(③), bolus 정맥·지연상(④). ⑤는 정맥주사인 투여경로를 경구로 뒤집은 교수 단골 함정.",
+    "distractor_src": ["MECKEL-04"]
+  },
+  {
+    "id": "l72-004",
+    "source_ids": ["MECKEL-05", "MECKEL-02"],
+    "exam": "MECKEL",
+    "part": "L72",
+    "question": "멕켈게실 검사의 정상 소견과 적응증으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 주사 후 blood pool이 즉시 나타나고 침샘·갑상샘·위에 집적이 증가한다",
+      "② 이소성(ectopic) 위점막에 의한 혈변증 환자에게 시행한다",
+      "③ 위강 분비 방사능이 샘창자→빈창자로 내려갈 수 있다",
+      "④ 정상에서는 위에 전혀 집적되지 않는다",
+      "⑤ 검사 전 별도 공복 없이 즉시 시행한다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "blood pool 즉시·침샘갑상샘위 집적(①), 이소성 위점막 혈변증 적응증(②), 위강 방사능이 샘창자→빈창자로 하강(③). ④는 위 집적이 정상인데 부정, ⑤는 4~6시간 공복 전처치를 부정한 함정.",
+    "distractor_src": ["MECKEL-02"]
+  },
+  {
+    "id": "l72-005",
+    "source_ids": ["LIVS-02", "LIVS-03", "LIVS-04"],
+    "exam": "LIVS",
+    "part": "L72",
+    "question": "간 검사(liver scan)의 집적기전과 정상 수치로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① colloid 표지 의약품의 집적기전은 식균작용(phagocytosis)이다",
+      "② Kupffer 세포 식균은 간 80~90%, 지라 5~10% 정도다",
+      "③ 정상 간 최대 집적은 8~12분이다",
+      "④ colloid 집적기전은 능동이동(친화성)이다",
+      "⑤ colloid는 토리여과로 집적된다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "colloid=식균작용(①), 간 80~90%·지라 5~10%(②), 최대집적 8~12분(③). ④는 간담도 IDA의 능동이동을 끌어옴, ⑤는 콩팥 DTPA의 토리여과를 끼운 함정.",
+    "distractor_src": ["HBS-05"]
+  },
+  {
+    "id": "l72-006",
+    "source_ids": ["LIVS-06"],
+    "exam": "LIVS",
+    "part": "L72",
+    "question": "간 검사의 비정상 소견으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 간경화·간염에서는 분포가 불규칙해지고 골수·지라 방사능이 증가한다",
+      "② 종양·낭종·농양은 열소(hot)로 나타난다",
+      "③ 간경화에서는 지라 방사능이 오히려 감소한다",
+      "④ 정상 간은 왼엽이 오른엽보다 집적이 높다",
+      "⑤ 간염에서는 간 크기가 항상 감소한다"
+    ],
+    "answers": [0],
+    "explanation": "간경화·간염은 불규칙 분포·골수·지라 방사능 증가(①). ②는 종양·낭종이 cold인데 hot으로 뒤집음, ③은 지라 증가를 감소로 뒤집음, ④는 정상에서 오른엽>왼엽인데 반대, ⑤는 간경화·간염에서 크기가 증가하는데 감소로 뒤집은 함정.",
+    "distractor_src": ["LIVS-06"]
+  },
+  {
+    "id": "l72-007",
+    "source_ids": ["LHEM-01", "LHEM-02"],
+    "exam": "LHEM",
+    "part": "L72",
+    "question": "간 혈관종 검사로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ⁹⁹ᵐTc-RBC를 정맥주사해 혈류·정지·지연영상으로 양성 혈관종을 악성과 구별한다",
+      "② ⁹⁹ᵐTc-sulfur colloid의 식균기전으로 혈관종을 영상화한다",
+      "③ 혈관종은 악성종양이므로 즉시 절제 대상이다",
+      "④ ¹³¹I-MIBG로 혈관종을 진단한다",
+      "⑤ 혈관종은 cold colloid 영상에서 열소로 나타난다"
+    ],
+    "answers": [0],
+    "explanation": "간 혈관종은 ⁹⁹ᵐTc-RBC 혈류풀 영상으로 양성을 악성과 구별(①). ②는 colloid 식균기전(간검사)을 끌어옴, ③은 양성종양을 악성이라 뒤집음, ④는 부신 MIBG를 끼움, ⑤는 무관한 서술의 함정.",
+    "distractor_src": ["LIVS-02"]
+  },
+  {
+    "id": "l72-008",
+    "source_ids": ["HBS-01", "HBS-03", "HBS-04", "HBS-07"],
+    "exam": "HBS",
+    "part": "L72",
+    "question": "간담도 검사의 쓸개즙 흐름과 영상 phase로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 쓸개즙은 담세관→간관→온간관→(쓸개관과 합쳐) 온쓸개관→샘창자유두로 흐른다",
+      "② 쓸개즙은 CCK에 의해 쓸개가 수축하고 오디조임근이 이완돼 샘창자로 배출된다",
+      "③ 검사 전 최소 6시간 공복이 필요하다",
+      "④ 이동 phase는 혈액기→간실질기→담도기→장기기 순이다",
+      "⑤ 쓸개즙은 콩팥을 통해 소변으로 배설되는 것이 주 경로다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "쓸개즙 경로(①), CCK 수축·오디조임근 이완 배출(②), 6시간 공복(③), phase 순서(④). ⑤는 쓸개즙이 담도→장으로 가는데 콩팥 소변배설을 주경로라 한 함정.",
+    "distractor_src": ["HBS-02"]
+  },
+  {
+    "id": "l72-009",
+    "source_ids": ["HBS-05", "HBS-06", "HBS-02"],
+    "exam": "HBS",
+    "part": "L72",
+    "question": "간담도 의약품 ⁹⁹ᵐTc-IDA에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① bilirubin과 경쟁적으로 작용하며 간세포 섭취 후 쓸개즙과 함께 분비된다",
+      "② 능동적 이동으로 쓸개관 배설이 증가하고 콩팥 배설은 감소한다",
+      "③ 집적기전은 모세혈관 차단이다",
+      "④ 분자량 5,000 이상이어야 담도로 잘 배설된다",
+      "⑤ IDA는 식균작용으로 Kupffer 세포에 포획된다"
+    ],
+    "answers": [0, 1],
+    "explanation": "IDA는 빌리루빈과 경쟁·간세포 섭취 후 쓸개즙 분비(①), 능동이동·담도배설↑·콩팥배설↓(②). ③은 MAA 기전, ④는 분자량 300~1,000이 적당한데 5,000↑로 왜곡(>5,000은 담도 배설 안 됨), ⑤는 colloid 식균을 끼운 함정.",
+    "distractor_src": ["LPS-05", "LIVS-02"]
+  },
+  {
+    "id": "l72-010",
+    "source_ids": ["HBS-08"],
+    "exam": "HBS",
+    "part": "L72",
+    "question": "간담도 검사의 폐쇄 판독으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 정상은 1시간 이내 쓸개와 장이 관찰된다",
+      "② 쓸개가 안 보이면 쓸개주머니관(cystic duct) 폐쇄를 의심한다",
+      "③ 장이 안 보이면 쓸개관(bile duct) 폐쇄를 의심한다",
+      "④ 쓸개가 안 보이면 쓸개관(bile duct) 폐쇄를 의심한다",
+      "⑤ 장이 안 보이면 정상 소견이다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "정상 1시간 내 쓸개·장 관찰(①), 쓸개 안 보임=cystic duct 폐쇄(②), 장 안 보임=bile duct 폐쇄(③). ④는 쓸개 비현시를 bile duct 폐쇄로 잘못 연결(맞바꿈), ⑤는 장 비현시를 정상이라 뒤집은 교수 킬러 함정.",
+    "distractor_src": ["HBS-08"]
+  },
+  {
+    "id": "l72-011",
+    "source_ids": ["SPLEEN-01", "SPLEEN-02", "SPLEEN-03", "SPLEEN-04", "SPLEEN-05"],
+    "exam": "SPLEEN",
+    "part": "L72",
+    "question": "지라 검사에 대한 설명으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 지라의 두 생리적 기능은 적혈구 포획(sequestration)과 식균작용(phagocytosis)이다",
+      "② 적혈구를 인위적으로 변형시켜 표지·정맥주사하면 지라에 섭취되는 원리를 이용한다",
+      "③ 의약품으로 ⁹⁹ᵐTc-RBC·⁹⁹ᵐTc-PYP·⁹⁹ᵐTc-sulfur colloid를 쓴다",
+      "④ 부비(accessory spleen)·무비증 진단에 이용된다",
+      "⑤ 경색·림프종·전이·낭종·농양에서 sulfur colloid가 cold로 나타날 수 있다"
+    ],
+    "answers": [0, 1, 2, 3, 4],
+    "explanation": "포획·식균(①), 변형 적혈구 표지(②), RBC·PYP·sulfur colloid(③), 부비·무비증 진단(④), 경색·림프종 등에서 cold(⑤) — 5개 모두 옳다(정답 개수 은닉).",
+    "distractor_src": []
+  },
+  {
+    "id": "l72-012",
+    "source_ids": ["PANC-03", "PANC-04"],
+    "exam": "PANC",
+    "part": "L72",
+    "question": "이자 검사(⁷⁵Se-selenomethionine)로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ⁷⁵Se는 이자에서 신속 합성으로 고농도 축적되며 검사 전 고단백 식사를 한다",
+      "② 이자 집적량은 간의 6~8배에 이른다",
+      "③ 검사 전 저단백·금식이 필수다",
+      "④ ⁷⁵Se는 이자에만 집적되고 다른 장기에는 전혀 가지 않는다",
+      "⑤ ⁷⁵Se는 흡입으로 투여한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "고단백 식사로 고농도 축적(①), 이자 집적 간의 6~8배(②). ③은 고단백 식사를 저단백·금식으로 뒤집음, ④는 지라·콩팥·간·고환에도 집적하는 사실을 부정, ⑤는 정맥주사를 흡입으로 뒤집은 함정.",
+    "distractor_src": ["PANC-03"]
+  },
+  {
+    "id": "l72-013",
+    "source_ids": ["FAT-04", "FAT-02", "B12-03", "B12-04"],
+    "exam": "FAT",
+    "part": "L72",
+    "question": "지방흡수 검사와 비타민 B12 흡수 검사로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① triolein 흡수 이상 시 이자 리파아제(lipase) 분비 결핍을 의심한다",
+      "② 지방흡수 검사 24시간 전 Lugol액으로 갑상샘을 차단한다",
+      "③ B12 검사(Schilling test)는 ⁵⁷Co-cyanocobalamin 경구 투여 후 비방사성 B12를 근육주사한다",
+      "④ B12 정상 요 배설률은 10~40%이며 8% 이하면 흡수장애로 판단한다",
+      "⑤ triolein은 lipase와 무관하게 그대로 흡수된다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "triolein 이상=lipase 결핍(①), Lugol 24시간 전 차단(②), Schilling test 경구 후 근육주사(③), 요배설률 10~40%·8%↓ 흡수장애(④). ⑤는 triolein이 lipase로 oleic acid가 되어 흡수되는 사실을 부정한 함정.",
+    "distractor_src": ["FAT-04"]
+  },
+  {
+    "id": "l8-001",
+    "source_ids": ["BRAIN-ANA-04", "BRP-01", "BRP-02"],
+    "exam": "BRP",
+    "part": "L8",
+    "question": "혈액뇌장벽(BBB)과 방사성의약품 통과로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① BBB는 모세혈관 내피세포·기저막·신경교 세포돌기의 3층 막 구조다",
+      "② 물·산소·이산화탄소·지용성 물질은 BBB를 잘 통과한다",
+      "③ 정상에서는 뇌조직 자체에 방사능 집적이 없고 큰 혈관(시상정맥동 등) 내 반응만 나타난다",
+      "④ BBB는 모든 물질을 자유롭게 통과시킨다",
+      "⑤ 뇌종양·경색에서는 BBB가 강화되어 집적이 더 차단된다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "3층 막 구조(①), 물·산소·CO₂·지용성 통과(②), 정상은 뇌조직 집적 없이 큰 혈관 반응만(③). ④는 BBB가 불필요 물질을 차단하는데 자유통과로 뒤집음, ⑤는 병변에서 BBB 변화로 오히려 집적이 증가하는 것을 차단으로 뒤집은 함정.",
+    "distractor_src": ["BRP-02"]
+  },
+  {
+    "id": "l8-002",
+    "source_ids": ["BRP-03", "BRP-04"],
+    "exam": "BRP",
+    "part": "L8",
+    "question": "BBB 통과성에 따른 뇌 방사성의약품 분류로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ⁹⁹ᵐTc-DTPA·⁹⁹ᵐTcO₄⁻·⁶⁷Ga-citrate는 BBB를 잘 통과하지 못하는 비확산성 의약품이다",
+      "② ⁹⁹ᵐTc-HMPAO·⁹⁹ᵐTc-ECD는 BBB를 통과하는 확산성(국소뇌혈류) 의약품이다",
+      "③ ¹²³I-iodoamphetamine·¹³³Xe는 확산성 의약품이다",
+      "④ ²⁰¹Tl-chloride는 비확산성 의약품이다",
+      "⑤ ⁹⁹ᵐTc-HMPAO는 비확산성이라 BBB를 통과하지 못한다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "DTPA·TcO₄·Ga 비확산성(①), HMPAO·ECD 확산성(②), IMP·Xe 확산성(③), 201Tl 비확산성(④). ⑤는 HMPAO가 확산성(뇌관류제)인 사실을 비확산성으로 뒤집은 함정.",
+    "distractor_src": ["BRP-04"]
+  },
+  {
+    "id": "l8-003",
+    "source_ids": ["BRANGI-01", "BRANGI-03", "BRANGI-05"],
+    "exam": "BRANGI",
+    "part": "L8",
+    "question": "뇌 방사성핵종 혈관조영·정적영상으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 뇌 검사는 동적(angiographic)+정적(static) 2과정으로 이뤄진다",
+      "② Radionuclide angiogram은 anterior view에서 bolus 후 2~3초 간격으로 기록한다",
+      "③ Brain static은 1시간 후 anterior·posterior·양측 lateral로 얻는다",
+      "④ 동적영상은 정맥주사 30분 후 1장만 촬영한다",
+      "⑤ angiogram은 흡입으로 의약품을 투여한다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "동적+정적 2과정(①), anterior bolus 2~3초 간격(②), static 1시간 후 다방향(③). ④는 연속 bolus 동적영상을 1장으로 축소, ⑤는 정맥 bolus를 흡입으로 뒤집은 함정.",
+    "distractor_src": ["BRANGI-03"]
+  },
+  {
+    "id": "l8-004",
+    "source_ids": ["BRANGI-02"],
+    "exam": "BRANGI",
+    "part": "L8",
+    "question": "⁹⁹ᵐTcO₄⁻ 뇌검사 시 전처치로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 검사 30분~1시간 전 potassium perchlorate를 투여해 맥락총 집적을 차단한다",
+      "② Lugol액으로 갑상샘을 차단한다",
+      "③ 검사 6시간 전부터 금식한다",
+      "④ acetazolamide를 정맥주사해 뇌혈류를 늘린다",
+      "⑤ 요추천자로 의약품을 주입한다"
+    ],
+    "answers": [0],
+    "explanation": "TcO₄⁻ 뇌검사는 potassium perchlorate로 맥락총 차단(①). ②는 MIBG·갑상샘검사의 Lugol, ③은 PET·심근검사의 금식, ④는 DIAMOX SPECT의 acetazolamide, ⑤는 cisternography의 요추천자를 끼운 함정.",
+    "distractor_src": ["BPS-07", "CSF-03"]
+  },
+  {
+    "id": "l8-005",
+    "source_ids": ["BRANGI-07"],
+    "exam": "BRANGI",
+    "part": "L8",
+    "question": "뇌사(brain death)의 핵의학 소견으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 동적영상에서 뇌내 동맥·모세혈관·정맥 혈류가 나타나지 않고, 즉시 시행한 정적영상에서 시상정맥동이 나타나지 않는다",
+      "② 동적영상에서 뇌혈류가 정상적으로 잘 나타난다",
+      "③ 정적영상에서 시상정맥동이 강하게 나타난다",
+      "④ 뇌조직에 방사능이 과도하게 집적된다",
+      "⑤ acetazolamide 투여 후 뇌혈류가 증가한다"
+    ],
+    "answers": [0],
+    "explanation": "뇌사는 뇌혈류 미현시+시상정맥동 미현시(①). ②③④⑤는 모두 혈류가 유지·증가하는 정상·반대 소견으로 뇌사 소견이 아니다.",
+    "distractor_src": ["BRANGI-07"]
+  },
+  {
+    "id": "l8-006",
+    "source_ids": ["BPS-02", "BPS-04", "BPS-05"],
+    "exam": "BPS",
+    "part": "L8",
+    "question": "뇌 관류 SPECT의 의약품과 기전으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 의약품으로 ⁹⁹ᵐTc-HMPAO·⁹⁹ᵐTc-ECD를 정맥주사한다",
+      "② HMPAO는 BBB 통과 순간 지용성을 잃고 뇌조직에 집적되며 집적은 뇌혈류량에 따라 다르다",
+      "③ ECD는 조기 가수분해로 뇌에 집적되고 콩팥 배설이 빨라 배후방사능이 HMPAO보다 낮다",
+      "④ HMPAO·ECD는 BBB를 통과하지 못한다",
+      "⑤ 의약품을 요추천자로 주입한다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "HMPAO·ECD 정맥주사(①), HMPAO 지용성 상실 후 집적·혈류 반영(②), ECD 빠른 콩팥 배설로 낮은 BKG(③). ④는 확산성(통과)을 부정, ⑤는 정맥주사를 요추천자로 뒤집은 함정.",
+    "distractor_src": ["CSF-03"]
+  },
+  {
+    "id": "l8-007",
+    "source_ids": ["BPS-07"],
+    "exam": "BPS",
+    "part": "L8",
+    "question": "뇌혈류 관류예비능 평가(DIAMOX SPECT)로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 혈관확장제 acetazolamide 주사 후 정상은 뇌혈류가 증가하나 뇌혈관질환은 변화 없거나 부분 감소가 뚜렷해진다",
+      "② acetazolamide는 뇌혈류를 감소시키는 혈관수축제다",
+      "③ 정상에서도 acetazolamide 후 뇌혈류 변화가 없다",
+      "④ 뇌혈관질환에서 acetazolamide 후 혈류가 더 잘 증가한다",
+      "⑤ 검사 전 Lugol 차단이 필수다"
+    ],
+    "answers": [0],
+    "explanation": "acetazolamide로 정상은 혈류 증가·질환부는 변화없음/감소가 부각(①, 교수 킬러). ②는 혈관확장제를 수축제로 뒤집음, ③은 정상 반응을 부정, ④는 질환부 반응을 반대로 서술, ⑤는 무관한 Lugol을 끼운 함정.",
+    "distractor_src": ["BPS-07"]
+  },
+  {
+    "id": "l8-008",
+    "source_ids": ["BPET-01", "BPET-03"],
+    "exam": "BPET",
+    "part": "L8",
+    "question": "FDG 뇌 PET으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 뇌 포도당 대사 변화를 영상화하며 종양·간질병소·치매 평가에 쓰인다",
+      "② 해마(hippocampus)의 FDG 축적은 정상에서도 낮아 병소로 오인하면 안 된다",
+      "③ FDG PET은 당대사가 아닌 뇌혈류를 직접 영상화한다",
+      "④ 당뇨병 환자는 FDG 섭취가 오히려 증가한다",
+      "⑤ 대뇌 당대사는 노년층에서 전체적으로 높게 나타난다"
+    ],
+    "answers": [0, 1],
+    "explanation": "포도당 대사 영상·종양/간질/치매(①), 해마 FDG 정상에서도 낮음(②). ③은 당대사≠혈류영상을 혈류로 뒤집음, ④는 당뇨 환자 섭취 저하를 증가로 뒤집음, ⑤는 노년층 당대사 저하를 높게로 뒤집은 함정.",
+    "distractor_src": ["BPET-03"]
+  },
+  {
+    "id": "l8-009",
+    "source_ids": ["CSF-02", "CSF-03", "CSF-04"],
+    "exam": "CSF",
+    "part": "L8",
+    "question": "뇌척수액(CSF) 검사·뇌조스캔(cisternography)으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① CSF는 맥락얼기에서 시작해 가쪽뇌실→셋째·넷째 뇌실→거미막 밑공간→거미막 융모로 흡수된다",
+      "② 뇌조스캔은 수두증·CSF강 협착·샛길 진단에 ⁹⁹ᵐTc-DTPA를 요추천자로 주입한다",
+      "③ 정상에서 24시간경 거미막 융모·시상정맥동에 도달·흡수된다",
+      "④ 허리뼈 주입은 뇌실로 들어가지 않아 정상에서 뇌실이 나타나지 않는다",
+      "⑤ 뇌조스캔 의약품은 정맥주사로 투여한다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "CSF 흐름(①), DTPA 요추천자 주입(②), 24시간 융모·정맥동 도달(③), 허리뼈 주입은 정상에서 뇌실 미현시(④). ⑤는 요추천자(거미막밑공간) 주입을 정맥주사로 뒤집은 함정.",
+    "distractor_src": ["CSF-03"]
+  },
+  {
+    "id": "l8-010",
+    "source_ids": ["CSF-05"],
+    "exam": "CSF",
+    "part": "L8",
+    "question": "뇌실-복막 단락 기능검사(shunt function test)로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 수두증 치료용 저장고(reservoir) 수술 후 기능을 평가한다",
+      "② ⁹⁹ᵐTc-DTPA를 저장고에 직접 주사해 T1/2로 CSF 흐름을 계산한다",
+      "③ 단락 막힘은 뇌실 쪽이면 감염이 주원인이다",
+      "④ 의약품을 정맥주사한다",
+      "⑤ 단락장치에는 밸브가 없어 양방향으로 흐른다"
+    ],
+    "answers": [0, 1],
+    "explanation": "저장고 수술 후 기능평가(①), DTPA 저장고 직접 주사·T1/2 계산(②). ③은 뇌실 쪽 막힘이 세포찌꺼기·맥락막총, 복막강 쪽이 감염인데 맞바꿈, ④는 저장고 직접 주사를 정맥으로 뒤집음, ⑤는 일방통행 밸브가 있는 사실을 부정한 함정.",
+    "distractor_src": ["CSF-05"]
+  },
+  {
+    "id": "l9-001",
+    "source_ids": ["KIDS-03", "KIDS-04", "KIDS-01"],
+    "exam": "KIDS",
+    "part": "L9",
+    "question": "콩팥 정적영상(⁹⁹ᵐTc-DMSA)으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① DMSA는 콩팥겉질에 집적되어 24시간 잔류하며 겉질 손상 평가에 쓰인다",
+      "② DMSA의 집적기전은 세뇨관분비다",
+      "③ DMSA는 콩팥 배설기능 평가가 불가능하고 피폭이 많은 편이다",
+      "④ DMSA는 단순확산·토리여과로 배설된다",
+      "⑤ DMSA는 콩팥속질에만 집적된다"
+    ],
+    "answers": [0, 1, 2],
+    "explanation": "DMSA 겉질 집적·24시간 잔류·겉질손상 평가(①), 세뇨관분비 기전(②), 배설기능 평가 불가·피폭 많음(③). ④는 DTPA의 단순확산·토리여과를 끌어옴, ⑤는 겉질 집적을 속질로 뒤집은 함정.",
+    "distractor_src": ["KIDD-03"]
+  },
+  {
+    "id": "l9-002",
+    "source_ids": ["KIDS-01", "KIDS-02", "KIDS-04"],
+    "exam": "KIDS",
+    "part": "L9",
+    "question": "콩팥 정적영상의 목적과 의약품으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 콩팥겉질 손상·좌우 콩팥 상대 기능·선천성 기형 평가가 목적이다",
+      "② ⁹⁹ᵐTc-GHA(glucoheptonate)도 콩팥겉질 영상이 가능하다",
+      "③ 정적영상으로 콩팥동맥 협착의 혈류역학을 정량평가한다",
+      "④ DMSA는 동적영상 전용이다",
+      "⑤ 정적영상에는 ⁹⁹ᵐTc-MAA를 사용한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "겉질손상·좌우기능·기형 평가(①), GHA도 겉질영상 가능(②). ③은 동적영상의 콩팥동맥 협착 평가를 정적에 끼움, ④는 DMSA 정적영상제를 동적전용으로 왜곡, ⑤는 폐관류제 MAA를 끼운 함정.",
+    "distractor_src": ["KIDD-01", "LPS-05"]
+  },
+  {
+    "id": "l9-003",
+    "source_ids": ["KIDD-03"],
+    "exam": "KIDD",
+    "part": "L9",
+    "question": "콩팥 동적영상 의약품의 집적·배설기전 연결로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① ⁹⁹ᵐTc-DTPA — 단순확산, 토리(사구체)여과",
+      "② ⁹⁹ᵐTc-MAG3 — 능동이동, 세뇨관분비 80~90%",
+      "③ ¹³¹I-hippuran — 능동이동, 세뇨관분비 위주",
+      "④ ⁹⁹ᵐTc-GHA — 토리여과+세뇨관분비를 함께 한다",
+      "⑤ DTPA는 세뇨관분비로만 배설된다"
+    ],
+    "answers": [0, 1, 2, 3],
+    "explanation": "DTPA 단순확산·토리여과(①), MAG3 능동이동·세뇨관분비 80~90%(②), hippuran 세뇨관분비 위주(③), GHA 토리여과+세뇨관분비(④). ⑤는 DTPA가 토리여과 배설인 것을 세뇨관분비로 뒤집은 함정.",
+    "distractor_src": ["KIDD-03"]
+  },
+  {
+    "id": "l9-004",
+    "source_ids": ["KIDD-04", "KIDD-05", "KIDD-06"],
+    "exam": "KIDD",
+    "part": "L9",
+    "question": "⁹⁹ᵐTc-DTPA와 ⁹⁹ᵐTc-MAG3의 비교로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① DTPA는 단순확산·토리여과로 배설되어 토리(사구체) 기능 평가에 쓰인다",
+      "② MAG3는 능동이동으로 신피질에 집적되고 세뇨관분비로 배설된다",
+      "③ DTPA는 세뇨관분비, MAG3는 토리여과로 배설된다",
+      "④ MAG3는 콩팥 실질에 오래 머물러 정적 겉질영상 전용이다",
+      "⑤ 둘 다 식균작용으로 집적된다"
+    ],
+    "answers": [0, 1],
+    "explanation": "DTPA 단순확산·토리여과·사구체기능(①), MAG3 능동이동·세뇨관분비(②). ③은 두 약의 기전을 맞바꿈, ④는 MAG3가 실질에 안 머물고 90%가 3시간 내 배설되는 동적검사제인데 정적전용으로 왜곡, ⑤는 colloid 식균을 끼운 함정.",
+    "distractor_src": ["LIVS-02"]
+  },
+  {
+    "id": "l9-005",
+    "source_ids": ["KIDD-02", "KIDD-07"],
+    "exam": "KIDD",
+    "part": "L9",
+    "question": "콩팥 동적영상의 전처치·renogram으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 검사 전 소변을 보게 해 방광 피폭을 줄이고, renogram은 혈류기·분비기·배설기로 구성된다",
+      "② 검사 전 방광을 가득 채운 상태로 검사한다",
+      "③ 검사 전 6시간 금식이 필수다",
+      "④ renogram은 관류기·농축기·방출기로 구성된다",
+      "⑤ 검사 전 Lugol 차단을 한다"
+    ],
+    "answers": [0],
+    "explanation": "배뇨로 방광 피폭 감소·renogram 혈류기·분비기·배설기(①). ②는 배뇨와 반대, ③은 무관한 금식, ④는 침샘 phase 용어로 바꿔치기, ⑤는 무관한 Lugol을 끼운 함정.",
+    "distractor_src": ["KIDD-07"]
+  },
+  {
+    "id": "l9-006",
+    "source_ids": ["DIUR-01", "DIUR-02", "DIUR-03"],
+    "exam": "DIUR",
+    "part": "L9",
+    "question": "이뇨제 콩팥 스캔으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 요로폐쇄와 비폐쇄성 요로질환(수신증 등) 감별에 유용하다",
+      "② furosemide를 정맥주사하고 주사 전후 소실곡선 반감기를 비교한다",
+      "③ 이뇨제 대신 captopril을 투여해 폐쇄를 평가한다",
+      "④ 이뇨제 주사 후 폐쇄성은 방사능이 빠르게 씻겨나간다",
+      "⑤ 이뇨제는 경구로 투여한다"
+    ],
+    "answers": [0, 1],
+    "explanation": "폐쇄/비폐쇄 감별(①), furosemide 정맥·반감기 비교(②). ③은 ACE 스캔의 captopril을 끌어옴, ④는 폐쇄성에서 씻김이 지연되는 것을 빠르다로 뒤집음, ⑤는 정맥주사를 경구로 뒤집은 함정.",
+    "distractor_src": ["ACE-01"]
+  },
+  {
+    "id": "l9-007",
+    "source_ids": ["ACE-01"],
+    "exam": "ACE",
+    "part": "L9",
+    "question": "ACE 억제제 콩팥 스캔으로 옳은 것을 모두 고르시오.",
+    "options": [
+      "① 콩팥혈관성 고혈압 환자에서 콩팥동맥 진단을 위해 ACE 억제제 캡토프릴(captopril)을 이용한다",
+      "② 요로폐쇄 감별을 위해 furosemide를 투여한다",
+      "③ 갑상샘 차단을 위해 Lugol을 투여한다",
+      "④ captopril은 혈관확장 뇌검사에 쓰인다",
+      "⑤ ACE 스캔은 정적 겉질영상이다"
+    ],
+    "answers": [0],
+    "explanation": "콩팥혈관성 고혈압에 captopril 이용(①). ②는 이뇨제 스캔의 furosemide, ③은 무관한 Lugol, ④는 뇌 DIAMOX(acetazolamide)와 혼동, ⑤는 ACE가 동적검사인 것을 정적으로 뒤집은 함정.",
+    "distractor_src": ["DIUR-02"]
+  }
+];
+const REG_BY_ID = Object.fromEntries(REGISTRY.map(r => [r.id, r]));
+const LS_KEY = "skullquiz_v1";
+
+let state = load();
+function load(){ try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch(e){ return {}; } }
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+state.progress = state.progress || {};
+state.settings = Object.assign({ M: 2, batch: 10 }, state.settings || {});
+
+// ── 단원(회차) 선택 ──
+const PART_ORDER = ["L42","L51","L5","L6","L71","L72","L8","L9"];
+const PART_LABELS = {
+  "L42":"수업4_2 · 부갑상샘·부신",
+  "L51":"수업5_1 · PYP(심근경색)",
+  "L5":"수업5 · 심장",
+  "L6":"수업6 · 폐",
+  "L71":"수업7_1 · 소화계1(침샘·식도·위)",
+  "L72":"수업7_2 · 소화계2(출혈·간·담도)",
+  "L8":"수업8 · 뇌",
+  "L9":"수업9 · 비뇨계(콩팥)"
+};
+// BANK에 실제 존재하는 회차만(순서 보존)
+const PARTS = PART_ORDER.filter(p => BANK.some(q => q.part === p));
+state.selectedParts = (state.selectedParts && state.selectedParts.filter(p => PARTS.includes(p))) || null;
+if (!state.selectedParts || !state.selectedParts.length) state.selectedParts = PARTS.slice();
+function selSet(){ return new Set(state.selectedParts); }
+function activeBank(){ const s = selSet(); const b = BANK.filter(q => s.has(q.part)); return b.length ? b : BANK; }
+function activeRegistry(){ const s = selSet(); const r = REGISTRY.filter(x => s.has(x.part)); return r.length ? r : REGISTRY; }
+function partsSummary(){ const n = state.selectedParts.length; if(n===PARTS.length) return "전체 단원"; if(n===1) return PART_LABELS[state.selectedParts[0]]; return PART_LABELS[state.selectedParts[0]]+` 외 ${n-1}`; }
+state.game = Object.assign({ xp:0, combo:0, bestCombo:0, totalCorrect:0, totalAnswered:0, badges:{} }, state.game || {});
+
+/* ===== 게임화 로직 ===== */
+// 레벨 곡선: 레벨 L까지 누적 필요 XP. 점증.
+function xpForLevel(L){ return Math.round(50*L*L + 50*L); }           // 누적 임계(L레벨 달성에 필요한 총 XP)
+function levelFromXp(xp){ let L=1; while(xp >= xpForLevel(L)) L++; return L; }
+const RANKS = [
+  {min:1,  name:"견습",       face:"🦴"},
+  {min:4,  name:"보조 테크니션", face:"🩻"},
+  {min:8,  name:"방사선사",     face:"👩‍⚕️"},
+  {min:14, name:"스컬 스페셜리스트", face:"🧠"},
+  {min:22, name:"영상의학 마스터", face:"🏆"},
+  {min:32, name:"스컬 그랜드마스터", face:"👑"},
+];
+function rankFor(L){ let r=RANKS[0]; for(const x of RANKS) if(L>=x.min) r=x; return r; }
+function faceForCombo(combo){ if(combo>=15)return"🤩"; if(combo>=8)return"😎"; if(combo>=3)return"🙂"; return rankFor(levelFromXp(state.game.xp)).face; }
+
+// 배지 정의
+const BADGES = [
+  {id:"first",   ic:"🐣", nm:"첫걸음",     ds:"첫 정답"},
+  {id:"combo5",  ic:"🔥", nm:"불씨",       ds:"5연속 정답"},
+  {id:"combo10", ic:"🔥", nm:"콤보 마스터", ds:"10연속 정답"},
+  {id:"combo20", ic:"☄️", nm:"불꽃 폭주",   ds:"20연속 정답"},
+  {id:"perfect", ic:"💯", nm:"완벽주의",    ds:"한 묶음 전부 정답"},
+  {id:"weak5",   ic:"🛡️", nm:"약점 정복",   ds:"약점 5개 졸업"},
+  {id:"solve50", ic:"📚", nm:"우직함",      ds:"누적 50문제"},
+  {id:"solve150",ic:"🎓", nm:"근면 성실",   ds:"누적 150문제"},
+  {id:"cover",   ic:"🗺️", nm:"커버리지 헌터", ds:"전 ID 풀이"},
+  {id:"lv10",    ic:"⭐", nm:"두 자릿수",   ds:"레벨 10 도달"},
+];
+const BADGE_BY_ID = Object.fromEntries(BADGES.map(b=>[b.id,b]));
+
+// XP 획득(정답): 기본 10 + 콤보 보너스(콤보당 2, 최대 +30)
+function xpGain(combo){ return 10 + Math.min(30, (combo-1)*2); }
+
+// 한 문제 채점 결과를 게임 상태에 반영. 반환: {gainedXp, leveledTo(또는0), newBadges:[]}
+function gameApply(correct, batchAllCorrect){
+  const g = state.game; const before = levelFromXp(g.xp);
+  g.totalAnswered++;
+  let gained = 0;
+  if(correct){
+    g.combo++; g.totalCorrect++;
+    if(g.combo>g.bestCombo) g.bestCombo=g.combo;
+    gained = xpGain(g.combo); g.xp += gained;
+  } else { g.combo = 0; }
+  const after = levelFromXp(g.xp);
+  const leveled = after>before ? after : 0;
+  const newBadges = checkBadges(batchAllCorrect, after);
+  save();
+  return { gained, leveled, newBadges };
+}
+
+function gradCount(){ return BANK.reduce((n,q)=>n+((state.progress[q.id]||{}).mastered?1:0),0); }
+
+function checkBadges(batchAllCorrect, level){
+  const g = state.game, got=[];
+  const give = id => { if(!g.badges[id]){ g.badges[id]=Date.now(); got.push(id); } };
+  if(g.totalCorrect>=1) give("first");
+  if(g.bestCombo>=5) give("combo5");
+  if(g.bestCombo>=10) give("combo10");
+  if(g.bestCombo>=20) give("combo20");
+  if(batchAllCorrect) give("perfect");
+  if(gradCount()>=5) give("weak5");
+  if(g.totalAnswered>=50) give("solve50");
+  if(g.totalAnswered>=150) give("solve150");
+  if(level>=10) give("lv10");
+  const cov = QuizEngine.computeCoverage(BANK, REGISTRY);
+  if(cov.uncovered.length===0) give("cover");
+  return got;
+}
+
+// ---- 연출: HUD, XP플로팅, 레벨업, 컨페티, 토스트, 사운드 ----
+function renderHud(){
+  const g = state.game, L = levelFromXp(g.xp), r = rankFor(L);
+  const base = L>1 ? xpForLevel(L-1) : 0, next = xpForLevel(L);
+  const inLv = g.xp - base, need = next - base;
+  document.getElementById("hudLvl").textContent = L;
+  document.getElementById("hudRank").textContent = r.name;
+  document.getElementById("hudFace").textContent = faceForCombo(g.combo);
+  document.getElementById("hudXp").style.width = Math.round(inLv/need*100)+"%";
+  document.getElementById("hudXpTxt").textContent = `XP ${g.xp} · 다음 레벨까지 ${need-inLv}`;
+  const cb = document.getElementById("hudCombo");
+  document.getElementById("hudComboN").textContent = g.combo;
+  cb.classList.toggle("zero", g.combo===0);
+  cb.classList.toggle("hot", g.combo>=3);
+}
+function bumpCombo(){ const cb=document.getElementById("hudCombo"); cb.classList.add("bump"); setTimeout(()=>cb.classList.remove("bump"),160); }
+
+function floatXp(amount){
+  const el=document.createElement("div"); el.className="xpfloat"; el.textContent="+"+amount+" XP";
+  document.body.appendChild(el); setTimeout(()=>el.remove(),1100);
+}
+function showLevelUp(level){
+  const r=rankFor(level);
+  const wrap=document.createElement("div"); wrap.className="levelup";
+  wrap.innerHTML=`<div class="box">LEVEL ${level}! ${r.face}<small>${r.name}</small></div>`;
+  document.body.appendChild(wrap); setTimeout(()=>wrap.remove(),1600);
+  beep("level");
+  burstConfetti(160);
+}
+let toastQ=[];
+function showToast(id){
+  const b=BADGE_BY_ID[id]; if(!b) return; toastQ.push(b); if(toastQ.length===1) runToast();
+}
+function runToast(){
+  if(!toastQ.length) return; const b=toastQ[0];
+  const t=document.getElementById("toast");
+  document.querySelector("#toast .ic").textContent=b.ic;
+  document.getElementById("toastTxt").textContent="배지 획득 — "+b.nm;
+  t.classList.add("show"); beep("badge");
+  setTimeout(()=>{ t.classList.remove("show"); setTimeout(()=>{ toastQ.shift(); runToast(); },450); },1900);
+}
+
+// 컨페티 (외부 라이브러리 없이 캔버스 파티클)
+const cvs=document.getElementById("confetti"), cx=cvs.getContext("2d");
+let parts=[], rafOn=false;
+function fitCanvas(){ cvs.width=innerWidth*devicePixelRatio; cvs.height=innerHeight*devicePixelRatio; cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+addEventListener("resize",fitCanvas); fitCanvas();
+const CCOL=["#ffe08a","#e8b740","#fff4d6","#ffb347","#d4a017","#ffd27a"];
+// 정답: 검광 슬래시 (콤보 높을수록 다연격)
+function slashFx(){
+  const c=state.game.combo, hits=c>=10?3:c>=5?2:1;
+  const w=document.createElement("div"); w.id="fxSlash";
+  const angles=["15deg","-13deg","19deg"], tops=["-50%","-90%","-30%"];
+  for(let i=0;i<hits;i++){ const s=document.createElement("div"); s.className="slash";
+    s.style.top=tops[i]; s.style.transform="rotate("+angles[i]+")"; s.style.animationDelay=(i*.085)+"s"; w.appendChild(s); }
+  document.body.appendChild(w); setTimeout(()=>w.remove(),760);
+}
+// 정답: 풀스크린 섬광 + 확장 충격파 + 화면 펀치
+function impactFx(){
+  const c=state.game.combo;
+  const f=document.createElement("div"); f.id="fxFlash"; document.body.appendChild(f); setTimeout(()=>f.remove(),420);
+  const sh=document.createElement("div"); sh.id="fxShock";
+  const rings=c>=8?3:c>=4?2:1;
+  for(let i=0;i<rings;i++){ const r=document.createElement("div"); r.className="ring"; r.style.animationDelay=(i*.08)+"s"; sh.appendChild(r); }
+  document.body.appendChild(sh); setTimeout(()=>sh.remove(),700);
+  const wrap=document.querySelector(".wrap");
+  if(wrap){ wrap.classList.remove("punch","shakeHard"); void wrap.offsetWidth; wrap.classList.add("punch"); }
+  tone(70,0.17,"sine",0.24,0); tone(110,0.12,"triangle",0.14,0.02); // 묵직한 타격음
+  if(navigator.vibrate) navigator.vibrate(c>=5?[20,30,20]:30);
+}
+// 콤보 3+ 시 화면 테두리 불타는 글로우 on/off
+function comboRim(combo){
+  let r=document.getElementById("fxRim");
+  if(!r){ r=document.createElement("div"); r.id="fxRim"; document.body.appendChild(r); }
+  r.classList.toggle("on", combo>=3);
+}
+// 오답: 화면 붉은 비네팅 + 강한 화면 흔들림
+function hitVignette(){
+  const d=document.createElement("div"); d.id="fxHit"; document.body.appendChild(d); setTimeout(()=>d.remove(),660);
+  const wrap=document.querySelector(".wrap");
+  if(wrap){ wrap.classList.remove("punch","shakeHard"); void wrap.offsetWidth; wrap.classList.add("shakeHard"); }
+  comboRim(0);
+}
+function burstConfetti(n){
+  const cxp=innerWidth/2;
+  for(let i=0;i<n;i++){
+    parts.push({x:cxp+(Math.random()-.5)*120, y:innerHeight*0.34,
+      vx:(Math.random()-.5)*9, vy:-Math.random()*11-4,
+      g:0.28+Math.random()*0.14, s:5+Math.random()*6, rot:Math.random()*6.28,
+      vr:(Math.random()-.5)*0.4, col:CCOL[i%CCOL.length], life:90+Math.random()*40});
+  }
+  if(!rafOn){ rafOn=true; requestAnimationFrame(tickConfetti); }
+}
+function tickConfetti(){
+  cx.clearRect(0,0,innerWidth,innerHeight);
+  parts=parts.filter(p=>p.life>0 && p.y<innerHeight+40);
+  parts.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
+    cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.fillStyle=p.col;
+    cx.shadowColor=p.col; cx.shadowBlur=9;
+    cx.globalAlpha=Math.max(0,Math.min(1,p.life/30));
+    cx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.55); cx.restore(); });
+  if(parts.length){ requestAnimationFrame(tickConfetti); } else { rafOn=false; cx.clearRect(0,0,innerWidth,innerHeight); }
+}
+
+// 효과음 (WebAudio 합성, 파일 없음)
+let actx=null;
+function ac(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return actx; }
+// iOS/모바일: 오디오는 사용자 제스처 안에서만 켜짐 → 첫 터치에서 잠금 해제
+function unlockAudio(){ const a=ac(); if(a && a.state==="suspended") a.resume();
+  const v=document.getElementById("bgvid"); if(v && v.paused){ v.play().catch(()=>{}); } }
+["touchend","pointerdown","click","keydown"].forEach(ev=>document.addEventListener(ev, unlockAudio, {passive:true}));
+function tone(freq,dur,type,vol,when){ const a=ac(); if(!a)return; const t=a.currentTime+(when||0);
+  const o=a.createOscillator(), g=a.createGain(); o.type=type||"sine"; o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.18,t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g).connect(a.destination); o.start(t); o.stop(t+dur+0.02); }
+function beep(kind){
+  if(kind==="correct"){ const base=520, c=Math.min(state.game.combo,12);
+    tone(base+c*28,0.14,"triangle",0.16,0); tone(base*1.5+c*30,0.16,"triangle",0.12,0.07); }
+  else if(kind==="wrong"){ tone(200,0.18,"sawtooth",0.12,0); tone(150,0.22,"sawtooth",0.1,0.09); }
+  else if(kind==="level"){ [523,659,784,1047].forEach((f,i)=>tone(f,0.22,"triangle",0.16,i*0.09)); }
+  else if(kind==="badge"){ tone(880,0.12,"square",0.12,0); tone(1175,0.18,"square",0.12,0.1); }
+}
+function renderBadges(){
+  const grid=document.getElementById("badgeGrid"); grid.innerHTML="";
+  const g=state.game; let n=0;
+  BADGES.forEach(b=>{ const got=!!g.badges[b.id]; if(got)n++;
+    const d=document.createElement("div"); d.className="badge"+(got?" got":"");
+    d.innerHTML=`<div class="ic">${b.ic}</div><div class="nm">${b.nm}</div><div class="ds">${b.ds}</div>`;
+    grid.appendChild(d);
+  });
+  document.getElementById("badgeCount").textContent=`${n} / ${BADGES.length}`;
+}
+
+let queue = [], qi = 0, cur = null, shuf = null, batchPerfect = true;
+
+function show(id){ ["parts","home","quiz","feedback","report","settings"].forEach(s => document.getElementById(s).classList.toggle("hidden", s !== id)); if(id==="parts") renderParts(); if(id==="home") renderHome(); if(id==="report") renderReport(); if(id==="settings") renderSettings(); }
+
+function renderHome(){
+  const AB = activeBank();
+  document.getElementById("homeParts").textContent = `${partsSummary()} · ${AB.length}문항`;
+  const weak = QuizEngine.selectQueue(state.progress, AB, "weak");
+  document.getElementById("weakCount").textContent = weak.length + "마리";
+  let mastered=0, seen=0;
+  AB.forEach(q => { const p=state.progress[q.id]; if(p&&p.seen){seen++; if(p.mastered)mastered++;} });
+  const total=AB.length, learning=seen-mastered, unseen=total-seen;
+  document.getElementById("progBar").innerHTML =
+    `<span style="width:${pct(mastered,total)}%;background:var(--ok)"></span>`+
+    `<span style="width:${pct(learning,total)}%;background:var(--miss)"></span>`+
+    `<span style="width:${pct(unseen,total)}%;background:#e9e9e9"></span>`;
+  document.getElementById("progText").textContent = `🎖️ 토벌 ${mastered} · ⚔️ 교전중 ${learning} · 🌑 미발견 ${unseen} / 총 ${total}마리`;
+  const cov = QuizEngine.computeCoverage(AB, activeRegistry());
+  document.getElementById("covText").textContent = `${cov.covered.length} / ${cov.total} ID`;
+  document.getElementById("covBar").innerHTML = `<span style="width:${pct(cov.covered.length,cov.total)}%;background:var(--accent)"></span>`;
+  renderHud();
+  renderBadges();
+}
+function pct(n,d){ return d? Math.round(n/d*100):0; }
+
+// ── 단원 선택 화면 ──
+function renderParts(){
+  const sel = selSet();
+  document.getElementById("partsCount").textContent = `${state.selectedParts.length} / ${PARTS.length} 단원`;
+  document.getElementById("partsGrid").innerHTML = PARTS.map(p => {
+    const n = BANK.filter(q => q.part === p).length;
+    const on = sel.has(p);
+    return `<div class="opt${on?" sel":""}" style="cursor:pointer;margin:6px 0" onclick="togglePart('${p}')">`+
+      `${on?"✅":"⬜"} <b>${PART_LABELS[p]}</b> <span class="muted">(${n}문항)</span></div>`;
+  }).join("");
+}
+function togglePart(p){
+  const i = state.selectedParts.indexOf(p);
+  if(i>=0) state.selectedParts.splice(i,1); else state.selectedParts.push(p);
+  // 순서 정렬 보존
+  state.selectedParts = PARTS.filter(x => state.selectedParts.includes(x));
+  renderParts();
+}
+function toggleAllParts(){
+  state.selectedParts = (state.selectedParts.length === PARTS.length) ? [] : PARTS.slice();
+  renderParts();
+}
+function confirmParts(){
+  if(!state.selectedParts.length){ alert("최소 한 단원은 선택하세요."); return; }
+  save(); show("home");
+}
+
+function startMode(mode){
+  queue = QuizEngine.selectQueue(state.progress, activeBank(), mode, state.settings.batch);
+  if(!queue.length){ alert(mode==="weak"?"토벌할 몬스터가 없습니다! 새 던전에 입장하세요.":"입장 가능한 던전이 없습니다."); return; }
+  qi = 0; batchPerfect = true; ac(); show("quiz"); renderQuestion();
+}
+
+function shuffleOptions(q){
+  const idx = q.options.map((_,i)=>i);
+  for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
+  const options = idx.map(i=>q.options[i]);
+  const answerSet = new Set(q.answers.map(a=>idx.indexOf(a)));
+  return { options, answerSet, idx };
+}
+
+function renderQuestion(){
+  cur = BANK.find(q => q.id === queue[qi]);
+  shuf = shuffleOptions(cur);
+  document.getElementById("qExam").textContent = cur.exam || "";
+  document.getElementById("qPos").textContent = `${qi+1} / ${queue.length}`;
+  document.getElementById("qText").textContent = cur.question;
+  const box = document.getElementById("qOpts"); box.innerHTML = "";
+  shuf.options.forEach((opt,i)=>{
+    const d=document.createElement("div"); d.className="opt"; d.dataset.i=i; d.textContent=opt;
+    d.onclick=()=>d.classList.toggle("sel");
+    box.appendChild(d);
+  });
+  show("quiz");
+}
+
+function submit(){
+  const sel = [...document.querySelectorAll("#qOpts .opt.sel")].map(d=>+d.dataset.i);
+  if(!sel.length){ if(!confirm("아무것도 안 골랐어요. 그대로 제출?")) return; }
+  const ansArr = [...shuf.answerSet];
+  const g = QuizEngine.gradeAnswer(sel, ansArr);
+  state.progress[cur.id] = QuizEngine.applyResult(state.progress[cur.id], g.correct, state.settings.M);
+  if(!g.correct) batchPerfect=false;
+  const gr = gameApply(g.correct, false);
+  save();
+  renderFeedback(g, sel, gr);
+}
+
+function renderFeedback(g, sel, gr){
+  const fr=document.getElementById("fbResult");
+  fr.textContent = g.correct ? "⚔️ 격파!" : "🛡️ 피격!";
+  fr.style.color = g.correct ? "var(--ok)" : "var(--no)";
+  fr.className = g.correct ? "win" : ""; void fr.offsetWidth; // 리플로우로 애니 재시작
+  const box=document.getElementById("fbOpts"); box.innerHTML="";
+  shuf.options.forEach((opt,i)=>{
+    const isAns=shuf.answerSet.has(i), isSel=sel.includes(i);
+    const d=document.createElement("div"); d.className="opt "+(isAns&&isSel?"ok":isAns?"miss":isSel?"no":"");
+    d.textContent=(isAns?"✔ ":isSel?"✘ ":"")+opt; box.appendChild(d);
+  });
+  document.getElementById("fbExp").textContent = cur.explanation || "";
+  const src=document.getElementById("fbSrc"); src.innerHTML="";
+  document.getElementById("fbSrcDetail").textContent="";
+  (cur.source_ids||[]).forEach(id=>{
+    const c=document.createElement("span"); c.className="chip"; c.textContent=id;
+    c.onclick=()=>{ const r=REG_BY_ID[id]; document.getElementById("fbSrcDetail").textContent = r?`${id} — ${r.label}`:id; };
+    src.appendChild(c);
+  });
+  const p=state.progress[cur.id];
+  document.getElementById("fbStreak").textContent = p.mastered ? "🎖️ 처치 완료(몬스터 토벌!)" : (g.correct?`연속 격파 ${p.streak} (토벌까지 ${state.settings.M-p.streak})`:`👹 몬스터 부활 — 다시 등장합니다 (피격 누적 ${p.wrongCount})`);
+  show("feedback");
+
+  // ===== 게임 연출 =====
+  renderHud();
+  const card=document.querySelector("#feedback .card");
+  if(g.correct){
+    bumpCombo();
+    beep("correct");
+    slashFx(); impactFx(); comboRim(state.game.combo);
+    if(gr.gained) floatXp(gr.gained);
+    card.classList.remove("shake"); void card.offsetWidth; card.classList.add("pop");
+    // 콤보 클수록 더 화려한 골드 파티클
+    burstConfetti(Math.min(60 + state.game.combo*11, 200));
+  } else {
+    beep("wrong");
+    hitVignette();
+    card.classList.remove("pop"); void card.offsetWidth; card.classList.add("shake");
+    if(navigator.vibrate) navigator.vibrate(120);
+  }
+  if(gr.leveled) setTimeout(()=>showLevelUp(gr.leveled), 450);
+  (gr.newBadges||[]).forEach((id,i)=> setTimeout(()=>showToast(id), 300+i*300));
+}
+
+function next(){
+  qi++;
+  if(qi>=queue.length){
+    // 약점/무한 모드는 남은 약점 다시 큐잉
+    const remaining = QuizEngine.selectQueue(state.progress, BANK, "weak");
+    if(remaining.length && queue.some(id=>remaining.includes(id))){ queue=remaining; qi=0; renderQuestion(); return; }
+    // 묶음 전부 정답 → 완벽주의 배지
+    if(batchPerfect && queue.length>=3){ const got=checkBadges(true, levelFromXp(state.game.xp)); save(); got.forEach((id,i)=>setTimeout(()=>showToast(id),200+i*300)); if(got.length) burstConfetti(140); }
+    alert("🏰 던전 클리어! 마을로 귀환합니다."); show("home"); return;
+  }
+  renderQuestion();
+}
+
+function renderReport(){
+  const agg = QuizEngine.idWeakness(state.progress, BANK);
+  const rows = Object.entries(agg).filter(([,v])=>v.wrong>0).sort((a,b)=>b[1].wrong-a[1].wrong).slice(0,30);
+  document.getElementById("rpWeak").innerHTML = rows.length
+    ? "<table><tr><th>ID</th><th>피격</th><th>약점</th></tr>"+rows.map(([id,v])=>`<tr><td>${id}</td><td>${v.wrong}</td><td>${(REG_BY_ID[id]||{}).label||""}</td></tr>`).join("")+"</table>"
+    : "<span class='muted'>아직 피격 기록이 없습니다 ⚔️</span>";
+  const cov = QuizEngine.computeCoverage(BANK, REGISTRY);
+  document.getElementById("rpUncov").textContent = cov.uncovered.length ? cov.uncovered.join(", ") : "전 구역 탐험 완료 🎉";
+}
+
+function renderSettings(){ document.getElementById("setM").value=state.settings.M; document.getElementById("setBatch").value=state.settings.batch; }
+function saveSettings(){ state.settings.M=Math.max(1,Math.min(5,+document.getElementById("setM").value||2)); state.settings.batch=Math.max(1,+document.getElementById("setBatch").value||10); save(); alert("저장됨"); }
+function exportProgress(){ const blob=new Blob([JSON.stringify({progress:state.progress,settings:state.settings,game:state.game},null,2)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="skullquiz_progress_"+Date.now()+".json"; a.click(); }
+function importProgress(ev){ const f=ev.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result); if(d.progress)state.progress=d.progress; if(d.settings)state.settings=Object.assign(state.settings,d.settings); if(d.game)state.game=Object.assign(state.game,d.game); save(); alert("가져오기 완료"); show("home"); }catch(e){ alert("파일 오류"); } }; r.readAsText(f); }
+function resetProgress(){ state.progress={}; state.game={ xp:0, combo:0, bestCombo:0, totalCorrect:0, totalAnswered:0, badges:{} }; save(); show("home"); }
+
+show("parts");
+</script>
+</body>
+</html>

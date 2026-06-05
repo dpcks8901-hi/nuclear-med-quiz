@@ -1,0 +1,1766 @@
+[
+  {
+    "id": "PTH-ANA-01",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "부갑상샘은 길이 3~8cm·지름 2~5cm·두께 1.5mm·무게 35mg 정도의 아주 작은 기관 작은수치"
+  },
+  {
+    "id": "PTH-ANA-02",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "갑상샘 좌우 엽(lobe) 뒷면에 위아래 각각 2개씩(총 4개) 위치, 3개·5개 변이도 있음 개수"
+  },
+  {
+    "id": "PTH-ANA-03",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "황갈색 소체"
+  },
+  {
+    "id": "PTH-ANA-04",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "부갑상샘 호르몬(PTH)의 합성·저장·분비를 수행, 아미노산으로 구성"
+  },
+  {
+    "id": "PTH-ANA-05",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "PTH는 뼈·신장·장에서 작용하며 비타민 D와 상호작용함 작용장기"
+  },
+  {
+    "id": "PTH-ANA-06",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "PTH는 뼈에서 혈액으로 칼슘 이동을 증가시키고 위장관·신장에서 칼슘 흡수를 촉진 → 혈중 칼슘 농도를 상승시킴 기전"
+  },
+  {
+    "id": "PTH-ANA-07",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "혈중 칼슘 농도가 상승하면 PTH 분비가 저하되는 음성 되먹임 조절"
+  },
+  {
+    "id": "PTH-ANA-08",
+    "exam": "PTH-ANA",
+    "part": "L42",
+    "label": "정상 혈중 칼슘 농도는 8.8~10.1 mg/dl 사이에서 조절 수치"
+  },
+  {
+    "id": "PTH-SCAN-01",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "검사목적 — 부갑상샘암(adenoma)·부갑상샘 과형성(hyperplasia)·갑상샘 기능항진증으로 크기가 커져 체내 무기질 대사 이상 발생 시"
+  },
+  {
+    "id": "PTH-SCAN-02",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "부갑상샘 검사 집적기전 = 능동이동(active transport) 기전"
+  },
+  {
+    "id": "PTH-SCAN-03",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "의약품 ① 201Tl-chloride / 99mTcO4- (74~111MBq / 185~370MBq, 정맥주사) ② 99mTc-sestaMIBI·99mTc-tetrofosmin ("
+  },
+  {
+    "id": "PTH-SCAN-04",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "이중선원법 — 201Tl-chloride는 갑상샘 및 부갑상샘 모두에 집적 핵심"
+  },
+  {
+    "id": "PTH-SCAN-05",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "이중선원법 — 99mTcO4-(과테크네슘산)는 갑상샘에만 집적 핵심(201Tl과 역할 구분)"
+  },
+  {
+    "id": "PTH-SCAN-06",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "핀홀(pinhole) 콜리메이터 이용 콜리메이터"
+  },
+  {
+    "id": "PTH-SCAN-07",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "선원에너지 설정 99mTc 140 keV / 201Tl 80 keV 에너지값"
+  },
+  {
+    "id": "PTH-SCAN-08",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "갑상샘 영상만을 소거(subtraction)하여 부갑상샘 영상을 획득(또는 각 영상 비교)"
+  },
+  {
+    "id": "PTH-SCAN-09",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "영상 획득 시 절대 움직이지 말아야 함(체위 고정)"
+  },
+  {
+    "id": "PTH-SCAN-10",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "단일선원법 — 99mTc-sestaMIBI는 정맥주사 후 4~5분에 갑상샘이 최대 섭취, 부갑상샘에도 빠르게 섭취 시간"
+  },
+  {
+    "id": "PTH-SCAN-11",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "갑상샘은 최대 섭취 후 점차 감소하나 부갑상샘은 지속적으로 섭취 대비"
+  },
+  {
+    "id": "PTH-SCAN-12",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "부갑상샘종(adenoma)에서 sestaMIBI의 배설은 늦음(2~3시간 이상) 지연"
+  },
+  {
+    "id": "PTH-SCAN-13",
+    "exam": "PTH-SCAN",
+    "part": "L42",
+    "label": "조기 및 지연기(2~3시간 후) 영상을 획득"
+  },
+  {
+    "id": "ADR-ANA-01",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "부신은 양측 콩팥 위를 덮는 한 쌍의 기관, 크기 2~3cm·길이 4~6cm·두께 0.3~0.6cm·무게 3~6g"
+  },
+  {
+    "id": "ADR-ANA-02",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "피질(adrenal cortex)과 수질(adrenal medulla)로 구성"
+  },
+  {
+    "id": "ADR-ANA-03",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "피질은 코르티코스테로이드(스테로이드 호르몬) 분비 — 염류코르티코이드·당류코르티코이드·성 스테로이드"
+  },
+  {
+    "id": "ADR-ANA-04",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "염류코르티코이드(mineralocorticoid)는 Na+/K+ 평형 조절, 알도스테론(aldosterone)이 가장 강력"
+  },
+  {
+    "id": "ADR-ANA-05",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "알도스테론은 사구대(zona glomerulosa)에서 생성, 콩팥을 자극해 NaCl·물을 보유하고 K+는 오줌으로 배설 → 혈액 용량·압력 증가"
+  },
+  {
+    "id": "ADR-ANA-06",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "당류코르티코이드(glucocorticoid)는 포도당·유기분자 대사 조절"
+  },
+  {
+    "id": "ADR-ANA-07",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "뇌하수체에서 부신겉질자극호르몬(ACTH) 분비 → 겉질이 스테로이드 호르몬 생성"
+  },
+  {
+    "id": "ADR-ANA-08",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "수질은 에피네프린:노르에피네프린을 4:1로 분비 비율"
+  },
+  {
+    "id": "ADR-ANA-09",
+    "exam": "ADR-ANA",
+    "part": "L42",
+    "label": "에피네프린·노르에피네프린은 카테콜아민 호르몬, 교감신경계 효과 강화(심박↑·관상혈관 확장·호흡수↑·대사율↑) → 스트레스 반응"
+  },
+  {
+    "id": "ADR-MED-01",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "131I-MIBG는 갈색세포종(pheochromocytoma)에 높은 감수성, 신경아세포종(neuroblastoma)·속질성 갑상샘암·부신경절종·악성종양에 이용 적응증"
+  },
+  {
+    "id": "ADR-MED-02",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "전처치 — Lugol액(potassium iodide, KI)을 검사 2일 전부터 투여해 갑상샘 차단(방사선 피폭 차단) 전처치"
+  },
+  {
+    "id": "ADR-MED-03",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "의약품 131I-MIBG 18.5~37MBq(500~1000μCi), 123I-MIBG 370MBq(10mCi), 정맥주사"
+  },
+  {
+    "id": "ADR-MED-04",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "MIBG는 정상에서도 심장·간·지라(비장)·침샘·갑상샘·대장(가끔)에 나타남 정상분포"
+  },
+  {
+    "id": "ADR-MED-05",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "정상적인 부신에서는 MIBG가 잘 나타나지 않음 뒤집기 함정(정상부신에 잘 나타난다=오답)"
+  },
+  {
+    "id": "ADR-MED-06",
+    "exam": "ADR-MED",
+    "part": "L42",
+    "label": "부신 위치 확인을 위해 소량의 99mTc-DTPA 또는 99mTc-DMSA를 주입해 콩팥을 영상화하기도 함"
+  },
+  {
+    "id": "ADR-COR-01",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "131I-NP-59는 부신 겉질과 난소종양(ovarian tumor)에 집적 적응증"
+  },
+  {
+    "id": "ADR-COR-02",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "NP-59는 체내 주입 후 저농도의 지질단백에 흡수되며 부신겉질에 의해 제거됨"
+  },
+  {
+    "id": "ADR-COR-03",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "전처치 — Lugol액을 검사 전부터 투여해 갑상샘 차단"
+  },
+  {
+    "id": "ADR-COR-04",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "의약품 131I-NP-59 18.5~74MBq(0.5~2mCi), 정맥주사"
+  },
+  {
+    "id": "ADR-COR-05",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "정맥 주입 후 3·5·7일에 복부 posterior view 영상 획득 시간"
+  },
+  {
+    "id": "ADR-COR-06",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "정상에서 간·쓸개·대장에 방사능 집적이 보임"
+  },
+  {
+    "id": "ADR-COR-07",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "posterior view에서 오른쪽 부신이 왼쪽보다 높게 나타남(간 방사능 중첩 때문, 해부학적으로는 왼쪽이 더 높음) 좌우 뒤집기 함정"
+  },
+  {
+    "id": "ADR-COR-08",
+    "exam": "ADR-COR",
+    "part": "L42",
+    "label": "섭취율(%) = (한쪽 부신 계수 / 주입한 방사성의약품 총 계수) × 100"
+  },
+  {
+    "id": "OCTREO-01",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "검사목적 — 신경 내분비·비신경 내분비 종양 의심 환자의 전이성 여부 확인, 원발성·전이성 신경내분비종양 위치 진단 적응증"
+  },
+  {
+    "id": "OCTREO-02",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "전처치 — 111In-Pentetreotide(펜테트레오티드) 투여 전 24시간 동안 Octreotide 투여 중지 전처치"
+  },
+  {
+    "id": "OCTREO-03",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "의약품 111In-Pentetreotide — 평면영상 111MBq(3mCi) / SPECT 영상 222MBq(6mCi), 정맥주사"
+  },
+  {
+    "id": "OCTREO-04",
+    "exam": "OCTREO",
+    "part": "L42",
+    "label": "주사 후 4시간 및 24시간에 전신촬영 시간"
+  },
+  {
+    "id": "PYP-01",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "99mTc-PYP는 뼈 영상에 적용되는 Diphosphonate 및 에너지 대사 중심 구조인 ATP의 phosphate bond를 구성 구조"
+  },
+  {
+    "id": "PYP-02",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "구조적 유사성으로 골 영상과 ATP가 많이 소모되는 심장 영상에 적용"
+  },
+  {
+    "id": "PYP-03",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "Gated Blood Pool Scan(GBPS)은 심실(좌심실 박출량/박출률)을 평가하며 99mTc-RBC가 주로 사용됨 PYP 아님"
+  },
+  {
+    "id": "PYP-04",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "99mTc-PYP 용도 ① 골 스캔(99mTc-MDP·99mTc-HDP로 대체되어 덜 사용) ② 심근 아밀로이드증 진단(비정상적으로 심근에 섭취) ③ 급성 심근경색 진단"
+  },
+  {
+    "id": "PYP-05",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "급성 심근경색 진단 원리 — 심근 괴사 부위에 칼슘이 침착되면서 99mTc-PYP가 결합(현재는 MRI·SPECT·PET 등 고해상도법으로 대체되어 거의 미사용) 기전"
+  },
+  {
+    "id": "PYP-06",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "PYP를 Gated Blood Pool Scan에 사용하지 않는 이유 — 칼슘 결합 성질로 조직 침착 칼슘·아밀로이드 진단에 쓰고, 혈액 내에 오래 머물지 않고 특정 조직(골·아밀"
+  },
+  {
+    "id": "PYP-07",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "아밀로이드(amyloid) — 비정상적으로 접힌 단백질이 섬유 구조로 응집해 조직에 침착되는 물질"
+  },
+  {
+    "id": "PYP-08",
+    "exam": "PYP",
+    "part": "L51",
+    "label": "심장에 아밀로이드 침착 → 부정맥(수축 리듬 불일정 → 효율적 혈액순환 어려움) → 심근경색 없이 심기능 저하 발생"
+  },
+  {
+    "id": "CIRC-ANA-01",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "정상 상태에서 심실을 통해 흐르는 혈류는 항상 일정해야 하며, 판막(valve)의 크기·압력이 심실에 균일한 혈류가 흐르도록 도움"
+  },
+  {
+    "id": "CIRC-ANA-02",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "최대 확장기말 용적(EDV)은 혈류가 완전히 심실에 채워진 이후의 용적, EDV가 달라도 박출량(stroke volume)은 같아야 함"
+  },
+  {
+    "id": "CIRC-ANA-03",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "박출량(stroke volume)은 수축기말 동안 각 심실이 박출하는 혈류 용적"
+  },
+  {
+    "id": "CIRC-ANA-04",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심박출률(EF) = 수축기 박출 혈액량 / 확장기말 용적의 백분율 = 심장이 혈액을 얼마나 잘 공급하는지의 척도 정의"
+  },
+  {
+    "id": "CIRC-ANA-05",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "정상적으로 좌심실은 혈액 중 55~60%를 박출(80~100ml 범위) 수치"
+  },
+  {
+    "id": "CIRC-ANA-06",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심장은 수축기 동안 대부분 전벽(anterior wall)이 움직임, 벽 운동은 심실벽 구역 평가, 비정상 국소 벽운동은 운동저하증·운동불능증·운동이상증으로 분류(운동이상증=수축기"
+  },
+  {
+    "id": "CIRC-ANA-07",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "왼 심장동맥 주요분지 — 좌전하행분지(LAD)·좌회선분지(Cx)·둔각변연분지, 좌심방·좌심실에 혈류 공급 분지매칭"
+  },
+  {
+    "id": "CIRC-ANA-08",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "오른 심장동맥 주요분지 — 예각변연분지·후하행동맥(PDA), 오른심방·오른심실·왼심실 하벽(inferior wall)·심실 중격에 혈류 공급 분지매칭"
+  },
+  {
+    "id": "CIRC-ANA-09",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심박동기(cardiac dynamics)는 이완기(filling phase, 3부분)와 수축기(4부분)로 구성"
+  },
+  {
+    "id": "CIRC-ANA-10",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "이완기 제1기 — 심실에 혈액이 급속히 채워지는 기간(이완), 심실 확장기의 처음 1/3 차지"
+  },
+  {
+    "id": "CIRC-ANA-11",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "이완기 제2기 — 정맥을 통해 계속 심방으로 들어오는 소량 혈류가 심방→심실로 넘어옴"
+  },
+  {
+    "id": "CIRC-ANA-12",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "이완기 제3기 — 심방 수축이 일어나고 혈액량은 확장기말 용적의 20~30% 정도 수치"
+  },
+  {
+    "id": "CIRC-ANA-13",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제1기 — 등축성 수축(isometric contraction), 심실 용적 변화 없이 압력만 증가, 20~30msec 정도 킬러용어"
+  },
+  {
+    "id": "CIRC-ANA-14",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제2기 — 혈액 배출 시기(심실 혈액의 ½ 방출), 심실압이 대동맥·허파동맥 확장기말 압력보다 증가하며 판막이 열려 혈액 방출"
+  },
+  {
+    "id": "CIRC-ANA-15",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제3기 — 심실 수축으로 혈액 배출"
+  },
+  {
+    "id": "CIRC-ANA-16",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "수축기 제4기 — 혈류 방출 없이 심근이 수축된 상태(확장 초기, 제2심음 직후), 등장성 이완으로 수축기 종료"
+  },
+  {
+    "id": "CIRC-ANA-17",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심방·심실 중격 결손 → 혈류 순환이 본래 방향과 달라짐 = 선천성 심장질환(CHD), 단락검사·심실-허파 방사능 곡선으로 측정"
+  },
+  {
+    "id": "CIRC-ANA-18",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "판막 감염·손상으로 기능 상실 → 후천성 심장질환(CHF), 판막 협착(stenosis)·부전(regurgitation)으로 심박출 저하, 심방·심실 확장, 폐혈류 재분포(redi"
+  },
+  {
+    "id": "CIRC-ANA-19",
+    "exam": "CIRC-ANA",
+    "part": "L5",
+    "label": "심장동맥 협착·폐쇄로 허혈성 심근질환·심근경색 = 관상동맥질환(CAD), 201Tl·99mTc의 심근 분포 정도를 영상화"
+  },
+  {
+    "id": "CARD-RP-01",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "(1) 혈류 이동경로 추적자 — 수 분 이내 추적자 역할 후 심장 통과 후 신속 배설, 99mTcO4-·99mTc-DTPA가 적당 조합"
+  },
+  {
+    "id": "CARD-RP-02",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "(2) 심실 모양 관찰 — 혈액풀(blood pool) 형성해 검사시간 동안 장시간 머무름, 99mTc-RBC·99mTc-HSA가 적당 조합"
+  },
+  {
+    "id": "CARD-RP-03",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "(3) 심근 집적 — 관상동맥 통해 분포하며 심근 무기질대사에 이용되어 집적, 99mTc-sestaMIBI·99mTc-teboroxime 조합"
+  },
+  {
+    "id": "CARD-RP-04",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "검사목적별 의약품 — 심근혈류(201Tl/sestaMIBI/tetrofosmin/teboroxime, 운동·약물 Dipyridamole 부하), 심실기능(99mTc-RBC/HSA,"
+  },
+  {
+    "id": "CARD-RP-05",
+    "exam": "CARD-RP",
+    "part": "L5",
+    "label": "심장 핵의학 검사 적용 — 흉통(chest pain) 원인, 심장기능, 심근 허혈, 심실동맥류, 수술 전 예후, 심근 생존능력, 심장동맥질환 진단"
+  },
+  {
+    "id": "SPS-01",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "목적 — 심장 내 단락(shunt) 유무, 심박출량 평가, 심장 순환시간 측정, 심실 용적 측정"
+  },
+  {
+    "id": "SPS-02",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "의약품 99mTcO4-·99mTc-DTPA"
+  },
+  {
+    "id": "SPS-03",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "환자자세 앙와위(supine), 영상 전면상(anterior)/좌전사위상(LAO), 30~60초 짧은 시간에 심장기능 평가, 방사성의약품이 심장을 1회 순환하는 동안 측정"
+  },
+  {
+    "id": "SPS-04",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "투여방법 bolus injection(순간주사), 바깥쪽정맥(external jugular)·앞팔꿈치정맥(antecubital vein) 투여"
+  },
+  {
+    "id": "SPS-05",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "단락률(Qp/Qs) = 1.0~1.2가 정상 수치"
+  },
+  {
+    "id": "GBPS-01",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "목적 — 심장기능(systolic·diastolic) 평가, 국소적 심장벽 운동(wall motion) 이상 유무"
+  },
+  {
+    "id": "GBPS-02",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "혈액풀 유지 의약품 투여 후 심장 움직임을 8~32 frames으로 ECG R파를 trigger 하는 원리로 박동 주기를 구분된(Gated) 동작으로 획득 frames"
+  },
+  {
+    "id": "GBPS-03",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "의약품 99mTc-PYP·99mTc-RBC (단, 99mTc-RBC가 주로 사용 — PYP는 혈액풀 부적합, 수업5_1 PYP-06 교차)"
+  },
+  {
+    "id": "GBPS-04",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "환자자세 앙와위, 영상 좌전사위상(LAO), 투여 정맥주사"
+  },
+  {
+    "id": "GBPS-05",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "검사시간 최소 30분~1시간 소요되므로 그동안 방사성의약품은 안정된 표지 상태가 유지되어야 함"
+  },
+  {
+    "id": "GBPS-06",
+    "exam": "GBPS",
+    "part": "L5",
+    "label": "RBC 제조법 — 체내 표지법(표지율 낮음 60~70%), 변형 체내 표지법(가장 널리 사용), 체외 표지법(사용되지 않음)"
+  },
+  {
+    "id": "MPS-01",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "목적 — 관상동맥질환 진단, 심장 관류 감소의 정량적 평가, 심장 전반 기능 평가"
+  },
+  {
+    "id": "MPS-02",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "환자준비 — 검사 6시간 전까지 금식(NPO): 내장 혈류를 증가시켜 간·소장에 201Tl 집적을 높이고 상대적으로 심근 집적이 낮아지는 것을 막기 위함(교수 킬러)"
+  },
+  {
+    "id": "MPS-03",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "의약품 201Tl-chloride·99mTc-sestaMIBI·99mTc-tetrofosmin"
+  },
+  {
+    "id": "MPS-04",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "환자자세 앙와위, 영상 우전사위상(RAO)에서 좌후사위상(LPO)까지 SPECT 스캔, 정맥주사 자세"
+  },
+  {
+    "id": "MPS-05",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl은 심장동맥 혈류를 따라 심근에 집적, K+(potassium)과 유사한 성질로 Na-K 펌프작용으로 심근 세포막을 통과해 추출 기전"
+  },
+  {
+    "id": "MPS-06",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl 심근 섭취 = 심근 혈류량 × 추출률, 심근 혈류로 유입된 201Tl의 약 85%를 추출해 섭취, 이 양은 전체 주입량의 4% 정도이고 나머지는 소화장기·근육 등에 집적"
+  },
+  {
+    "id": "MPS-07",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "시간 경과에 따라 혈액과 심근 내 201Tl 농도가 평형을 이루어 심근 내 201Tl 농도는 감소"
+  },
+  {
+    "id": "MPS-08",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "재분포(redistribution) — 심장동맥 협착·폐쇄 시 운동부하로 정상 심근보다 혈류 감소가 심화, 2~3시간 휴지기 이후 혈중 201Tl이 냉소 부위에서 서서히 재흡수됨"
+  },
+  {
+    "id": "MPS-09",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "운동부하 시 냉소로 나타난 부위가 휴지기에 재분포를 보여 정상조직과 같은 열소로 나타나면 심근 허혈(ischemia), 재분포가 없으면 심근경색(infarction)으로 진단(교수"
+  },
+  {
+    "id": "MPS-10",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl은 69·71·80keV 감마선과 135·167keV 연속엑스선을 가짐, 주로 80keV 사용, 이중에너지 사용 시 80keV·167keV 사용 에너지"
+  },
+  {
+    "id": "MPS-11",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl 사용에너지(80keV)가 낮아 영상의 질이 비교적 낮고 연조직 감쇠 효과가 큼"
+  },
+  {
+    "id": "MPS-12",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "201Tl 반감기 2.7일, 가속기(사이클로트론)에서 생성된 핵종(원활하지 못한 공급이 문제 될 수 있음) 반감기·생산"
+  },
+  {
+    "id": "MPS-13",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "99mTc-sestaMIBI·tetrofosmin은 심근 섭취기전·섭취율·배설경로가 201Tl과 비슷"
+  },
+  {
+    "id": "MPS-14",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "sestaMIBI·tetrofosmin은 심근 집적·제거의 생리적 기전이 201Tl과 달라 재분포가 일어나지 않음 → 운동부하 재분포 영상을 위해 추가 재주입을 해야 하는 단점 ("
+  },
+  {
+    "id": "MPS-15",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "99mTc-sestaMIBI는 지질친화성 양이온 화합물로 미토콘드리아의 음성막전하에 의해 포획(단순 확산) 기전(교수 킬러)"
+  },
+  {
+    "id": "MPS-16",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "sestaMIBI 심근 섭취율은 총 주입량의 3% 내외이며 쓸개·간에 높은 집적을 보이고 장으로 배출"
+  },
+  {
+    "id": "MPS-17",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "sestaMIBI 심근 섭취·배설은 세포 생존능력·세포막 온전성 여부에 영향받으므로 심근 섭취 정도가 심근 생존능을 반영"
+  },
+  {
+    "id": "MPYP-01",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "99mTc-PYP는 심근경색 부위(infarcted area)에 선택적으로 집적되어 열소(hot spot)로 나타나는 특징 이용, 경색 발병 1~7일/수술 후, 경색 부위 찾기 c"
+  },
+  {
+    "id": "MPYP-02",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "PYP는 괴사로 함몰된 심근세포 미토콘드리아에 Ca2+와 함께 인산화합물이 수산화인회석형으로 섭취되는 성질 이용, 급성기 심근괴사 병소를 양성상으로 묘출"
+  },
+  {
+    "id": "MPYP-03",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "PYP는 201Tl과 반대로 양성상으로 검출되므로 흡수보정이 필요 없음 (201Tl 대비)"
+  },
+  {
+    "id": "MPYP-04",
+    "exam": "MPYP",
+    "part": "L5",
+    "label": "정상 심근은 복장뼈·갈비뼈 영상만 나타남, 비정상 심근은 심근 내 집적. 갈비뼈 골절·근육 손상·피부병소·석회화 연골·유방질환에도 집적, 심근경색·왼심실 동맥류·불완전 협심증·심근"
+  },
+  {
+    "id": "CPET-01",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "심근관류 PET는 현재 임상에서 관류 평가에 가장 실용적·유용, 심근관류 SPECT보다 영상품질·진단성적 우수, 절대 관류량 평가 장점"
+  },
+  {
+    "id": "CPET-02",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "[15O]H2O — 반감기 2분, 물분자 자체로 관류 시 자유확산을 통해 조직에 섭취되며 혈중에서 대사되지 않음"
+  },
+  {
+    "id": "CPET-03",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "[13N]NH3 — 반감기 9.96분, 심근으로 확산해 들어간 후 글루타민합성효소가 글루타민 형태로 고정, 혈류량 측정 시 초기 5분 이내 영상 이용"
+  },
+  {
+    "id": "CPET-04",
+    "exam": "CPET",
+    "part": "L5",
+    "label": "심근대사 PET — 포도당 대사 FDG, 지방산 대사 11C-팔미트산, 산소 대사 11C-아세트산 매칭"
+  },
+  {
+    "id": "VENO-01",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "목적 — 상지 또는 하지 심부 정맥 폐쇄의 선별 진단"
+  },
+  {
+    "id": "VENO-02",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "의약품 — 상지 99mTcO4-, 하지 99mTc-MAA 상·하지 구분"
+  },
+  {
+    "id": "VENO-03",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "환자자세 앙와위, 영상 전면상(anterior), 투여 bolus injection(순간주사)"
+  },
+  {
+    "id": "VENO-04",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "하지 혈류량 대부분 깊은 정맥에서 평가, 99mTc-MAA는 폐(lung)에 집적되므로 상지보다 하지정맥에 적당, 장골정맥·대퇴정맥·무릎 후면 정맥 등 깊은 부위도 잘 표현"
+  },
+  {
+    "id": "VENO-05",
+    "exam": "VENO",
+    "part": "L5",
+    "label": "상지정맥은 좌우를 분리해 병소부위를 먼저 검사, 99mTc-MAA를 발등 정맥 내로 주사"
+  },
+  {
+    "id": "LYMPH-01",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "목적 — Hodgkin's 질환, 림프절·림프관 질환(형태·기능), 림프절 통한 전이(metastasis) 여부"
+  },
+  {
+    "id": "LYMPH-02",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "의약품 99mTc-phytate·99mTc-colloid·99mTc-ASCtate(Sb2S3)"
+  },
+  {
+    "id": "LYMPH-03",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "환자자세 상·하지 앙와위·좌위(sitting), 유방 앙와위, 투여 피하주사(subcutaneous injection) (정맥주사로 뒤집으면 오답 — 교수 부정형 함정)"
+  },
+  {
+    "id": "LYMPH-04",
+    "exam": "LYMPH",
+    "part": "L5",
+    "label": "주입 후 4시간 경과 후 서혜부(inguinal)·장골 부위·대동맥 주위에서 집적 관찰(정상)"
+  },
+  {
+    "id": "RESP-ANA-01",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "공기 유입 경로 — 코안(nasal cavity)→인두(pharynx)→후두(larynx)→기관(trachea), 기관은 2개의 기관지(bronchus)로 나뉜 후 허파 속에서 2"
+  },
+  {
+    "id": "RESP-ANA-02",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "허파꽈리주머니(폐포낭, alveolar sac)와 허파꽈리(폐포, alveoli)에서 끝나며, 허파꽈리는 공기와 혈액 사이 가스교환(산소·이산화탄소)이 일어남"
+  },
+  {
+    "id": "RESP-ANA-03",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "코안~호흡세기관지에 이르는 공기 운반 통로를 기도라 함"
+  },
+  {
+    "id": "RESP-ANA-04",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "허파에서 기관지·혈관이 출입하는 곳을 허파문(폐문, hilus)이라 함"
+  },
+  {
+    "id": "RESP-ANA-05",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "횡격막(가로막)은 가슴과 배를 나누는 가로무늬근육"
+  },
+  {
+    "id": "RESP-ANA-06",
+    "exam": "RESP-ANA",
+    "part": "L6",
+    "label": "가슴막은 벽쪽가슴막·허파쪽가슴막, 사이에 가슴막액(윤활제 역할), 가슴막공간(pleural cavity)은 음압으로 유지"
+  },
+  {
+    "id": "LPS-01",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "목적 — 폐 혈관계 질환(폐전색·혈전·종양·폐암·결핵), 폐쇄성 질환(만성 기관지염·폐기종·기관지 천식·기관지 확장증), 우좌단락(right to left shunt) 평가, 색전"
+  },
+  {
+    "id": "LPS-02",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "전처치 — 촬영 5~10분 전 누운 상태 휴식, 정맥주사 후에도 3~5분간 편안히 누운 상태 유지"
+  },
+  {
+    "id": "LPS-03",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-MAA 주입 시 주사기 내로 혈액이 역류하면 혈액과 MAA가 응집해 다시 주입 시 허파 내 열소로 나타나므로 응고되기 전에 주입"
+  },
+  {
+    "id": "LPS-04",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "주입하는 동안 2~3회 심호흡 → 입자의 균등 분포에 도움"
+  },
+  {
+    "id": "LPS-05",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-MAA(microaggregated albumin)는 혈관 차단기전, 일반적으로 0.1%가 모세관에 차단, 단락 없으면 입자의 95%가 허파모세혈관에서 제거(작은 입자는"
+  },
+  {
+    "id": "LPS-06",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-MAA — 입자 직경 10~60μm, 입자 수 600,000, 반감기 6h, generator 생성, 140keV, 정맥 수치"
+  },
+  {
+    "id": "LPS-07",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "99mTc-HAM(human albumin microsphere) — 입자 20~45μm, 입자 수 100,000, 폐성고혈압증이 심한 환자에게는 사용 금지"
+  },
+  {
+    "id": "LPS-08",
+    "exam": "LPS",
+    "part": "L6",
+    "label": "검사 — 앉은/누운 자세, 조준기 저에너지 범용성(LEGP)·저에너지 고분해능(LEHR), SPECT로 허파 크기·모양·혈류분포·질환 정보 및 정량분석"
+  },
+  {
+    "id": "LVS-01",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "목적 — 국소 환기 평가, 흡입된 방사선 기체가 기관·기관지→종말세기관지(terminal bronchiole)→허파꽈리관을 거쳐 허파꽈리에서 기체교환"
+  },
+  {
+    "id": "LVS-02",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "기도에 유입된 방사성 기체는 콘공(pore of Kohn)·람버트관(canal of Lambert)을 통해 인근 허파꽈리에 도달, 세기관지가 막혀도 측부환기 역할로 폐엽에 냉소(c"
+  },
+  {
+    "id": "LVS-03",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "폐관류 스캔의 특이도를 보완·개선, 만성 기관지염·폐기종·폐전색증에 이용, 특별한 전처치 없음"
+  },
+  {
+    "id": "LVS-04",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "133Xe — 반감기 5.3일(생물학적 반감기 30초), 감마선 81keV로 낮아 10cm 이상 허파조직에서 ½ 이상 감약되어 좋은 영상 어려움, 후면상(posterior)으로 실"
+  },
+  {
+    "id": "LVS-05",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "127Xe — 환기검사 이용, 반감기 36.4일, 감마선 172·203keV, 관류 영상보다 나중에 시행할 수 있는 장점"
+  },
+  {
+    "id": "LVS-06",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "81mKr — 반감기 13초(81Rb을 모핵종으로 생성, generator 반감기 4.6시간으로 짧아 사용 불편), 190keV, 허파 용적보다 국소 폐환기 검사에 적당"
+  },
+  {
+    "id": "LVS-07",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "환기검사 표 — 133Xe(reactor 생성, 80keV) / 127Xe(accelerator, 375·203·172keV) / 81mKr(generator, 190keV), 모"
+  },
+  {
+    "id": "LVS-08",
+    "exam": "LVS",
+    "part": "L6",
+    "label": "환기 영상 3단계 — First breath(방사성 제논 가스 깊게 흡입 후 호흡 멈추고 기록), Equilibrium(산소+방사가스 2~3분 흡입한 평형 영상), Washout("
+  },
+  {
+    "id": "LIS-01",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "연무(양압/초음파 분무기) 흡입 촬영은 국소 환기 촬영의 일종, 연무 입자 크기에 의한 분포 차이 가능하나 호흡 방법에 영향받음"
+  },
+  {
+    "id": "LIS-02",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "폐혈류+폐흡입 동시 시행으로 폐 혈류 결손이 환기 결손과 동반되는지 진단, 특별한 전처치 없음"
+  },
+  {
+    "id": "LIS-03",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "99mTc-technegas — 입자 크기 20nm 이하(탄소 증기: 99mTcO4-과 아르곤 가스를 2,500°C로 가열해 생성), 담체 가스로 아르곤(Argon) 사용, 허파"
+  },
+  {
+    "id": "LIS-04",
+    "exam": "LIS",
+    "part": "L6",
+    "label": "99mTc-DTPA aerosol — 입자 0.25~2.0μm(technegas 0.0005μm), 둘 다 6h·generator·140keV·흡입, DTPA는 바로누운/앉은 자세"
+  },
+  {
+    "id": "PEVQ-01",
+    "exam": "PEVQ",
+    "part": "L6",
+    "label": "폐색전증 — 폐혈류+폐흡입을 동시 시행해 혈류 결손이 환기 결손과 동반되는지 확인, 병행 시 폐흡입 검사를 먼저 실시(허파에 침착되는 연무량이 폐혈류보다 상대적으로 낮기 때문) 순"
+  },
+  {
+    "id": "PEVQ-02",
+    "exam": "PEVQ",
+    "part": "L6",
+    "label": "환기 정상 + 관류 결손 = mismatch = 폐색전(pulmonary embolism), 둘 다 결손 = matched 해석"
+  },
+  {
+    "id": "PEVQ-03",
+    "exam": "PEVQ",
+    "part": "L6",
+    "label": "우좌단락 검사 — 기본 폐관류 검사를 동일하게 시행 후 전신촬영, 10세 이하 어린이와 우좌단락 환자에는 MAA 입자 수를 100,000개 이하로 주사 수치"
+  },
+  {
+    "id": "SALI-ANA-01",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "침샘(salivary gland)은 외분비샘(exocrine gland), 귀밑샘(아하선, parotid)·턱밑샘(악하선, submandibular)·혀밑샘(설하선, subling"
+  },
+  {
+    "id": "SALI-ANA-02",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "귀밑샘(parotid)은 3개 분비기관 중 가장 크고 장액성(serous) 침 생성, Stensen's duct를 통해 분비"
+  },
+  {
+    "id": "SALI-ANA-03",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "턱밑샘(submandibular)은 혼합성(점액성+장액성) 침 생성, Wharton's duct를 통해 분비"
+  },
+  {
+    "id": "SALI-ANA-04",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "혀밑샘(sublingual)은 주로 점액성 침 생성하나 혼합샘으로 분류, 10% 미만의 침 분비(가장 작음)"
+  },
+  {
+    "id": "SALI-ANA-05",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "침 분비 — 부교감신경에 의해 저농도 침, 고농도 침 분비는 교감신경이 조절"
+  },
+  {
+    "id": "SALI-ANA-06",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "분비세포(secretory cell)가 모여 소포(acini)를 이룸, 침 생성에 필요한 수분·성분은 목동맥(경동맥)과 연결된 모세혈관 통해 공급, 침샘은 하루 0.5~1.5L 분"
+  },
+  {
+    "id": "SALI-ANA-07",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "침은 소엽내관(intralobular duct)에 저장, 음이온(과산화테크네슘·옥소화합물)을 농축하는 능력"
+  },
+  {
+    "id": "SALI-ANA-08",
+    "exam": "SALI-ANA",
+    "part": "L71",
+    "label": "99mTcO4-은 음이온 성질로 침샘에서 활동적으로 흡수·분비되므로 침샘 위치·크기·기능 촬영, 침샘 침범 종괴(mass) 진단·감별에 이용"
+  },
+  {
+    "id": "SALI-01",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "목적 — 침 분비관 폐쇄, 침샘염·입안 건조, 침샘 내 종양 기능 평가"
+  },
+  {
+    "id": "SALI-02",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "전처치 — 검사 6시간 전부터 공복, 촬영 전 물로 입안을 세척해 침으로 분비된 99mTcO4- 제거"
+  },
+  {
+    "id": "SALI-03",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "의약품 99mTcO4-(정맥주사), Head&neck anterior dynamic blood flow study로 침샘 내 혈류분포 영상화, Conversing collimato"
+  },
+  {
+    "id": "SALI-04",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "침 분비제(레몬주스 등)를 사용하면 99mTcO4-의 분비가 촉진됨 (교수 단골)"
+  },
+  {
+    "id": "SALI-05",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "검사 — 정맥주사 후 즉시·5·10·20분 전면상, 20분에 전면+좌우측면, 레몬주스 물린 후 제거·세척한 30분 washout 영상"
+  },
+  {
+    "id": "SALI-06",
+    "exam": "SALI",
+    "part": "L71",
+    "label": "영상 phase — 관류기(1분 이내 perfusion), 농축기(5~15분 concentration, 정적영상), 분비기(15분 이후 secretory), 방출영상(washout"
+  },
+  {
+    "id": "ESO-01",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "목적 — 연하곤란증(dysphagia)·이완불능증(achalasia)·식도운동 이상증 진단, 식도 통과시간 측정, 유동식·고형식 식괴(bolus)가 식도→위 통과시간 측정"
+  },
+  {
+    "id": "ESO-02",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "Ba 식도촬영(esophagram)·식도압측정(manometry)에는 미치지 못하나 식도통과 정량검사에 유용, 전처치 6시간 공복"
+  },
+  {
+    "id": "ESO-03",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "유동식 검사 — 99mTc-sulfur colloid, 바로누운 자세로 위 fundus 포함, 한 번에 삼킴(15초 간격 10분 반복), 영상은 삼킨 후 1분간 0.25초·나머지"
+  },
+  {
+    "id": "ESO-04",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "고형식 검사 — 99mTc-DTPA+계란을 후라이로 만들어 빵조각에 넣어 먹게 함, 15초 간격 전후면상으로 기하학적 효율 계산"
+  },
+  {
+    "id": "ESO-05",
+    "exam": "ESO",
+    "part": "L71",
+    "label": "정상 — pharynx에서 식도로 통과 0.5~1초 이하, 식도통과시간 5~10초, 삼킨 후 15초 후 통과율 90% 이상 수치"
+  },
+  {
+    "id": "GER-01",
+    "exam": "GER",
+    "part": "L71",
+    "label": "목적 — 역류 신티그램으로 역류 유무·역류량 측정, 위·샘창자 내용물이 식도로 역류해 점막 염증 유발, 가슴앓이(heart-burn)·탄산증(pyrosis)·역류(regurgita"
+  },
+  {
+    "id": "GER-02",
+    "exam": "GER",
+    "part": "L71",
+    "label": "전처치 — 검사 전날 밤부터 반드시 공복"
+  },
+  {
+    "id": "GER-03",
+    "exam": "GER",
+    "part": "L71",
+    "label": "의약품 99mTc-sulfur colloid·99mTcO4-·111In-DTPA, 식도 점막에 붙거나 흡수되지 않아야 함, 오렌지 주스와 희석해 경구 투여"
+  },
+  {
+    "id": "GER-04",
+    "exam": "GER",
+    "part": "L71",
+    "label": "식도역류율(%) — 비정상 4% 이상, 정상 2% 미만 수치"
+  },
+  {
+    "id": "GES-01",
+    "exam": "GES",
+    "part": "L71",
+    "label": "목적 — 위 소화능력, 오심·구토·복부팽만감·체중저하 원인 파악, 위 내용물의 삼투성·산도·칼로리·단백질·탄수화물·지방 정도에 따라 배출시간이 다름"
+  },
+  {
+    "id": "GES-02",
+    "exam": "GES",
+    "part": "L71",
+    "label": "음식물 배출 경로 — 위바닥(fundus)·위몸통(body)에 머문 뒤 느린 수축·연동으로 위전정부(antrum)로, 위전정부 강한 연동으로 연한 음식은 샘창자로 내려가고 딱딱한"
+  },
+  {
+    "id": "GES-03",
+    "exam": "GES",
+    "part": "L71",
+    "label": "전처치 — 검사 전 최소 4~6시간 금식(담배·술도 금함)"
+  },
+  {
+    "id": "GES-04",
+    "exam": "GES",
+    "part": "L71",
+    "label": "유동식 — 99mTc-DTPA·111In-DTPA를 생리식염수·우유에 섞어 마심, 1시간 이내, 위 배출능력 정확 반영 못함, 섬유·단백질·지방 함유 필요, 정상 위 반감시간 10"
+  },
+  {
+    "id": "GES-05",
+    "exam": "GES",
+    "part": "L71",
+    "label": "고형식 — 99mTc-DTPA 포함 계란찜+김밥 먹고 10분 이내 촬영, 2~3시간 장시간, 정상 위 반감시간 45~110분 수치"
+  },
+  {
+    "id": "GES-06",
+    "exam": "GES",
+    "part": "L71",
+    "label": "위 배출이 빠른 경우 — 수술 후(유문성형술·반위절제·샘창자궤양·가스트리노마)·갑상샘기능항진증·샤가스병(Chagas')·흡수장애증"
+  },
+  {
+    "id": "SBT-01",
+    "exam": "SBT",
+    "part": "L71",
+    "label": "소장 통과시간 — 방사성의약품 투여 후 3.5~4.0시간 후 영상(6시간 후 재촬영)"
+  },
+  {
+    "id": "SBT-02",
+    "exam": "SBT",
+    "part": "L71",
+    "label": "57Co를 iliac crest에 부착해 소장과 오름(상행)·내림(하행)결장·S자결장·직장을 구분, 111In resin bead를 capsule로 경구 투여하고 4·12시간 영상"
+  },
+  {
+    "id": "SBT-03",
+    "exam": "SBT",
+    "part": "L71",
+    "label": "위로부터 대장 통과시간을 ROI 설정해 계수 측정, 정상 위로부터 배율률은 투여량의 24~47%(2시간)·56~100%(4시간), 6시간 경과 후 소장으로부터 11~70% 배출 수"
+  },
+  {
+    "id": "GIB-01",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "원리 — 특정 장기에서만 선택적으로 제거되는 방사성의약품을 출혈 환자에게 투여하여 출혈 부위로 일부 새어 나가고 나머지는 특정 장기에서 제거되는 원리"
+  },
+  {
+    "id": "GIB-02",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "예민도가 높아 0.05~0.12ml/min 정도의 출혈량을 감지 수치"
+  },
+  {
+    "id": "GIB-03",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "상부 소화기(궤양·샘창자 궤양·위염·정맥류), 하부 소화기(게실 diverticulum·혈관 형성장애 angiodysplasia·소장 감염·신생물 neoplasm) 출혈 진단에 유"
+  },
+  {
+    "id": "GIB-04",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "의약품 99mTc-pyrophosphate(PYP)·99mTc-sulfur colloid·99mTc-RBC 조합"
+  },
+  {
+    "id": "GIB-05",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "99mTc-sulfur colloid는 체내 투입 시 그물내피계(RES)에 빠르게 흡수되어 혈액 중 감소, 정상 반감기 1.5~3분, 반감기 짧아 출혈점-정상 대조도 크고 장 내"
+  },
+  {
+    "id": "GIB-06",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "99mTc-sulfur colloid는 처음에 간·지라에 집적되어 상복부 출혈검사 곤란(오른창자굽이 hepatic flexure·왼창자굽이 splenic flexure 등 출혈병소"
+  },
+  {
+    "id": "GIB-07",
+    "exam": "GIB",
+    "part": "L72",
+    "label": "99mTc-RBC는 간헐적·서서히 출혈되는 출혈검사에 우수, 적어도 24시간 경시적 기록 가능, 출혈 시 1/3 이상이 12~24시간 사이 양성, sulfur colloid보다 정"
+  },
+  {
+    "id": "MECKEL-01",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "출혈을 일으킨 멕켈게실은 거의 모두 위벽측세포(gastric parietal cell)를 가짐, 퇴화된 위장관의 하나로 돌창자(회장) 말단(terminal ileum)에 위치, 산"
+  },
+  {
+    "id": "MECKEL-02",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "상당한 염산(HCl)·펩신(pepsin) 분비가 주위 장점막에 궤양·출혈 유발, 이소성(ectopic) 위점막에 의한 혈변증(hematochezia) 환자에게 시행, 전처치 4~6"
+  },
+  {
+    "id": "MECKEL-03",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "의약품 99mTcO4-(옥소처럼 위점막 점액 생산세포에 농축·분비되는 성질)"
+  },
+  {
+    "id": "MECKEL-04",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "검사 — bolus 정맥주사, 하행대동맥 나타나면 1분간 1frame/5sec 동적영상, 이후 1시간 5~10분 간격 정적영상, 지연상(delay image) 2~6시간 또는 18"
+  },
+  {
+    "id": "MECKEL-05",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "정상 — 99mTcO4- 주사 후 blood pool 즉시 나타남, 침샘·갑상샘·위 집적 증가, 위강 분비 방사능이 샘창자→빈창자(공장, jejunum)→때로 돌창자까지 내려감"
+  },
+  {
+    "id": "LIV-ANA-01",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간은 인체 최대 장기(적갈색 실질장기), 대부분 복막에 싸여 오른 상복부 횡경막 아래면에 위치, 모양은 체위·호흡에 따라 변함"
+  },
+  {
+    "id": "LIV-ANA-02",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "낫인대(겸상인대, falciform ligament)에 의해 오른간엽·왼간엽 구분, 간문 앞뒤로 네모엽(quadrate)·조리엽(caudate), 오른엽-네모엽 사이에 쓸개(gal"
+  },
+  {
+    "id": "LIV-ANA-03",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간실질의 65%가 간세포, 모세혈관 사이는 간세포삭, 육각형 중심에 central vein, 모서리에 hepatic artery·portal vein·bile duct 위치(동양혈"
+  },
+  {
+    "id": "LIV-ANA-04",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "쿠퍼세포(Kupffer's cell)는 혈관벽 내피세포 사이 그물내피계세포, 몸 전체 그물내피계(탐식작용)의 80%를 구성(지라·골수·허파에도 다수)"
+  },
+  {
+    "id": "LIV-ANA-05",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간 혈액 — 복강동맥(celiac artery)의 분지인 간동맥, 그리고 지라정맥+위창자간막정맥이 합치는 문맥으로부터 공급"
+  },
+  {
+    "id": "LIV-ANA-06",
+    "exam": "LIV-ANA",
+    "part": "L72",
+    "label": "간 기능 — 대사·분비·배설·순환·저장, 쓸개즙(담즙) 생성·분비, 암모니아 등 독성물질을 요소로 전환해 배설"
+  },
+  {
+    "id": "LIVS-01",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "목적 — 간종대(hepatomegaly)·복부종양 구분, 암 전이 여부 수술 전 확인, 간경화·간염, 위치·모양·황달·간농양·혈종·파열"
+  },
+  {
+    "id": "LIVS-02",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "Colloid 표지 방사성의약품의 직접 기전은 식균작용(phagocytosis)임(간·지라) 기전"
+  },
+  {
+    "id": "LIVS-03",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "Kupffer 세포에 의한 식균작용 — 간 80~90%, 지라 5~10% 비율"
+  },
+  {
+    "id": "LIVS-04",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "정상 간 최대 집적은 8~12분, 간에서 유효반감기 6시간 수치"
+  },
+  {
+    "id": "LIVS-05",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "의약품 99mTc-sulfur colloid 74~148MBq IV(영상 10~15분), 99mTc-tin colloid·albumin minimicrosphere, 99mTc-I"
+  },
+  {
+    "id": "LIVS-06",
+    "exam": "LIVS",
+    "part": "L72",
+    "label": "정상 — 방사능 고르고 오른엽보다 왼엽이 약간 저하, 종양·낭종·농양은 single/multiple cold 부위, 간경화·간염은 불규칙 분포+간 크기 증가+골수 방사능 증가+지라"
+  },
+  {
+    "id": "LHEM-01",
+    "exam": "LHEM",
+    "part": "L72",
+    "label": "간 혈관종은 흔한 간의 양성종양, 검사로 악성·양성 판정에 결정적 진단정보 제공, 간암·간농양·간전이 등 악성과 신속 구별"
+  },
+  {
+    "id": "LHEM-02",
+    "exam": "LHEM",
+    "part": "L72",
+    "label": "의약품·방법 — 99mTc-RBC 정맥주사(혈류영상·정지영상 static·지연상 delay image 기록)"
+  },
+  {
+    "id": "HBS-01",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "쓸개즙은 간세포에서 생성, 담세관(bile canaliculi)→소엽간담관(interlobular)→간관(hepatic duct)→온간관(common hepatic duct), 온"
+  },
+  {
+    "id": "HBS-02",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "대사산물 배출은 극성(polarity)·분자 크기·구조에 영향받음 — 분자량<300은 요로 배설(주로 신장), 300~1,000은 쓸개관으로 잘 배설(300~500은 소변·담즙 두"
+  },
+  {
+    "id": "HBS-03",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "쓸개에 저장된 쓸개즙은 음식물 섭취 시 샘창자 점막에서 분비, CCK(cholecystokinin)에 의해 쓸개가 수축하며 배출, 오디조임근(괄약근)이 이완되며 샘창자 내로 배출,"
+  },
+  {
+    "id": "HBS-04",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "목적 — 간세포 기능상태, 쓸개관 폐쇄 여부, 쓸개 기능·쓸개주머니관 폐쇄 여부 진단, 전처치 최소 6시간 공복"
+  },
+  {
+    "id": "HBS-05",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "99mTc-IDA 복합체는 음이온체와 결합하며 같은 음이온체를 운반하는 bilirubin과 경쟁적으로 작용해 간세포 섭취 후 쓸개즙과 함께 분비되어 쓸개·쓸개관→샘창자로 흘러감(간"
+  },
+  {
+    "id": "HBS-06",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "간담도 의약품 조건 — 혈장으로 빠른 시간 내 간세포 흡수, 간담도로 신속 이행, 장 흡수 없고 콩팥 배설 적어야, 분자량 300~1,000 적당, 복합체 양단이 수용성·지용성 동"
+  },
+  {
+    "id": "HBS-07",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "이동 phase — 혈액기(blood pool, 5분 이내), 간실질기(hepatocyte, 5~20분), 담도기(biliary tract, 1시간), 장기기(intestinal,"
+  },
+  {
+    "id": "HBS-08",
+    "exam": "HBS",
+    "part": "L72",
+    "label": "정상은 1시간 이내 쓸개·장이 관찰되나, 쓸개가 안 보이면 쓸개주머니관(cystic duct) 폐쇄 의심, 장이 안 보이면 쓸개관(bile duct) 폐쇄 의심(교수 킬러)"
+  },
+  {
+    "id": "BEF-01",
+    "exam": "BEF",
+    "part": "L72",
+    "label": "목적 — 담석 없는 환자에서 쓸개운동 이상증·cystic duct 이상이 만성 간담께 통증 원인이 될 수 있음, 전처치 최소 4시간 공복"
+  },
+  {
+    "id": "BEF-02",
+    "exam": "BEF",
+    "part": "L72",
+    "label": "IDA계 외에 99mTc-disofenin·99mTc-mebrofenin 이용, 쓸개의 쓸개즙 배출 정량 분석"
+  },
+  {
+    "id": "BEF-03",
+    "exam": "BEF",
+    "part": "L72",
+    "label": "바로 누운 자세 정맥주사, 모든 영상 기록시간 5분 일정 유지, 정상 쓸개즙 배출률 40% 이상(sincalide 자극) 수치"
+  },
+  {
+    "id": "SPLEEN-01",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "지라는 좌상복부 후면, 그물내피세포+림프구 구성, 혈구(혈소판·백혈구·적혈구) 조절·체액인자 생산·외부입자 제거, 두 생리적 기능은 적혈구 포획(sequestration)과 식균작"
+  },
+  {
+    "id": "SPLEEN-02",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "수명을 다하거나 변형된 적혈구가 지라에서 포획되는 원리 이용 — 적혈구를 인위적으로 변형시키고 방사성의약품 표지해 정맥주사하면 모두 지라에 섭취 기전"
+  },
+  {
+    "id": "SPLEEN-03",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "목적 — 크기·형태·위치, 좌상복부 종괴 감별, 외상, 악성종양 진전도, 부비(accessory spleen)·비증(splenosis)·무비증(asplenia) 진단"
+  },
+  {
+    "id": "SPLEEN-04",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "의약품 99mTc-RBC·99mTc-PYP·99mTc-sulfur colloid, 정상은 간과 비슷하거나 약간 적게 균등 분포·전면상 얇은 난원형, 체위 anterior·후면상 주"
+  },
+  {
+    "id": "SPLEEN-05",
+    "exam": "SPLEEN",
+    "part": "L72",
+    "label": "sulfur colloid가 지라에 cold로 나타나는 경우 — 경색·림프종·전이성질환·낭종·농양·혈종·동맥류 / cold로 안 나타나는 경우 — 지라 절제 후(splenectom"
+  },
+  {
+    "id": "PANC-01",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "이자(췌장)는 1·2허리뼈 높이, 내분비+외분비 겸비 복막 후 장기, 머리(head)·몸통(body)·꼬리(tail)로 구분(머리는 샘창자에, 꼬리는 지라에 부착)"
+  },
+  {
+    "id": "PANC-02",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "내분비선 Langerhans섬에서 인슐린·글루카곤·소마토스타틴 분비, 탄수화물 합성조절·혈장수준 조절, 삼대영양소 분해효소 보유, 이자관→온쓸개관과 함께 큰샘창자유두로 방출, 췌액"
+  },
+  {
+    "id": "PANC-03",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "의약품 75Se-seleno-methionin 정맥주사, 75Se는 소변 80%·대변 20% 배설, 이자에서 신속 합성에 의해 고농도 축적, 고농도 축적 위해 검사 전 고단백 식사"
+  },
+  {
+    "id": "PANC-04",
+    "exam": "PANC",
+    "part": "L72",
+    "label": "이자 외 지라·콩팥·간·고환(testis)에도 집적, 이자 집적량은 간의 6~8배, 10분 간격 60분 기록, 정상 10분 이내 이자에 나타남(간·공장·비장)"
+  },
+  {
+    "id": "FAT-01",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "정상 성인은 50~100g 지방식 섭취 시 5g 이하 지방이 대변 배설, 지방변(steatorrhea) 진단, 표지물 oleic acid·triolein(131I 표지)·11C-c"
+  },
+  {
+    "id": "FAT-02",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "전처치 — 방사성의약품 투여 24시간 전 Lugol액 투여(갑상샘 차단), triolein 투여 3~6시간 후 혈중 방사능 최고(투여량 8~17%가 혈중)"
+  },
+  {
+    "id": "FAT-03",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "대변 방사능 측정이 장 지방 흡수 기능을 가장 잘 평가, 72시간 동안 대변 수집(배설량 투여량의 5% 미만, 보통 1~2%) 수치"
+  },
+  {
+    "id": "FAT-04",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "triolein 흡수 이상 시 이자 리파아제(lipase) 분비 결핍 의심 — triolein(중성지방)은 lipase·lecithinase로 oleic acid로 변해 흡수, 1"
+  },
+  {
+    "id": "FAT-05",
+    "exam": "FAT",
+    "part": "L72",
+    "label": "11C-carbon dioxide는 경구 투여 시 간에서 빠른 대사 후 허파 통해 호기 중 14CO2로 제거, 방사능 계수 측정(간단·안전)"
+  },
+  {
+    "id": "B12-01",
+    "exam": "B12",
+    "part": "L72",
+    "label": "내부 인자 결함에 의한 악성빈혈(pernicious anemia) 검사, 흡수 장애 — 회장염(ileitis)·소장 게실염·다발성 소장 협착증·위절제 수술·점액수종(myxedema"
+  },
+  {
+    "id": "B12-02",
+    "exam": "B12",
+    "part": "L72",
+    "label": "의약품 57Co-cyanocobalamin"
+  },
+  {
+    "id": "B12-03",
+    "exam": "B12",
+    "part": "L72",
+    "label": "57Co-cyanocobalamin 경구 투여 후 1~2시간 후 비방사성 비타민 B12를 근육주사, 조직·혈장 내 B12가 내인자(intrinsic factor)를 포화시키면 방사"
+  },
+  {
+    "id": "B12-04",
+    "exam": "B12",
+    "part": "L72",
+    "label": "정상인 요 배설률 10~40%, 8% 이하면 장관 흡수장애로 판단해 빈혈 진단 수치"
+  },
+  {
+    "id": "BRAIN-ANA-01",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "좌우 2개 대뇌반구와 소뇌로 구분, 뇌줄기(brain stem)에 의해 척수(spinal cord)와 연결, 대뇌는 이마엽(전두엽)·관자엽(측두엽)·마루엽(두정엽)"
+  },
+  {
+    "id": "BRAIN-ANA-02",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "뇌막 3겹 — 연질막(pia mater)·거미막(지주막, arachnoid)·그 사이 거미막 밑공간(지주막하강, subarachnoid space), 거미막 밑공간은 뇌척수액(CS"
+  },
+  {
+    "id": "BRAIN-ANA-03",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "뇌 혈류량은 정상에서 심박출량의 15%인 750ml/min, 뇌조직 내 산소·이산화탄소 분압에 의해 좌우 수치"
+  },
+  {
+    "id": "BRAIN-ANA-04",
+    "exam": "BRAIN-ANA",
+    "part": "L8",
+    "label": "뇌혈류장벽(BBB)은 뇌혈관계와 신경교 별아교세포(성상세포, astrocyte) 사이에 존재, 혈액-뇌 사이 불필요 물질 차단, 구조상 모세혈관 내피세포·기저막·신경교 세포돌기 3"
+  },
+  {
+    "id": "BRP-01",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "BBB를 잘 통과하는 물질 — 물·탄산가스·산소·지용성 물질"
+  },
+  {
+    "id": "BRP-02",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "정상인은 BBB에 의해 차단되어 뇌조직 자체에는 방사능 집적이 없고, 시상정맥동(sagittal sinus)·횡단정맥동(transverse sinus) 같은 큰 혈관 내 반응만 나"
+  },
+  {
+    "id": "BRP-03",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "BBB 통과가 용이하지 못한(비확산성) 의약품 — 99mTc-pertechnetate·99mTc-DTPA·99mTc-GHA·99mTc-red cells·99mTc-phosphona"
+  },
+  {
+    "id": "BRP-04",
+    "exam": "BRP",
+    "part": "L8",
+    "label": "BBB 통과가 용이한(확산성, 국소뇌혈류) 의약품 — 133Xe(gas, 81keV)·123I-iodoamphetamine(159keV)·99mTc-HMPAO(140keV)·99m"
+  },
+  {
+    "id": "BRANGI-01",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "뇌 핵의학 검사는 2과정 — 동적(bolus 후 대뇌반구 뇌혈류 연속 스캔, angiographic study) + 정적(1시간 후 뇌조직 분포 확인, static image, 지"
+  },
+  {
+    "id": "BRANGI-02",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "99mTcO4- 사용 시 검사 30분~1시간 전 potassium perchlorate 200~500mg 투여로 맥락총 집적 차단해 불필요한 피폭 방지"
+  },
+  {
+    "id": "BRANGI-03",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Radionuclide angiogram — anterior view, 99mTc-표지화합물 555~740MBq(15~20mCi) bolus, 2~3초 간격 30~60초 기록, p"
+  },
+  {
+    "id": "BRANGI-04",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "비정상 angiogram 원인 — 대칭 지연(부적당 주사·아테롬성 동맥경화·울혈성 심부전), 부분 감소 관류(폐쇄성·색전·아테롬종양), 혈종·경막하 cystic 종양·위축·경색 부"
+  },
+  {
+    "id": "BRANGI-05",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Brain static — 1시간 후 anterior·posterior·both lateral, 99mTcO4- 시 맥락얼기·침샘 차단, vertex view로 대뇌반구 verte"
+  },
+  {
+    "id": "BRANGI-06",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Delay static — 이상 부위 3~4시간 후 재촬영(표적/배후방사능 비 커짐), 경막하혈종(subdural hematoma)에 반드시 시행, 뼈·연부조직 표재는 시간 경과로"
+  },
+  {
+    "id": "BRANGI-07",
+    "exam": "BRANGI",
+    "part": "L8",
+    "label": "Brain death — dynamic study에서 intracerebral artery·capillary·venous blood flow가 안 나타나고, 즉시 실시한 stati"
+  },
+  {
+    "id": "BPS-01",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "목적 — 폐쇄성 뇌혈관질환(내경동맥 협착·모야모야병), 치매·뇌신경질환(간질·알츠하이머·파킨슨) 진단, 뇌질환 생리연구·예후 평가"
+  },
+  {
+    "id": "BPS-02",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "의약품 99mTc-HMPAO·99mTc-ECD 정맥주사"
+  },
+  {
+    "id": "BPS-03",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "SPECT 이점 — 후두개·기저부 병소 검출 우수, 두개 내/외 병소 감별, 깊이 방향 위치 평가 용이, 수술 후 재발·잔존병소 검출 우수"
+  },
+  {
+    "id": "BPS-04",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "99mTc-HMPAO는 정맥 주입 후 수초 이내 안정 분포, BBB 통과 순간 지용성 특징이 상실되며 뇌조직에 집적(집적 정도는 뇌혈류량에 의해 분포 양상 다름) 기전"
+  },
+  {
+    "id": "BPS-05",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "99mTc-ECD도 조기 가수분해로 뇌조직 집적되고 콩팥 통해 빠르게 배설되므로 배후방사능(BKG)이 HMPAO보다 낮음"
+  },
+  {
+    "id": "BPS-06",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "정상은 HMPAO·ECD 양측 대칭 분포, 백질(20~30ml/min/100g)보다 회백질(70~90ml/min/100g)에서 혈류량이 많아 회백질부·신경절 저부·시상부에서 증가"
+  },
+  {
+    "id": "BPS-07",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "뇌혈류질환 의심 시 혈관확장제 acetazolamide 정맥주사 후 검사 — 정상은 뇌혈류량 증가하나 뇌혈관질환은 변화 없거나 부분 감소가 뚜렷, 약 20~50% 뇌혈류 증가 ="
+  },
+  {
+    "id": "BPS-08",
+    "exam": "BPS",
+    "part": "L8",
+    "label": "123I-IMP — 중성 지용성, 초회 순환으로 높은 비율 뇌 섭취, 배설(clearance) 느림, 집적률 약 8%, 1시간 정도 안정, 123I 반감기 13시간·159keV,"
+  },
+  {
+    "id": "BPET-01",
+    "exam": "BPET",
+    "part": "L8",
+    "label": "FDG(fluoro deoxy glucose) brain PET은 뇌 포도당 대사 변화를 영상화·정량분석, 뇌종양 위치·양성종양 감별·재발·간질 발작병소·치매·파킨슨·악성뇌종양 방"
+  },
+  {
+    "id": "BPET-02",
+    "exam": "BPET",
+    "part": "L8",
+    "label": "전처치 6시간 이상 금식, 수분 섭취 충분하면 연부조직 대조도 향상, 18F-FDG는 대뇌 겉질·미상핵(caudate nucleus)·시상(thalamus)·소뇌에 집적, 정맥주사"
+  },
+  {
+    "id": "BPET-03",
+    "exam": "BPET",
+    "part": "L8",
+    "label": "당대사 영상≠혈류영상, 해마(hippocampus) FDG 축적은 정상에서도 낮아 알츠하이머·간질 병소로 판단하면 안 됨, 당뇨병 환자는 FDG 섭취 저하, 대뇌 당대사는 노년층에"
+  },
+  {
+    "id": "CSF-01",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "CSF는 측뇌실 맥락막총(choroid plexus)에서 1일 400~500cc 생성(약 6시간이면 20% 교체), 총 CSF 양은 120~160cc 항상 유지(뇌실 크기 20~3"
+  },
+  {
+    "id": "CSF-02",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "CSF 흐름 — 가쪽뇌실 상의세포(ependyma)로 이루어진 맥락얼기에서 시작→가쪽뇌실→셋째·넷째 뇌실→정중구·외측구→거미막 밑공간(지주막하강)→거미막 융모 통해 정맥(venou"
+  },
+  {
+    "id": "CSF-03",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "뇌조 스캔(Cisternography) — 수두증(hydrocephalus)·뇌척수액강 협착·샛길(fistulae) 진단, 99mTc-DTPA를 요추천자(lumbar punctur"
+  },
+  {
+    "id": "CSF-04",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "정상 — 1시간 후 머리 방사능 분포·뇌저조, 2~4시간 전두부·중간뇌수도관(실비우스구), 8~12시간 대뇌저면, 24시간 거미막 융모·시상정맥동 도달·흡수, 허리뼈 주입은 뇌실로"
+  },
+  {
+    "id": "CSF-05",
+    "exam": "CSF",
+    "part": "L8",
+    "label": "뇌실-복막 단락 기능검사(Shunt function test) — 수두증 치료용 저장고(reservoir) 수술 후 기능 평가, 99mTc-DTPA를 저장고에 직접 주사, 단락장치"
+  },
+  {
+    "id": "KID-ANA-01",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥은 몸의 등쪽 가로막(횡격막) 아래 1쌍의 완두콩 모양 복막뒤기관(복막후장기), 제11등뼈~제3허리뼈 사이, 오른콩팥이 왼콩팥보다 낮게 위치(간에 눌리기 때문)"
+  },
+  {
+    "id": "KID-ANA-02",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥은 바깥쪽 겉질(피질, cortex)과 안쪽 속질(수질, medulla)로 구별, 속질 안쪽 콩팥굴(renal sinus)에 콩팥깔대기(renal pelvis)가 있어 소변 방"
+  },
+  {
+    "id": "KID-ANA-03",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "혈류 — 배대동맥→콩팥동맥→(콩팥문)→엽사이동맥(interlobar)→활꼴동맥(arcuate)→소엽사이동맥(interlobular)→들토리세동맥(afferent)→토리(glomer"
+  },
+  {
+    "id": "KID-ANA-04",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥소체(renal corpuscle)는 토리와 토리주머니(Bowman capsule)로 구성, 토리주머니는 콩팥세관(renal tubule)과 연결, 토리주머니에서 여과된 토리여"
+  },
+  {
+    "id": "KID-ANA-05",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥세관 경로 — 토리쪽곱슬세관(근위, proximal convoluted tubule)→콩팥세관고리(헨레고리, 내림부위·오름부위)→먼쪽곱슬세관(원위, distal convolut"
+  },
+  {
+    "id": "KID-ANA-06",
+    "exam": "KID-ANA",
+    "part": "L9",
+    "label": "콩팥소체와 콩팥세관은 소변 생성의 기능적 단위 = 콩팥단위(nephron), 100만 개 정도, 소변은 토리여과액이 재흡수·분비를 거쳐 생성"
+  },
+  {
+    "id": "KIDS-01",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "목적 — 위치·크기·모양, 종양·낭종·농양 공간점유물, 깔때기콩팥염·방광요로 역류 환자의 콩팥피질 손상, 좌우 콩팥 상대 기능평가, 선천성 콩팥기형 진단"
+  },
+  {
+    "id": "KIDS-02",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "99mTc-glucoheptonate(GHA)는 콩팥겉질 영상 기록 가능"
+  },
+  {
+    "id": "KIDS-03",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "99mTc-DMSA는 콩팥겉질 내 집적되어 24시간 동안 잔류, 혈장단백과 견고하게 결합해 콩팥겉질에 집적, 콩팥 배설기능 평가는 불가능하고 다른 의약품보다 피폭이 많은 편"
+  },
+  {
+    "id": "KIDS-04",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "집적기전(집적부위) — 99mTc-DMSA 37~185MBq 정맥, 세뇨관분비(콩팥겉질 40~50%) / 99mTc-GHA 370MBq 정맥, 세뇨관분비(콩팥겉질 5~10%) 수치"
+  },
+  {
+    "id": "KIDS-05",
+    "exam": "KIDS",
+    "part": "L9",
+    "label": "주의 — 표지된 의약품은 30분 이내 투여, 빛 차단·2~8℃ 보관, 99mTcO4-와 DMSA 표지 후 10~240분 이내 사용"
+  },
+  {
+    "id": "KIDD-01",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "목적 — 콩팥 관류·배설 기능 평가, 콩팥동맥 협착, 콩팥혈관성 고혈압 진단·평가, 사구체여과율(GFR)·유효콩팥혈장류량(ERPF) 측정"
+  },
+  {
+    "id": "KIDD-02",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "전처치 — 검사 전 소변을 보게 해 방광 피폭 방사선량 감소"
+  },
+  {
+    "id": "KIDD-03",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "집적기전(배설기전) — 99mTc-DTPA(단순확산, 토리여과)·99mTc-GHA(능동이동, 토리여과 90~95%·세뇨관분비 5~10%)·99mTc-MAG3(능동이동, 세뇨관 80"
+  },
+  {
+    "id": "KIDD-04",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "99mTc-DTPA는 대부분 콩팥 통해 빠르게 배설되고 콩팥 내 머무는 시간 짧음, 토리(사구체) 기능 평가, 투여량 90%가 주입 후 4시간 이내 여과"
+  },
+  {
+    "id": "KIDD-05",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "99mTc-MAG3는 hippuran처럼 콩팥 기능 검사, 정상 콩팥 실질 내에 머무르지 않고 주입량 90%가 3시간 이내 소변 배설, 소변 배설 기능·콩팥 혈류·콩팥겉질 집적 검"
+  },
+  {
+    "id": "KIDD-06",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "배설기전 대비 — 99mTc-MAG3는 능동이동으로 콩팥 신피질에 집적되고 세뇨관분비로 배설 / 99mTc-DTPA는 단순확산으로 콩팥에 집적되고 사구체여과로 배설(교수 킬러: D"
+  },
+  {
+    "id": "KIDD-07",
+    "exam": "KIDD",
+    "part": "L9",
+    "label": "Renogram은 혈류기·분비기·배설기로 구성"
+  },
+  {
+    "id": "DIUR-01",
+    "exam": "DIUR",
+    "part": "L9",
+    "label": "콩팥 배설 기능 저하 시 이뇨제콩팥신티그램 실시 — 콩팥결석(신석)·종괴·중복콩팥깔때기(중복신우)·물콩팥증(수신증)에 의한 요로폐쇄와 비폐쇄성 요로질환 감별에 유용"
+  },
+  {
+    "id": "DIUR-02",
+    "exam": "DIUR",
+    "part": "L9",
+    "label": "이뇨제(furosemide 0.3~1.0mg/kg, 1 ample 2mL)를 정맥주사하고 앉은/누운 자세로 기본검사와 동일하게 검사"
+  },
+  {
+    "id": "DIUR-03",
+    "exam": "DIUR",
+    "part": "L9",
+    "label": "평가 — 이뇨제 주사 전후 영상 육안 비교, 소실곡선 반감기 비교(객관·정량), 주사 직전 관심영역 방사능이 1/2로 감소하는 시간(반감기)을 구함(흔한 방법)"
+  },
+  {
+    "id": "ACE-01",
+    "exam": "ACE",
+    "part": "L9",
+    "label": "콩팥혈관에 의한 고혈압 환자에서 콩팥의 동적인 진단을 위해 ACE 억제제로 캡토프릴(Captopril) 이용"
+  }
+]
