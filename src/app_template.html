@@ -365,7 +365,7 @@
         <button class="btn primary" onclick="startMode('weak')">⚔️ 복수전 (약점 토벌)</button>
         <button class="btn" onclick="startMode('new')">🚪 새 던전 입장</button>
         <button class="btn" onclick="startMode('infinite')">♾️ 무한 회랑</button>
-        <button class="btn" onclick="startMode('review')">📌 반복노트 (<span id="reviewCount">0</span>)</button>
+        <button class="btn" onclick="startMode('review')">🔖 표식의 방 (<span id="reviewCount">0</span>)</button>
       </div>
     </div>
     <div class="card">
@@ -388,7 +388,7 @@
     <div class="card">
       <div class="muted" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <span><span id="qExam"></span> · <span id="qPos"></span></span>
-        <button id="reviewToggle" onclick="toggleReview()" style="background:none;border:1px solid var(--gold-dk);border-radius:8px;padding:4px 10px;cursor:pointer;color:inherit;font-size:13px;white-space:nowrap">📌 반복노트</button>
+        <button id="reviewToggle" onclick="toggleReview()" style="background:none;border:1px solid var(--gold-dk);border-radius:8px;padding:4px 10px;cursor:pointer;color:inherit;font-size:13px;white-space:nowrap">🔖 표식</button>
       </div>
       <p id="qText" style="font-size:17px;font-weight:600"></p>
       <div id="qOpts"></div>
@@ -510,7 +510,7 @@ function load(){ try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; } 
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 state.progress = state.progress || {};
 state.settings = Object.assign({ M: 2, batch: 10 }, state.settings || {});
-state.review = state.review || [];   // 반복노트(수동 즐겨찾기 id 목록, 자동 제거 없음)
+state.review = state.review || [];   // 표식의 방(수동 즐겨찾기 id 목록, 자동 제거 없음)
 
 // ── 단원(회차) 선택 ──
 const PART_ORDER = ["L42","L51","L5","L6","L71","L72","L8","L9"];
@@ -798,7 +798,7 @@ function toggleReview(){
 function renderReviewBtn(){
   const b=document.getElementById("reviewToggle"); if(!b||!cur) return;
   const on = state.review.includes(cur.id);
-  b.textContent = on ? "📌 담김 ✓" : "📌 반복노트";
+  b.textContent = on ? "🔖 표식됨 ✓" : "🔖 표식";
   b.style.background = on ? "var(--gold-dk)" : "none";
   b.style.fontWeight = on ? "700" : "400";
 }
@@ -808,7 +808,7 @@ function startMode(mode){
   if(mode==="review"){
     const ids = new Set(BANK.map(q=>q.id));
     queue = state.review.filter(id=>ids.has(id));
-    if(!queue.length){ alert("📌 반복노트가 비어 있습니다.\n문제를 풀 때 '📌 반복노트' 버튼으로 추가하세요."); return; }
+    if(!queue.length){ alert("🔖 표식을 남긴 몬스터가 없습니다.\n문제를 풀 때 '🔖 표식' 버튼으로 표식하세요."); return; }
   } else {
     queue = QuizEngine.selectQueue(state.progress, activeBank(), mode, state.settings.batch);
     if(!queue.length){ alert(mode==="weak"?"토벌할 몬스터가 없습니다! 새 던전에 입장하세요.":"입장 가능한 던전이 없습니다."); return; }
@@ -899,7 +899,7 @@ function renderFeedback(g, sel, gr){
 function next(){
   qi++;
   if(qi>=queue.length){
-    if(currentMode==="review"){ alert("📌 반복노트 한 바퀴 완료! 마을로 귀환합니다."); show("home"); return; }
+    if(currentMode==="review"){ alert("🔖 표식의 방 한 바퀴 완료! 마을로 귀환합니다."); show("home"); return; }
     // 약점/무한 모드는 남은 약점 다시 큐잉
     const remaining = QuizEngine.selectQueue(state.progress, activeBank(), "weak");
     if(remaining.length && queue.some(id=>remaining.includes(id))){ queue=remaining; qi=0; renderQuestion(); return; }
