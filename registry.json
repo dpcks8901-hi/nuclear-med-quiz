@@ -510,6 +510,18 @@
     "label": "단락률(Qp/Qs) = 1.0~1.2가 정상 수치"
   },
   {
+    "id": "SPS-06",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "일회통과 시 의약품(99mTcO4-)이 지나는 해부 경로 — SVC→우심방(right atrium)→우심실→폐→좌심방(left atrium)→좌심실 빈칸흐름(2024 출제)"
+  },
+  {
+    "id": "SPS-07",
+    "exam": "SPS",
+    "part": "L5",
+    "label": "시간-방사능곡선(T-A curve) 분석으로 단락을 평가, 심실단락검사가 T-A curve 분석이 필요한 대표 검사 (2024 출제)"
+  },
+  {
     "id": "GBPS-01",
     "exam": "GBPS",
     "part": "L5",
@@ -646,6 +658,12 @@
     "exam": "MPS",
     "part": "L5",
     "label": "sestaMIBI 심근 섭취·배설은 세포 생존능력·세포막 온전성 여부에 영향받으므로 심근 섭취 정도가 심근 생존능을 반영"
+  },
+  {
+    "id": "MPS-18",
+    "exam": "MPS",
+    "part": "L5",
+    "label": "부하(stress) — 운동을 못 하는 환자는 약물부하 시행, Dipyridamole·adenosine(140µg/kg/min) 이용 부하종류"
   },
   {
     "id": "MPYP-01",
@@ -1186,6 +1204,12 @@
     "exam": "MECKEL",
     "part": "L72",
     "label": "정상 — 99mTcO4- 주사 후 blood pool 즉시 나타남, 침샘·갑상샘·위 집적 증가, 위강 분비 방사능이 샘창자→빈창자(공장, jejunum)→때로 돌창자까지 내려감"
+  },
+  {
+    "id": "MECKEL-06",
+    "exam": "MECKEL",
+    "part": "L72",
+    "label": "의약품 99mTcO4-는 140keV 감마선을 가지며 집적기전은 위점막 농축(구획구분, compartment) keV·기전(2024 19번 정답)"
   },
   {
     "id": "LIV-ANA-01",
