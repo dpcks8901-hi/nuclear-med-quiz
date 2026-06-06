@@ -351,6 +351,15 @@
     </div>
   </div>
 
+  <!-- PICKER (문제 목록 골라 풀기) -->
+  <div id="picker" class="hidden">
+    <div class="card">
+      <div class="row"><b>📋 문제 목록</b><button class="btn" onclick="show('home')">← 마을로</button></div>
+      <div class="muted" style="margin:6px 0">선택한 섬의 문제입니다. 누르면 그 문제부터 풀이를 시작합니다. (⭐졸업 · ✓풀음 · ❌오답 · ·미풀이)</div>
+      <div id="pickerList"></div>
+    </div>
+  </div>
+
   <!-- HOME -->
   <div id="home">
     <div class="card">
@@ -366,6 +375,8 @@
         <button class="btn" onclick="startMode('new')">🚪 새 던전 입장</button>
         <button class="btn" onclick="startMode('infinite')">♾️ 무한 회랑</button>
         <button class="btn" onclick="startMode('review')">🔖 표식의 방 (<span id="reviewCount">0</span>)</button>
+        <button class="btn" onclick="startMode('all')">🔄 전체 복습 (처음부터)</button>
+        <button class="btn" onclick="show('picker')">📋 문제 목록 (골라 풀기)</button>
       </div>
     </div>
     <div class="card">
@@ -738,7 +749,7 @@ function renderBadges(){
 
 let queue = [], qi = 0, cur = null, shuf = null, batchPerfect = true, currentMode = "new";
 
-function show(id){ ["parts","home","quiz","feedback","report","settings"].forEach(s => document.getElementById(s).classList.toggle("hidden", s !== id)); if(id==="parts") renderParts(); if(id==="home") renderHome(); if(id==="report") renderReport(); if(id==="settings") renderSettings(); }
+function show(id){ ["parts","home","quiz","feedback","report","settings","picker"].forEach(s => document.getElementById(s).classList.toggle("hidden", s !== id)); if(id==="parts") renderParts(); if(id==="home") renderHome(); if(id==="report") renderReport(); if(id==="settings") renderSettings(); if(id==="picker") renderPicker(); }
 
 function renderHome(){
   const AB = activeBank();
@@ -833,15 +844,33 @@ function renderReviewBtn(){
   b.style.fontWeight = on ? "700" : "400";
 }
 
+function shuffleIds(ids){ const a=ids.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function renderPicker(){
+  const ab = activeBank();
+  document.getElementById("pickerList").innerHTML = ab.length ? ab.map((q,idx)=>{
+    const pr = state.progress[q.id] || {};
+    const mark = pr.mastered ? "⭐" : (pr.seen ? ((pr.wrongCount && (pr.streak||0)===0) ? "❌" : "✓") : "·");
+    return `<div class="opt" style="cursor:pointer;margin:5px 0" onclick="playFrom(${idx})"><b>${mark} ${idx+1}.</b> <span class="muted">[${q.exam||q.part}]</span> ${(q.question||"").slice(0,40)}…</div>`;
+  }).join("") : "<span class='muted'>선택한 섬에 문제가 없습니다. 단원을 먼저 고르세요.</span>";
+}
+function playFrom(idx){
+  const ids = activeBank().map(q=>q.id);
+  if(!ids.length) return;
+  currentMode = "all"; queue = ids; qi = idx; batchPerfect = true; ac(); show("quiz"); renderQuestion();
+}
+
 function startMode(mode){
   currentMode = mode;
   if(mode==="review"){
     const ids = new Set(BANK.map(q=>q.id));
     queue = state.review.filter(id=>ids.has(id));
     if(!queue.length){ alert("🔖 표식을 남긴 몬스터가 없습니다.\n문제를 풀 때 '🔖 표식' 버튼으로 표식하세요."); return; }
+  } else if(mode==="all"){
+    queue = shuffleIds(activeBank().map(q=>q.id));
+    if(!queue.length){ alert("선택한 섬에 문제가 없습니다. 단원을 먼저 고르세요."); return; }
   } else {
     queue = QuizEngine.selectQueue(state.progress, activeBank(), mode, state.settings.batch);
-    if(!queue.length){ alert(mode==="weak"?"토벌할 몬스터가 없습니다! 새 던전에 입장하세요.":"입장 가능한 던전이 없습니다."); return; }
+    if(!queue.length){ alert(mode==="weak" ? "토벌할 몬스터가 없습니다! 새 던전에 입장하세요." : "이 섬의 새 문제를 모두 풀었습니다!\n'🔄 전체 복습'으로 다시 풀거나 '📋 문제 목록'에서 골라 푸세요."); return; }
   }
   qi = 0; batchPerfect = true; ac(); show("quiz"); renderQuestion();
 }
@@ -930,6 +959,7 @@ function next(){
   qi++;
   if(qi>=queue.length){
     if(currentMode==="review"){ alert("🔖 표식의 방 한 바퀴 완료! 마을로 귀환합니다."); show("home"); return; }
+    if(currentMode==="all"){ alert("🔄 복습 한 바퀴 완료! 마을로 귀환합니다."); show("home"); return; }
     // 약점/무한 모드는 남은 약점 다시 큐잉
     const remaining = QuizEngine.selectQueue(state.progress, activeBank(), "weak");
     if(remaining.length && queue.some(id=>remaining.includes(id))){ queue=remaining; qi=0; renderQuestion(); return; }
