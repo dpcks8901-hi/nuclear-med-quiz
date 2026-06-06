@@ -341,8 +341,8 @@
   <!-- PARTS (단원 선택) -->
   <div id="parts">
     <div class="card">
-      <div class="row"><b>🗺️ 원정 지역 선택 (단원)</b><span class="muted" id="partsCount"></span></div>
-      <div class="muted" style="margin:6px 0">풀 회차를 고르세요. 진도·탐험도는 고른 단원 기준으로 집계됩니다.</div>
+      <div class="row"><b>🌊 핵의학 군도 — 항해할 섬 선택</b><span class="muted" id="partsCount"></span></div>
+      <div class="muted" style="margin:6px 0">섬(단원)을 탭해 항로에 넣고 빼세요. 진도·탐험도는 고른 섬 기준으로 집계됩니다.</div>
       <div id="partsGrid" style="margin-top:8px"></div>
       <div style="margin-top:10px">
         <button class="btn" onclick="toggleAllParts()">전체 선택/해제</button>
@@ -4772,15 +4772,43 @@ function renderHome(){
 function pct(n,d){ return d? Math.round(n/d*100):0; }
 
 // ── 단원 선택 화면 ──
+const ISLAND_ICON = {L42:"🦴",L51:"❤️‍🩹",L5:"🫀",L6:"🫁",L71:"🍽️",L72:"🩸",L8:"🧠",L9:"🫘"};
+const ISLAND_NAME = {L42:"부갑상샘·부신",L51:"PYP",L5:"심장",L6:"폐",L71:"소화 ①",L72:"소화 ②",L8:"뇌",L9:"콩팥"};
 function renderParts(){
   const sel = selSet();
-  document.getElementById("partsCount").textContent = `${state.selectedParts.length} / ${PARTS.length} 단원`;
-  document.getElementById("partsGrid").innerHTML = PARTS.map(p => {
-    const n = BANK.filter(q => q.part === p).length;
-    const on = sel.has(p);
-    return `<div class="opt${on?" sel":""}" style="cursor:pointer;margin:6px 0" onclick="togglePart('${p}')">`+
-      `${on?"✅":"⬜"} <b>${PART_LABELS[p]}</b> <span class="muted">(${n}문항)</span></div>`;
+  document.getElementById("partsCount").textContent = `${state.selectedParts.length} / ${PARTS.length} 섬`;
+  const n = PARTS.length, W = 320, gap = 88, top = 60, H = top + gap*(n-1) + 56;
+  const pos = PARTS.map((p,i) => ({ p, i, x: i%2===0 ? 84 : 236, y: top + gap*i }));
+  // 점선 항로(섬 사이 S자 곡선)
+  let route = "";
+  pos.forEach((c,i) => {
+    if(i===0){ route = `M ${c.x} ${c.y}`; return; }
+    const pv = pos[i-1], my = (pv.y + c.y)/2;
+    route += ` C ${pv.x} ${my}, ${c.x} ${my}, ${c.x} ${c.y}`;
+  });
+  const islands = pos.map(c => {
+    const p = c.p, on = sel.has(p), r = 41;
+    const cnt = BANK.filter(q => q.part === p).length;
+    const mastered = BANK.filter(q => q.part === p && (state.progress[q.id]||{}).mastered).length;
+    const done = cnt && mastered === cnt;
+    return `<g class="island" onclick="togglePart('${p}')" style="cursor:pointer">
+      <circle cx="${c.x}" cy="${c.y}" r="${r}" fill="${on?'rgba(232,183,64,.20)':'rgba(18,40,58,.6)'}" stroke="${on?'#e8b740':'#3a6a82'}" stroke-width="${on?3.2:1.6}"/>
+      <text x="${c.x}" y="${c.y-4}" text-anchor="middle" font-size="27">${ISLAND_ICON[p]||'🏝️'}</text>
+      <text x="${c.x}" y="${c.y+15}" text-anchor="middle" font-size="11" fill="#ffe9b0" font-weight="800">${p.replace('L','')}회차</text>
+      <text x="${c.x}" y="${c.y+r+15}" text-anchor="middle" font-size="11" fill="#dff" font-weight="700">${ISLAND_NAME[p]||p}</text>
+      <text x="${c.x}" y="${c.y+r+28}" text-anchor="middle" font-size="9" fill="#8fb4c4">${cnt}문항${done?' · ⭐클리어':''}</text>
+      ${on?`<text x="${c.x+r-8}" y="${c.y-r+12}" font-size="19">🚩</text>`:''}
+    </g>`;
   }).join("");
+  document.getElementById("partsGrid").innerHTML =
+    `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:430px;display:block;margin:2px auto;touch-action:manipulation">
+      <defs><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="rgba(20,60,90,.28)"/><stop offset="1" stop-color="rgba(8,24,40,.10)"/>
+      </linearGradient></defs>
+      <rect x="0" y="0" width="${W}" height="${H}" rx="16" fill="url(#sea)"/>
+      <path d="${route}" fill="none" stroke="#5a8aa0" stroke-width="2.5" stroke-dasharray="6 7" opacity=".75"/>
+      ${islands}
+    </svg>`;
 }
 function togglePart(p){
   const i = state.selectedParts.indexOf(p);
