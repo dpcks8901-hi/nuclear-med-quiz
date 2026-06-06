@@ -458,7 +458,7 @@
   function selectQueue(progressMap, bank, mode, batchN) {
     batchN = batchN || 10;
     const prog = id => progressMap[id] || { seen: false, mastered: false };
-    const weak = bank.filter(q => { const p = prog(q.id); return p.seen && !p.mastered && (p.wrongCount||0) > 0; }).map(q => q.id);
+    const weak = bank.filter(q => { const p = prog(q.id); return p.seen && (p.streak||0) === 0 && (p.wrongCount||0) > 0; }).map(q => q.id);
     const unseen = bank.filter(q => !prog(q.id).seen).map(q => q.id);
     if (mode === "weak") return weak;
     if (mode === "new") return unseen.slice(0, batchN);
@@ -4881,7 +4881,7 @@ function next(){
   qi++;
   if(qi>=queue.length){
     // 약점/무한 모드는 남은 약점 다시 큐잉
-    const remaining = QuizEngine.selectQueue(state.progress, BANK, "weak");
+    const remaining = QuizEngine.selectQueue(state.progress, activeBank(), "weak");
     if(remaining.length && queue.some(id=>remaining.includes(id))){ queue=remaining; qi=0; renderQuestion(); return; }
     // 묶음 전부 정답 → 완벽주의 배지
     if(batchPerfect && queue.length>=3){ const got=checkBadges(true, levelFromXp(state.game.xp)); save(); got.forEach((id,i)=>setTimeout(()=>showToast(id),200+i*300)); if(got.length) burstConfetti(140); }
