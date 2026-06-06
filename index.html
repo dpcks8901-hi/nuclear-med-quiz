@@ -365,6 +365,7 @@
         <button class="btn primary" onclick="startMode('weak')">⚔️ 복수전 (약점 토벌)</button>
         <button class="btn" onclick="startMode('new')">🚪 새 던전 입장</button>
         <button class="btn" onclick="startMode('infinite')">♾️ 무한 회랑</button>
+        <button class="btn" onclick="startMode('review')">📌 반복노트 (<span id="reviewCount">0</span>)</button>
       </div>
     </div>
     <div class="card">
@@ -385,7 +386,10 @@
   <!-- QUIZ -->
   <div id="quiz" class="hidden">
     <div class="card">
-      <div class="muted"><span id="qExam"></span> · <span id="qPos"></span></div>
+      <div class="muted" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span><span id="qExam"></span> · <span id="qPos"></span></span>
+        <button id="reviewToggle" onclick="toggleReview()" style="background:none;border:1px solid var(--gold-dk);border-radius:8px;padding:4px 10px;cursor:pointer;color:inherit;font-size:13px;white-space:nowrap">📌 반복노트</button>
+      </div>
       <p id="qText" style="font-size:17px;font-weight:600"></p>
       <div id="qOpts"></div>
       <button class="btn primary" id="submitBtn" onclick="submit()">🗡️ 공격!</button>
@@ -4515,6 +4519,7 @@ function load(){ try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; } 
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 state.progress = state.progress || {};
 state.settings = Object.assign({ M: 2, batch: 10 }, state.settings || {});
+state.review = state.review || [];   // 반복노트(수동 즐겨찾기 id 목록, 자동 제거 없음)
 
 // ── 단원(회차) 선택 ──
 const PART_ORDER = ["L42","L51","L5","L6","L71","L72","L8","L9"];
@@ -4740,12 +4745,13 @@ function renderBadges(){
   document.getElementById("badgeCount").textContent=`${n} / ${BADGES.length}`;
 }
 
-let queue = [], qi = 0, cur = null, shuf = null, batchPerfect = true;
+let queue = [], qi = 0, cur = null, shuf = null, batchPerfect = true, currentMode = "new";
 
 function show(id){ ["parts","home","quiz","feedback","report","settings"].forEach(s => document.getElementById(s).classList.toggle("hidden", s !== id)); if(id==="parts") renderParts(); if(id==="home") renderHome(); if(id==="report") renderReport(); if(id==="settings") renderSettings(); }
 
 function renderHome(){
   const AB = activeBank();
+  document.getElementById("reviewCount").textContent = state.review.length;
   document.getElementById("homeParts").textContent = `${partsSummary()} · ${AB.length}문항`;
   const weak = QuizEngine.selectQueue(state.progress, AB, "weak");
   document.getElementById("weakCount").textContent = weak.length + "마리";
@@ -4792,9 +4798,30 @@ function confirmParts(){
   save(); show("home");
 }
 
+function toggleReview(){
+  if(!cur) return;
+  const i = state.review.indexOf(cur.id);
+  if(i>=0) state.review.splice(i,1); else state.review.push(cur.id);
+  save(); renderReviewBtn();
+}
+function renderReviewBtn(){
+  const b=document.getElementById("reviewToggle"); if(!b||!cur) return;
+  const on = state.review.includes(cur.id);
+  b.textContent = on ? "📌 담김 ✓" : "📌 반복노트";
+  b.style.background = on ? "var(--gold-dk)" : "none";
+  b.style.fontWeight = on ? "700" : "400";
+}
+
 function startMode(mode){
-  queue = QuizEngine.selectQueue(state.progress, activeBank(), mode, state.settings.batch);
-  if(!queue.length){ alert(mode==="weak"?"토벌할 몬스터가 없습니다! 새 던전에 입장하세요.":"입장 가능한 던전이 없습니다."); return; }
+  currentMode = mode;
+  if(mode==="review"){
+    const ids = new Set(BANK.map(q=>q.id));
+    queue = state.review.filter(id=>ids.has(id));
+    if(!queue.length){ alert("📌 반복노트가 비어 있습니다.\n문제를 풀 때 '📌 반복노트' 버튼으로 추가하세요."); return; }
+  } else {
+    queue = QuizEngine.selectQueue(state.progress, activeBank(), mode, state.settings.batch);
+    if(!queue.length){ alert(mode==="weak"?"토벌할 몬스터가 없습니다! 새 던전에 입장하세요.":"입장 가능한 던전이 없습니다."); return; }
+  }
   qi = 0; batchPerfect = true; ac(); show("quiz"); renderQuestion();
 }
 
@@ -4818,6 +4845,7 @@ function renderQuestion(){
     d.onclick=()=>d.classList.toggle("sel");
     box.appendChild(d);
   });
+  renderReviewBtn();
   show("quiz");
 }
 
@@ -4880,6 +4908,7 @@ function renderFeedback(g, sel, gr){
 function next(){
   qi++;
   if(qi>=queue.length){
+    if(currentMode==="review"){ alert("📌 반복노트 한 바퀴 완료! 마을로 귀환합니다."); show("home"); return; }
     // 약점/무한 모드는 남은 약점 다시 큐잉
     const remaining = QuizEngine.selectQueue(state.progress, activeBank(), "weak");
     if(remaining.length && queue.some(id=>remaining.includes(id))){ queue=remaining; qi=0; renderQuestion(); return; }
